@@ -6,9 +6,6 @@ This demo illustrates techniques for performing routine maintenance operations i
 
 - [Main](https://github.com/PureMVC/puremvc-swift-demo-uikit-employeeadmin)
 
-## Screenshot
-![PureMVC SWIFT Demo: Employee Admin](http://puremvc.org/pages/images/screenshots/PureMVC-Shot-Swift-EmployeeAdmin.png)
-
 ## Installation
 
 Clone and launch a microservice before running the application
