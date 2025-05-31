@@ -8,37 +8,40 @@
 
 import Foundation
 import Combine
+import Observation
 import PureMVC
 
-class EmployeeAdminMediator: ObservableObject, IMediator {
+import Foundation
+import Combine
+
+@Observable
+class EmployeeAdminMediator: Mediator {
     
-    @Published var users: [User] = []
+    override class var NAME: String { "EmployeeAdminMediator" }
     
-    @Published var user: User?
+    var users: [User] = []
+    
+    var user: User?
         
-    @Published var departments: [Department] = [Department(id: 0, name: "--None Selected--")]
+    var departments: [Department] = [Department(id: 0, name: "--None Selected--")]
     
-    @Published var roles: [Role] = []
+    var roles: [Role] = []
     
-    @Published var error: String?
+    var error: String?
     
     private var cancellables = Set<AnyCancellable>()
+        
+    private var userProxy: IUserProxy?
     
-    let name: String = "EmployeeAdminMediator"
+    private var roleProxy: IRoleProxy?
     
-    var viewComponent: AnyObject?
+    init() {
+        super.init(name: EmployeeAdminMediator.NAME, viewComponent: nil)
+    }
     
-    open lazy var facade = Facade.getInstance(ApplicationFacade.KEY) { k in Facade(key: k) }
-    
-    private var userProxy: UserProxy?
-    
-    private var roleProxy: RoleProxy?
-    
-    init() {}
-    
-    func onRegister() {
-        userProxy = facade?.retrieveProxy(UserProxy.NAME) as? UserProxy
-        roleProxy = facade?.retrieveProxy(RoleProxy.NAME) as? RoleProxy
+    public override func onRegister() {
+        userProxy = facade?.retrieveProxy(UserProxy.NAME) as? IUserProxy
+        roleProxy = facade?.retrieveProxy(RoleProxy.NAME) as? IRoleProxy
     }
     
     func findAllUsers() {
@@ -127,17 +130,6 @@ class EmployeeAdminMediator: ObservableObject, IMediator {
     deinit {
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
-        facade?.removeMediator(self.name)
     }
-    
-    func listNotificationInterests() -> [String] { [] }
-    
-    func handleNotification(_ notification: INotification) {}
-    
-    func onRemove() {}
-    
-    func initializeNotifier(_ key: String) {}
-    
-    func sendNotification(_ notificationName: String, body: Any?, type: String?) {}
     
 }

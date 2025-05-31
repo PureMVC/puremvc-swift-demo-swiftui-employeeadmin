@@ -7,18 +7,25 @@
 //
 
 import SwiftUI
+import Observation
 
 struct UserForm: View {
     
-    @ObservedObject var delegate: EmployeeAdminMediator
-    var id: Int?
-    var responder: ((User?) -> Void)?
+    @Bindable var delegate: EmployeeAdminMediator
+    var id: Int
+    var onComplete: ((User?) -> Void)?
     
     @Environment(\.dismiss) private var dismiss
     
     @State private var confirm: String?
     @State private var isSheetPresented: Bool = false
     @State private var error: Error?
+    
+    init(id: Int = 0, onComplete: ((User?) -> Void)? = nil) {
+        self.id = id
+        self.onComplete = onComplete
+        delegate = ApplicationFacade.getInstance(key: ApplicationFacade.KEY)?.retrieveMediator(EmployeeAdminMediator.NAME) as! EmployeeAdminMediator
+     }
     
     var body: some View {
         VStack {
@@ -46,7 +53,7 @@ struct UserForm: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .font(.system(size: 16))
                 .autocapitalization(.none)
-                
+
                 TextField("Username", text: Binding(
                     get: { delegate.user?.username ?? "" },
                     set: { delegate.user?.username = $0 }))
@@ -54,7 +61,7 @@ struct UserForm: View {
                 .font(.system(size: 16))
                 .autocapitalization(.none)
             }
- 
+            
             HStack {
                 SecureField("Password", text: Binding(
                     get: { delegate.user?.password ?? "" },
@@ -63,7 +70,7 @@ struct UserForm: View {
                 .font(.system(size: 16))
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                
+
                 SecureField("Confirm Password", text: Binding(
                     get: { self.confirm ?? "" },
                     set: { self.confirm = $0 }))
@@ -96,10 +103,10 @@ struct UserForm: View {
                     }
                 }
             }
-            .background(Color(UIColor.systemGray6))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
+        .background(Color(UIColor.systemGray6))
         .navigationTitle("User Form")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -111,32 +118,34 @@ struct UserForm: View {
                         self.error = Exception(code: 1, message: "Invalid Form Data.")
                     }
                 }) {
-                    Text(self.id == nil ? "Save" : "Update")
+                    Text(self.id == 0 ? "Save" : "Update")
                 }
             }
         }
-        .task(id: id) {
+        .onAppear() { // UI Data
             if delegate.departments.count <= 1 {
                 delegate.findAllDepartments()
             }
-            if let id = self.id {
+        }
+        .task(id: id) { // User Data
+            if id != 0 {
                 delegate.findUserById(id)
             } else {
                 delegate.user = User(id: 0)
             }
         }
-        .onReceive(delegate.$user) { user in // sync state
-            self.confirm = user?.password ?? ""
+        .onChange(of: delegate.user) { // sync state
+            confirm = delegate.user?.password ?? ""
         }
         .onDisappear { // cleanup
             delegate.user = nil
-            self.confirm = nil
+            confirm = ""
         }
         .sheet(isPresented: $isSheetPresented) {
             NavigationStack {
-                UserRole(delegate: delegate, onComplete: { roles in
+                UserRole() { roles in
                     delegate.user?.roles = roles
-                })
+                }
             }
         }
         .alert(isPresented: Binding(get:{ error != nil }, set:{ _ in error = nil })) {
@@ -147,11 +156,10 @@ struct UserForm: View {
                 secondaryButton: .cancel()
             )
         }
-
     }
     
 }
 
 #Preview {
-    UserForm(delegate: EmployeeAdminMediator())
+    UserForm()
 }

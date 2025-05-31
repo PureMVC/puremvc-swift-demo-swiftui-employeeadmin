@@ -7,11 +7,15 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 
 struct UserList: View {
     
-    @ObservedObject var delegate: EmployeeAdminMediator
+    @Bindable var delegate: EmployeeAdminMediator
+    
+    init() {
+        delegate = ApplicationFacade.getInstance(key: ApplicationFacade.KEY)?.retrieveMediator(EmployeeAdminMediator.NAME) as! EmployeeAdminMediator
+    }
     
     var body: some View {
         List {
@@ -34,7 +38,7 @@ struct UserList: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(
-                    destination: UserForm(delegate: delegate) { user in // new user
+                    destination: UserForm() { user in // new user
                         guard let user else { return }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             withAnimation {
@@ -49,7 +53,7 @@ struct UserList: View {
             }
         }
         .navigationDestination(for: User.self, destination: { user in // existing user
-            UserForm(delegate: delegate, id: user.id) { user in
+            UserForm(id: user.id) { user in
                 guard let user else { return }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     if let index = self.delegate.users.firstIndex(of: user) {
@@ -61,7 +65,7 @@ struct UserList: View {
             }
         })
         .task {
-            delegate.findAllUsers()
+             delegate.findAllUsers()
         }
         
     }
@@ -69,5 +73,5 @@ struct UserList: View {
 }
 
 #Preview {
-    UserList(delegate: EmployeeAdminMediator())
+    UserList()
 }

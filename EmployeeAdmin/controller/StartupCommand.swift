@@ -24,9 +24,7 @@ class StartupCommand: SimpleCommand {
         facade?.registerProxy(UserProxy(session: session, encoder: encoder, decoder: decoder))
         facade?.registerProxy(RoleProxy(session: session, encoder: encoder, decoder: decoder))
         
-        if let mediator = notification.body as? IMediator {
-            facade?.registerMediator(mediator)
-        }
+        facade?.registerMediator(EmployeeAdminMediator())
     }
     
 }

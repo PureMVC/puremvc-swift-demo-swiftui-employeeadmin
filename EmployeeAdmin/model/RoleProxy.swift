@@ -10,7 +10,12 @@ import Foundation
 import Combine
 import PureMVC
 
-class RoleProxy: Proxy {
+protocol IRoleProxy: Proxy {
+    func findAll() -> AnyPublisher<[Role], Error>
+    func findRolesById(_ id: Int) -> AnyPublisher<[Role], Error>
+}
+
+class RoleProxy: Proxy, IRoleProxy {
     
     override class var NAME: String { "RoleProxy" }
     

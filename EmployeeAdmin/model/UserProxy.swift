@@ -10,7 +10,16 @@ import Foundation
 import Combine
 import PureMVC
 
-class UserProxy: Proxy {
+protocol IUserProxy: Proxy {
+    func findAll() -> AnyPublisher<[User], Error>
+    func findById(_ id: Int) -> AnyPublisher<User, Error>
+    func save(_ user: User) -> AnyPublisher<User, Error>
+    func update(_ user: User) -> AnyPublisher<User, Error>
+    func deleteById(_ id: Int) -> AnyPublisher<Void, Error>
+    func findAllDepartments() -> AnyPublisher<[Department], Error>
+}
+
+class UserProxy: Proxy, IUserProxy {
     
     override class var NAME: String { "UserProxy" }
     

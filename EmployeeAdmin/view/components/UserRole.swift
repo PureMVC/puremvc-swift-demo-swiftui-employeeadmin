@@ -10,17 +10,22 @@ import SwiftUI
 
 struct UserRole: View {
     
-    @ObservedObject var delegate: EmployeeAdminMediator
-    
-    let onComplete: (([Role]) -> Void)?
+    @Bindable var delegate: EmployeeAdminMediator
     
     @Environment(\.dismiss) private var dismiss
+
+    let onComplete: (([Role]) -> Void)?
+    
+    init(onComplete: (([Role]) -> Void)? = nil) {
+        self.onComplete = onComplete
+        delegate = ApplicationFacade.getInstance(key: ApplicationFacade.KEY)?.retrieveMediator(EmployeeAdminMediator.NAME) as! EmployeeAdminMediator
+    }
     
     var body: some View {
         VStack {
             List(delegate.roles) { role in
                 HStack {
-                    Text(role.name).foregroundColor(.black)
+                    Text(role.name).foregroundColor(.primary)
                     Spacer()
                     if delegate.user?.roles.contains(where: { $0.id == role.id }) == true {
                        Image(systemName: "checkmark").foregroundColor(.blue)
@@ -46,15 +51,18 @@ struct UserRole: View {
                 }
             }
         }
-        .task(id: delegate.user?.id) {
+        .onAppear() { // UI Data
             delegate.findAllRoles()
+        }
+        .task(id: delegate.user?.id) { // User Data
             if let id = delegate.user?.id {
                 delegate.findAllUserRoles(id)
             }
          }
+        
     }
 }
 
 #Preview {
-    UserRole(delegate: EmployeeAdminMediator(), onComplete: nil)
+    UserRole()
 }
