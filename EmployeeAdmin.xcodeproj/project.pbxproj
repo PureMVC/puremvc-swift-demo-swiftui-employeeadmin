@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A8024A1D2DE1A07800D1BF1E /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8024A1C2DE1A07800D1BF1E /* PureMVC */; };
 		A898FCA52DE988F400996F3F /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A898FCA42DE988F400996F3F /* PureMVC */; };
-		A8F237242DE97F3B00E5DD0A /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8F237232DE97F3B00E5DD0A /* PureMVC */; };
 		A8F9208F2F8A5E5F003EA9F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A8F9208E2F8A5E5F003EA9F0 /* LICENSE */; };
 		A8F920912F8A5E64003EA9F0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A8F920902F8A5E64003EA9F0 /* README.md */; };
 		A8F920932F8A5E6A003EA9F0 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = A8F920922F8A5E6A003EA9F0 /* VERSION */; };
@@ -65,8 +63,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A898FCA52DE988F400996F3F /* PureMVC in Frameworks */,
-				A8024A1D2DE1A07800D1BF1E /* PureMVC in Frameworks */,
-				A8F237242DE97F3B00E5DD0A /* PureMVC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,8 +416,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EmployeeAdmin/EmployeeAdmin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -447,8 +445,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EmployeeAdmin/EmployeeAdmin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
