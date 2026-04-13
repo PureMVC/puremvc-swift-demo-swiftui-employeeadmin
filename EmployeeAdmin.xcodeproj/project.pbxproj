@@ -10,6 +10,9 @@
 		A8024A1D2DE1A07800D1BF1E /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8024A1C2DE1A07800D1BF1E /* PureMVC */; };
 		A898FCA52DE988F400996F3F /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A898FCA42DE988F400996F3F /* PureMVC */; };
 		A8F237242DE97F3B00E5DD0A /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8F237232DE97F3B00E5DD0A /* PureMVC */; };
+		A8F9208F2F8A5E5F003EA9F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A8F9208E2F8A5E5F003EA9F0 /* LICENSE */; };
+		A8F920912F8A5E64003EA9F0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A8F920902F8A5E64003EA9F0 /* README.md */; };
+		A8F920932F8A5E6A003EA9F0 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = A8F920922F8A5E6A003EA9F0 /* VERSION */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +36,9 @@
 		A80249A12DE0D9E000D1BF1E /* EmployeeAdmin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmployeeAdmin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A80249AE2DE0D9E100D1BF1E /* EmployeeAdminTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmployeeAdminTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A80249B82DE0D9E100D1BF1E /* EmployeeAdminUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmployeeAdminUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A8F9208E2F8A5E5F003EA9F0 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		A8F920902F8A5E64003EA9F0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A8F920922F8A5E6A003EA9F0 /* VERSION */ = {isa = PBXFileReference; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -88,6 +94,9 @@
 				A80249B12DE0D9E100D1BF1E /* EmployeeAdminTests */,
 				A80249BB2DE0D9E100D1BF1E /* EmployeeAdminUITests */,
 				A80249A22DE0D9E000D1BF1E /* Products */,
+				A8F9208E2F8A5E5F003EA9F0 /* LICENSE */,
+				A8F920902F8A5E64003EA9F0 /* README.md */,
+				A8F920922F8A5E6A003EA9F0 /* VERSION */,
 			);
 			sourceTree = "<group>";
 		};
@@ -227,6 +236,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8F920912F8A5E64003EA9F0 /* README.md in Resources */,
+				A8F920932F8A5E6A003EA9F0 /* VERSION in Resources */,
+				A8F9208F2F8A5E5F003EA9F0 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

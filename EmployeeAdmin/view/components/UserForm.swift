@@ -11,97 +11,42 @@ import Observation
 
 struct UserForm: View {
     
-    @Bindable var delegate: EmployeeAdminMediator
-    var id: Int
-    var onComplete: ((User?) -> Void)?
-    
+    let id: Int
+    let onComplete: ((User?) -> Void)?
+    let delegate: EmployeeAdminMediator?
+
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var confirm: String?
     @State private var isSheetPresented: Bool = false
     @State private var error: Error?
-    
+
     init(id: Int = 0, onComplete: ((User?) -> Void)? = nil) {
         self.id = id
         self.onComplete = onComplete
-        delegate = ApplicationFacade.getInstance(key: ApplicationFacade.KEY)?.retrieveMediator(EmployeeAdminMediator.NAME) as! EmployeeAdminMediator
+        self.delegate = facade?.retrieveMediator(EmployeeAdminMediator.NAME) as? EmployeeAdminMediator
      }
     
     var body: some View {
         VStack {
-            
             HStack {
-                TextField("First", text: Binding(
-                    get: { delegate.user?.first ?? "" },
-                    set: { delegate.user?.first = $0 }))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(.system(size: 16))
-                .autocapitalization(.none)
-                
-                TextField("Last", text: Binding(
-                    get: { delegate.user?.last ?? "" },
-                    set: { delegate.user?.last = $0 }))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(.system(size: 16))
-                .autocapitalization(.none)
+                first()
+                last()
             }
             
             HStack {
-                TextField("Email", text: Binding(
-                    get: { delegate.user?.email ?? "" },
-                    set: { delegate.user?.email = $0 }))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(.system(size: 16))
-                .autocapitalization(.none)
-
-                TextField("Username", text: Binding(
-                    get: { delegate.user?.username ?? "" },
-                    set: { delegate.user?.username = $0 }))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(.system(size: 16))
-                .autocapitalization(.none)
+                email()
+                username()
             }
             
             HStack {
-                SecureField("Password", text: Binding(
-                    get: { delegate.user?.password ?? "" },
-                    set: { delegate.user?.password = $0 }))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(.system(size: 16))
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-
-                SecureField("Confirm Password", text: Binding(
-                    get: { self.confirm ?? "" },
-                    set: { self.confirm = $0 }))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(.system(size: 16))
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
+                password()
+                confirmPassword()
             }
             
-            HStack {
-                Picker(selection: Binding(
-                    get: { delegate.user?.department ?? nil },
-                    set: { delegate.user?.department = $0 }
-                ), label: Text("")) {
-                    ForEach(delegate.departments, id: \.id) { department in
-                        Text(department.name ?? "").tag(Optional(department))
-                    }
-                }
-                .pickerStyle(.wheel)
-                .padding()
-            }
-            
-            HStack {
-                Button(action: { isSheetPresented.toggle() }) { // User Roles
-                    HStack {
-                        Text("User Roles")
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                    }
-                }
+            VStack {
+                department()
+                roles()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -111,8 +56,8 @@ struct UserForm: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    if delegate.user?.isValid(confirm: self.confirm) == true {
-                        delegate.saveOrUpdate()
+                    if delegate?.user?.isValid(confirm: self.confirm) == true {
+                        delegate?.saveOrUpdate()
                         dismiss()
                     } else {
                         self.error = Exception(code: 1, message: "Invalid Form Data.")
@@ -123,28 +68,28 @@ struct UserForm: View {
             }
         }
         .onAppear() { // UI Data
-            if delegate.departments.count <= 1 {
-                delegate.findAllDepartments()
+            if (delegate?.departments.count ?? 0) <= 1 {
+                delegate?.findAllDepartments()
             }
         }
         .task(id: id) { // User Data
             if id != 0 {
-                delegate.findUserById(id)
+                delegate?.findUserById(id)
             } else {
-                delegate.user = User(id: 0)
+                delegate?.user = User(id: 0)
             }
         }
-        .onChange(of: delegate.user) { // sync state
-            confirm = delegate.user?.password ?? ""
+        .onChange(of: delegate?.user) { // sync state
+            confirm = delegate?.user?.password ?? ""
         }
         .onDisappear { // cleanup
-            delegate.user = nil
+            delegate?.user = nil
             confirm = ""
         }
         .sheet(isPresented: $isSheetPresented) {
             NavigationStack {
                 UserRole() { roles in
-                    delegate.user?.roles = roles
+                    delegate?.user?.roles = roles
                 }
             }
         }
@@ -160,6 +105,87 @@ struct UserForm: View {
     
 }
 
+extension UserForm {
+    func first() -> some View {
+        TextField("First", text: Binding(
+            get: { delegate?.user?.first ?? "" },
+            set: { delegate?.user?.first = $0 }))
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .font(.system(size: 16))
+        .autocapitalization(.none)
+    }
+    
+    func last() -> some View {
+        TextField("Last", text: Binding(
+            get: { delegate?.user?.last ?? "" },
+            set: { delegate?.user?.last = $0 }))
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .font(.system(size: 16))
+        .autocapitalization(.none)
+    }
+    
+    func email() -> some View {
+        TextField("Email", text: Binding(
+            get: { delegate?.user?.email ?? "" },
+            set: { delegate?.user?.email = $0 }))
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .font(.system(size: 16))
+        .autocapitalization(.none)
+    }
+    
+    func username() -> some View {
+        TextField("Username", text: Binding(
+            get: { delegate?.user?.username ?? "" },
+            set: { delegate?.user?.username = $0 }))
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .font(.system(size: 16))
+        .autocapitalization(.none)
+    }
+    
+    func password() -> some View {
+        SecureField("Password", text: Binding(
+            get: { delegate?.user?.password ?? "" },
+            set: { delegate?.user?.password = $0 }))
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .font(.system(size: 16))
+        .autocapitalization(.none)
+        .disableAutocorrection(true)
+    }
+    
+    func confirmPassword() -> some View {
+        SecureField("Confirm Password", text: Binding(
+            get: { self.confirm ?? "" },
+            set: { self.confirm = $0 }))
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .font(.system(size: 16))
+        .autocapitalization(.none)
+        .disableAutocorrection(true)
+    }
+    
+    func department() -> some View {
+        Picker(selection: Binding(
+            get: { delegate?.user?.department ?? nil },
+            set: { delegate?.user?.department = $0 }
+        ), label: Text("")) {
+            ForEach(delegate?.departments ?? [], id: \.id) { department in
+                Text(department.name ?? "").tag(Optional(department))
+            }
+        }
+        .pickerStyle(.wheel)
+    }
+    
+    func roles() -> some View {
+        Button(action: { isSheetPresented.toggle() }) { // User Roles
+            HStack {
+                Text("User Roles")
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
+        }
+    }
+}
+
 #Preview {
-    UserForm()
+    UserForm(id: 0)
 }

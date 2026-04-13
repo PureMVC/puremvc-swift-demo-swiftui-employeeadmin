@@ -10,56 +10,62 @@ import SwiftUI
 
 struct UserRole: View {
     
-    @Bindable var delegate: EmployeeAdminMediator
+    let onComplete: (([Role]) -> Void)?
+    let delegate: EmployeeAdminMediator?
     
     @Environment(\.dismiss) private var dismiss
 
-    let onComplete: (([Role]) -> Void)?
-    
     init(onComplete: (([Role]) -> Void)? = nil) {
         self.onComplete = onComplete
-        delegate = ApplicationFacade.getInstance(key: ApplicationFacade.KEY)?.retrieveMediator(EmployeeAdminMediator.NAME) as! EmployeeAdminMediator
+        self.delegate = facade?.retrieveMediator(EmployeeAdminMediator.NAME) as? EmployeeAdminMediator
     }
     
     var body: some View {
         VStack {
-            List(delegate.roles) { role in
-                HStack {
-                    Text(role.name).foregroundColor(.primary)
-                    Spacer()
-                    if delegate.user?.roles.contains(where: { $0.id == role.id }) == true {
-                       Image(systemName: "checkmark").foregroundColor(.blue)
-                    }
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    if let index = delegate.user?.roles.firstIndex(where: { $0.id == role.id }) {
-                        delegate.user?.roles.remove(at: index)
-                    } else {
-                        delegate.user?.roles.append(role)
-                    }
-                }
-            }
+            roles()
         }
         .navigationTitle("User Roles")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
-                    onComplete?(delegate.user?.roles ?? [])
+                    onComplete?(delegate?.user?.roles ?? [])
                     dismiss()
                 }
             }
         }
         .onAppear() { // UI Data
-            delegate.findAllRoles()
+            delegate?.findAllRoles()
         }
-        .task(id: delegate.user?.id) { // User Data
-            if let id = delegate.user?.id {
-                delegate.findAllUserRoles(id)
+        .task(id: delegate?.user?.id) { // User Data
+            if let id = delegate?.user?.id {
+                delegate?.findAllUserRoles(id)
             }
          }
         
+    }
+}
+
+extension UserRole {
+    
+    func roles() -> some View {
+        List(delegate?.roles ?? []) { role in
+            HStack {
+                Text(role.name).foregroundColor(.primary)
+                Spacer()
+                if delegate?.user?.roles.contains(where: { $0.id == role.id }) == true {
+                   Image(systemName: "checkmark").foregroundColor(.blue)
+                }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                if let index = delegate?.user?.roles.firstIndex(where: { $0.id == role.id }) {
+                    delegate?.user?.roles.remove(at: index)
+                } else {
+                    delegate?.user?.roles.append(role)
+                }
+            }
+        }
     }
 }
 

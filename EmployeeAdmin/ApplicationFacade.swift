@@ -12,7 +12,7 @@ import PureMVC
 
 class ApplicationFacade: Facade {
     
-    static let KEY: String = "ApplicationFacade"
+    static let KEY: String = "EmployeeAdmin"
     
     static let STARTUP = "startup"
     

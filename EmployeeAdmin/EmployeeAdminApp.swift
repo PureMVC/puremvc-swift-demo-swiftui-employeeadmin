@@ -8,13 +8,16 @@
 import SwiftUI
 import PureMVC
 
+let facade = ApplicationFacade.getInstance(key: ApplicationFacade.KEY)
+
 @main
 struct EmployeeAdminApp: App {
     
+     init() {
+         facade?.startup()
+     }
+    
     var body: some Scene {
-        
-        ApplicationFacade.getInstance(key: ApplicationFacade.KEY)?.startup();
-        
         return WindowGroup {
             NavigationStack {
                 UserList()
