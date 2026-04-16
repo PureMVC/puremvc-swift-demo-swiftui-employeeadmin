@@ -18,8 +18,8 @@ struct UserList: View {
     }
     
     var body: some View {
-        VStack {
-            users()
+        NavigationStack {
+            users
         }
         .navigationTitle("UserList")
         .toolbar {
@@ -61,7 +61,7 @@ struct UserList: View {
 
 extension UserList {
     
-    func users() -> some View {
+    var users: some View {
         List {
             ForEach(delegate?.users ?? []) { user in
                 NavigationLink(value: user) {

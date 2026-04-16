@@ -22,7 +22,7 @@ struct UserRole: View {
     
     var body: some View {
         VStack {
-            roles()
+            roles
         }
         .navigationTitle("User Roles")
         .navigationBarTitleDisplayMode(.inline)
@@ -48,7 +48,7 @@ struct UserRole: View {
 
 extension UserRole {
     
-    func roles() -> some View {
+    var roles: some View {
         List(delegate?.roles ?? []) { role in
             HStack {
                 Text(role.name).foregroundColor(.primary)

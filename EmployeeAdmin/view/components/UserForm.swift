@@ -25,28 +25,28 @@ struct UserForm: View {
         self.id = id
         self.onComplete = onComplete
         self.delegate = facade?.retrieveMediator(EmployeeAdminMediator.NAME) as? EmployeeAdminMediator
-     }
+    }
     
     var body: some View {
         VStack {
             HStack {
-                first()
-                last()
+                first
+                last
             }
             
             HStack {
-                email()
-                username()
+                email
+                username
             }
             
             HStack {
-                password()
-                confirmPassword()
+                password
+                confirmPassword
             }
             
             VStack {
-                department()
-                roles()
+                department
+                roles
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -55,28 +55,12 @@ struct UserForm: View {
         .navigationTitle("User Form")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    if delegate?.user?.isValid(confirm: self.confirm) == true {
-                        delegate?.saveOrUpdate()
-                        dismiss()
-                    } else {
-                        self.error = Exception(code: 1, message: "Invalid Form Data.")
-                    }
-                }) {
-                    Text(self.id == 0 ? "Save" : "Update")
-                }
+                saveOrUpdate
             }
         }
         .onAppear() { // UI Data
             if (delegate?.departments.count ?? 0) <= 1 {
                 delegate?.findAllDepartments()
-            }
-        }
-        .task(id: id) { // User Data
-            if id != 0 {
-                delegate?.findUserById(id)
-            } else {
-                delegate?.user = User(id: 0)
             }
         }
         .onChange(of: delegate?.user) { // sync state
@@ -86,27 +70,19 @@ struct UserForm: View {
             delegate?.user = nil
             confirm = ""
         }
-        .sheet(isPresented: $isSheetPresented) {
-            NavigationStack {
-                UserRole() { roles in
-                    delegate?.user?.roles = roles
-                }
+        .task(id: id) { // User Data
+            if id != 0 {
+                delegate?.findUserById(id)
+            } else {
+                delegate?.user = User(id: 0)
             }
-        }
-        .alert(isPresented: Binding(get:{ error != nil }, set:{ _ in error = nil })) {
-            Alert(
-                title: Text("Error"),
-                message: Text(((error as? Exception)?.message ?? error?.localizedDescription) ?? "An unknown error occurred."),
-                primaryButton: .default(Text("OK")),
-                secondaryButton: .cancel()
-            )
         }
     }
     
 }
 
 extension UserForm {
-    func first() -> some View {
+    var first: some View {
         TextField("First", text: Binding(
             get: { delegate?.user?.first ?? "" },
             set: { delegate?.user?.first = $0 }))
@@ -115,7 +91,7 @@ extension UserForm {
         .autocapitalization(.none)
     }
     
-    func last() -> some View {
+    var last: some View {
         TextField("Last", text: Binding(
             get: { delegate?.user?.last ?? "" },
             set: { delegate?.user?.last = $0 }))
@@ -124,7 +100,7 @@ extension UserForm {
         .autocapitalization(.none)
     }
     
-    func email() -> some View {
+    var email: some View {
         TextField("Email", text: Binding(
             get: { delegate?.user?.email ?? "" },
             set: { delegate?.user?.email = $0 }))
@@ -133,7 +109,7 @@ extension UserForm {
         .autocapitalization(.none)
     }
     
-    func username() -> some View {
+    var username: some View {
         TextField("Username", text: Binding(
             get: { delegate?.user?.username ?? "" },
             set: { delegate?.user?.username = $0 }))
@@ -142,7 +118,7 @@ extension UserForm {
         .autocapitalization(.none)
     }
     
-    func password() -> some View {
+    var password: some View {
         SecureField("Password", text: Binding(
             get: { delegate?.user?.password ?? "" },
             set: { delegate?.user?.password = $0 }))
@@ -152,7 +128,7 @@ extension UserForm {
         .disableAutocorrection(true)
     }
     
-    func confirmPassword() -> some View {
+    var confirmPassword: some View {
         SecureField("Confirm Password", text: Binding(
             get: { self.confirm ?? "" },
             set: { self.confirm = $0 }))
@@ -162,7 +138,7 @@ extension UserForm {
         .disableAutocorrection(true)
     }
     
-    func department() -> some View {
+    var department: some View {
         Picker(selection: Binding(
             get: { delegate?.user?.department ?? nil },
             set: { delegate?.user?.department = $0 }
@@ -174,7 +150,7 @@ extension UserForm {
         .pickerStyle(.wheel)
     }
     
-    func roles() -> some View {
+    var roles: some View {
         Button(action: { isSheetPresented.toggle() }) { // User Roles
             HStack {
                 Text("User Roles")
@@ -182,6 +158,34 @@ extension UserForm {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
             }
+        }
+        .sheet(isPresented: $isSheetPresented) {
+            NavigationStack {
+                UserRole() { roles in
+                    delegate?.user?.roles = roles
+                }
+            }
+        }
+    }
+    
+    var saveOrUpdate: some View {
+        Button(action: {
+            if delegate?.user?.isValid(confirm: self.confirm) == true {
+                delegate?.saveOrUpdate()
+                dismiss()
+            } else {
+                self.error = Exception(code: 1, message: "Invalid Form Data.")
+            }
+        }) {
+            Text(self.id == 0 ? "Save" : "Update")
+        }
+        .alert(isPresented: Binding(get:{ error != nil }, set:{ _ in error = nil })) {
+            Alert(
+                title: Text("Error"),
+                message: Text(((error as? Exception)?.message ?? error?.localizedDescription) ?? "An unknown error occurred."),
+                primaryButton: .default(Text("OK")),
+                secondaryButton: .cancel()
+            )
         }
     }
 }
