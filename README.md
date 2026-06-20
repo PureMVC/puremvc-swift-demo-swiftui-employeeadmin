@@ -1,10 +1,12 @@
-## [PureMVC](http://puremvc.github.com/) [Swift](https://github.com/PureMVC/puremvc-swift-multicore-framework/wiki) Demo: Employee Admin
+## [PureMVC](https://puremvc.org/) [Swift](https://github.com/PureMVC/puremvc-swift-multicore-framework/wiki) Demo: Employee Admin
 
 This demo illustrates techniques for performing routine maintenance operations in a PureMVC-based application using [SwiftUI](https://en.wikipedia.org/wiki/SwiftUI) view components.
 
 ## Demo Branches
 
-- [Main](https://github.com/PureMVC/puremvc-swift-demo-uikit-employeeadmin)
+- [Main](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/)
+- [Async](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/async)
+- [Combine](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/combine)
 
 ## Installation
 
@@ -13,11 +15,8 @@ Clone and launch a microservice before running the application
 ```commandLine
 git clone https://github.com/PureMVC/puremvc-js-demo-microservice-employeeadmin.git
 cd puremvc-js-demo-microservice-employeeadmin
-docker-compose-up
+docker compose up
 ```
-
-## Status
-Production - [Version 1.0](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/blob/master/VERSION)
 
 ## Platforms / Technologies
 * [SwiftUI](https://en.wikipedia.org/wiki/SwiftUI)
@@ -25,9 +24,8 @@ Production - [Version 1.0](https://github.com/PureMVC/puremvc-swift-demo-swiftui
 * [iOS](http://en.wikipedia.org/wiki/IOS)
 
 ## License
-* PureMVC Swift Demo - Employee Admin SwiftUI
-* PureMVC - Copyright © 2025 [Saad Shams](https://www.linkedin.com/in/muizz/)
-* PureMVC - Copyright © 2025 [Futurescale, Inc.](http://futurescale.com)
+* PureMVC SwiftUI Demo - Employee Admin - Copyright © 2025-2026 [Saad Shams](https://www.linkedin.com/in/muizz/)
+* PureMVC - Copyright © 2025-2026 [Futurescale, Inc.](http://futurescale.com)
 * All rights reserved.
 
 * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
