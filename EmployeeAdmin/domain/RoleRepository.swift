@@ -1,5 +1,5 @@
 //
-//  RoleProxy.swift
+//  RoleRepository.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
@@ -8,25 +8,17 @@
 
 import Foundation
 import Combine
-import PureMVC
 
-protocol IRoleProxy: Proxy {
+protocol IRoleRepository {
   func findAll() async throws -> [Role]
   func findByUserId(_ id: Int) async throws -> [Role]
 }
 
-class RoleProxy: Proxy, IRoleProxy {
-    
-  override class var NAME: String { "RoleProxy" }
+final class RoleRepository: IRoleRepository {
   
-  private var session: URLSession
-  private var decoder: JSONDecoder
-  
-  init(session: URLSession, decoder: JSONDecoder) {
-    self.session = session
-    self.decoder = decoder
-    super.init(name: RoleProxy.NAME)
-  }
+  private let session: URLSession = .shared
+  private let encoder: JSONEncoder = JSONEncoder()
+  private let decoder: JSONDecoder = JSONDecoder()
   
   func findAll() async throws -> [Role] {
     var request = URLRequest(url: URL(string: "http://localhost/roles")!)
@@ -36,10 +28,10 @@ class RoleProxy: Proxy, IRoleProxy {
     let (data, response) = try await session.data(for: request)
     
     guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
+      throw try JSONDecoder().decode(Exception.self, from: data)
     }
     
-    return try decoder.decode([Role].self, from: data)
+    return try JSONDecoder().decode([Role].self, from: data)
   }
   
   func findByUserId(_ id: Int) async throws -> [Role] {
@@ -50,10 +42,10 @@ class RoleProxy: Proxy, IRoleProxy {
     let (data, response) = try await session.data(for: request)
     
     guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
+      throw try JSONDecoder().decode(Exception.self, from: data)
     }
     
-    return try decoder.decode([Role].self, from: data)
+    return try JSONDecoder().decode([Role].self, from: data)
   }
     
 }

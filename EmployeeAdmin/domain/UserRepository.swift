@@ -1,5 +1,5 @@
 //
-//  UserProxy.swift
+//  UserRepository.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
@@ -8,9 +8,8 @@
 
 import Foundation
 import Combine
-import PureMVC
 
-protocol IUserProxy: Proxy {
+protocol IUserRepository {
   func findAll() async throws -> [User]
   func findById(_ id: Int) async throws -> User
   func save(_ user: User) async throws -> User
@@ -19,20 +18,11 @@ protocol IUserProxy: Proxy {
   func findAllDepartments() async throws -> [Department]
 }
 
-class UserProxy: Proxy, IUserProxy {
-    
-  override class var NAME: String { "UserProxy" }
+final class UserRepository: IUserRepository {
   
-  private let session: URLSession
-  private let encoder: JSONEncoder
-  private let decoder: JSONDecoder
-  
-  init(session: URLSession, encoder: JSONEncoder, decoder: JSONDecoder) {
-    self.session = session
-    self.encoder = encoder
-    self.decoder = decoder
-    super.init(name: UserProxy.NAME)
-  }
+  private let session: URLSession = .shared
+  private let encoder: JSONEncoder = JSONEncoder()
+  private let decoder: JSONDecoder = JSONDecoder()
   
   func findAll() async throws -> [User] {
     var request = URLRequest(url: URL(string: "http://localhost/users")!)

@@ -1,5 +1,5 @@
 //
-//  UserListMediator.swift
+//  UserRoleViewModel.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
@@ -7,24 +7,19 @@
 //
 
 import Observation
-import PureMVC
 
 @Observable
-class UserListMediator: Mediator {
-  override class var NAME: String { "UserListMediator" }
+class UserRoleViewModel {
   
-  var users: [User] = []
-  var error: Error?
+  var roles: [Role] = []
+  var selection: [Role] = []
   var isLoading = false
+  var error: Error?
+
+  private let repository: IRoleRepository
   
-  private var userProxy: IUserProxy?
-  
-  init() {
-    super.init(name: UserListMediator.NAME, viewComponent: nil)
-  }
-  
-  override func onRegister() {
-    userProxy = facade?.retrieveProxy(UserProxy.NAME) as? IUserProxy
+  init(repository: IRoleRepository) {
+    self.repository = repository
   }
   
   func findAll() async {
@@ -33,19 +28,19 @@ class UserListMediator: Mediator {
     defer { isLoading = false }
     
     do {
-      users = try await userProxy?.findAll() ?? []
+      roles = try await repository.findAll()
     } catch {
       self.error = error
     }
   }
   
-  func deleteById(_ id: Int) async {
+  func findByUserId(_ id: Int) async {
     isLoading = true
     error = nil
     defer { isLoading = false }
     
     do {
-      try await userProxy?.deleteById(id)
+      selection = try await repository.findByUserId(id)
     } catch {
       self.error = error
     }

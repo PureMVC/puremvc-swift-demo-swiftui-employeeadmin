@@ -15,7 +15,7 @@ struct UserRole: View {
   private let selection: [Role]
   private let onComplete: ([Role]) -> Void
   
-  @State private var delegate: UserRoleMediator
+  @State private var viewModel: UserRoleViewModel
     
   @Environment(\.dismiss) private var dismiss
 
@@ -23,12 +23,8 @@ struct UserRole: View {
     self.id = id
     self.selection = selection
     self.onComplete = onComplete
-    
-    guard let delegate = facade.retrieveMediator(UserRoleMediator.NAME) as? UserRoleMediator else {
-      fatalError("UserRoleMediator not found.")
-    }
-    
-    self.delegate = delegate
+  
+    _viewModel = State(initialValue: UserRoleViewModel(repository: container.roleRepository))
   }
     
   var body: some View {
@@ -36,10 +32,10 @@ struct UserRole: View {
       VStack {
         roles
       }
-      .disabled(delegate.isLoading)
-      .blur(radius: delegate.isLoading ? 2 : 0)
+      .disabled(viewModel.isLoading)
+      .blur(radius: viewModel.isLoading ? 2 : 0)
       
-      if delegate.isLoading {
+      if viewModel.isLoading {
         ProgressView()
           .padding()
           .background(.regularMaterial)
@@ -51,18 +47,18 @@ struct UserRole: View {
     .toolbar {
       ToolbarItem(placement: .navigationBarTrailing) {
         Button("Done") {
-          onComplete(delegate.selection)
+          onComplete(viewModel.selection)
           dismiss()
         }
       }
     }
     .task { // User Data
-      await delegate.findAll()
+      await viewModel.findAll()
       
-      if delegate.selection.isEmpty {
-        delegate.selection = selection
+      if viewModel.selection.isEmpty {
+        viewModel.selection = selection
       } else {
-        await delegate.findByUserId(id)
+        await viewModel.findByUserId(id)
       }
     }
   }
@@ -71,21 +67,21 @@ struct UserRole: View {
 extension UserRole {
     
   var roles: some View {
-    List(delegate.roles) { role in
+    List(viewModel.roles) { role in
       HStack {
         Text(role.name).foregroundColor(.primary)
         Spacer()
-        if delegate.selection.contains(where: { $0.id == role.id }) {
+        if viewModel.selection.contains(where: { $0.id == role.id }) {
           Image(systemName: "checkmark")
             .foregroundColor(.blue)
         }
       }
       .contentShape(Rectangle())
       .onTapGesture {
-        if let index = delegate.selection.firstIndex(where: { $0.id == role.id }) {
-          delegate.selection.remove(at: index)
+        if let index = viewModel.selection.firstIndex(where: { $0.id == role.id }) {
+          viewModel.selection.remove(at: index)
         } else {
-          delegate.selection.append(role)
+          viewModel.selection.append(role)
         }
       }
     }

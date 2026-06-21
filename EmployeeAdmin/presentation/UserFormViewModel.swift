@@ -1,5 +1,5 @@
 //
-//  UserFormMediator.swift
+//  UserFormViewModel.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
@@ -7,34 +7,28 @@
 //
 
 import Observation
-import PureMVC
 
 @Observable
-class UserFormMediator: Mediator {
-  override class var NAME: String { "UserFormMediator" }
+class UserFormViewModel {
   
   var departments: [Department] = []
   var user: User = .empty
   var isLoading = false
   var error: Error?
   
-  private var userProxy: IUserProxy?
+  private let repository: IUserRepository
   
-  init() {
-    super.init(name: UserFormMediator.NAME, viewComponent: nil)
+  init(repository: IUserRepository) {
+    self.repository = repository
   }
-  
-  override func onRegister() {
-    userProxy = facade?.retrieveProxy(UserProxy.NAME) as? IUserProxy
-  }
-  
+
   func findAllDepartments() async {
     isLoading = true
     error = nil
     defer { isLoading = false }
     
     do {
-      departments = try await userProxy?.findAllDepartments() ?? []
+      departments = try await repository.findAllDepartments()
     } catch {
       self.error = error
     }
@@ -46,7 +40,7 @@ class UserFormMediator: Mediator {
     defer { isLoading = false }
     
     do {
-      user = try await userProxy?.findById(id) ?? .empty
+      user = try await repository.findById(id)
     } catch {
       self.error = error
     }
@@ -55,9 +49,9 @@ class UserFormMediator: Mediator {
   func saveOrUpdate(_ user: User) async {
     do {
       if (user.id == 0) {
-        self.user = try await userProxy?.save(user) ?? .empty
+        self.user = try await repository.save(user)
       } else {
-        self.user = try await userProxy?.update(user) ?? .empty
+        self.user = try await repository.update(user)
       }
     } catch {
       self.error = error

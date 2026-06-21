@@ -15,19 +15,14 @@ struct UserForm: View {
   
   @Environment(\.dismiss) private var dismiss
 
-  @State private var delegate: UserFormMediator
+  @State private var viewModel: UserFormViewModel
   @State private var confirm: String = ""
   @State private var isSheetPresented: Bool = false
 
   init(id: Int = 0, onComplete: @escaping (User) -> Void) {
     self.id = id
     self.onComplete = onComplete
-    
-    guard let delegate = facade.retrieveMediator(UserFormMediator.NAME) as? UserFormMediator else {
-      fatalError("UserFormMediator not found.")
-    }
-
-    self.delegate = delegate
+    _viewModel = State(initialValue: UserFormViewModel(repository: container.userRepository))
   }
   
   var body: some View {
@@ -53,10 +48,10 @@ struct UserForm: View {
           roles
         }
       }
-      .disabled(delegate.isLoading)
-      .blur(radius: delegate.isLoading ? 2 : 0)
+      .disabled(viewModel.isLoading)
+      .blur(radius: viewModel.isLoading ? 2 : 0)
       
-      if delegate.isLoading {
+      if viewModel.isLoading {
         ProgressView()
           .padding()
           .background(.regularMaterial)
@@ -73,15 +68,15 @@ struct UserForm: View {
       }
     }
     .task {
-      if delegate.departments.isEmpty {
-        await delegate.findAllDepartments()
+      if viewModel.departments.isEmpty {
+        await viewModel.findAllDepartments()
       }
       
       if id != 0 {
-        await delegate.findById(id)
-        confirm = delegate.user.password
+        await viewModel.findById(id)
+        confirm = viewModel.user.password
       } else {
-        delegate.user = .empty
+        viewModel.user = .empty
         confirm = ""
       }
     }
@@ -90,21 +85,21 @@ struct UserForm: View {
 
 extension UserForm {
   var first: some View {
-    TextField("First", text: $delegate.user.first)
+    TextField("First", text: $viewModel.user.first)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
   }
   
   var last: some View {
-    TextField("Last", text: $delegate.user.last)
+    TextField("Last", text: $viewModel.user.last)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
   }
   
   var email: some View {
-    TextField("Email", text: $delegate.user.email)
+    TextField("Email", text: $viewModel.user.email)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
@@ -112,14 +107,14 @@ extension UserForm {
   }
   
   var username: some View {
-    TextField("Username", text: $delegate.user.username)
+    TextField("Username", text: $viewModel.user.username)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
   }
   
   var password: some View {
-    SecureField("Password", text: $delegate.user.password)
+    SecureField("Password", text: $viewModel.user.password)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
@@ -135,8 +130,8 @@ extension UserForm {
   }
   
   var department: some View {
-    Picker("Department", selection: $delegate.user.department) {
-      ForEach([.empty] + delegate.departments, id: \.id) { department in
+    Picker("Department", selection: $viewModel.user.department) {
+      ForEach([.empty] + viewModel.departments, id: \.id) { department in
         Text(department.name).tag(department)
       }
     }
@@ -156,8 +151,8 @@ extension UserForm {
     }
     .sheet(isPresented: $isSheetPresented) {
       NavigationStack {
-        UserRole(id: delegate.user.id, selection: delegate.user.roles) { roles in
-          delegate.user.roles = roles
+        UserRole(id: viewModel.user.id, selection: viewModel.user.roles) { roles in
+          viewModel.user.roles = roles
         }
       }
     }
@@ -165,20 +160,20 @@ extension UserForm {
     
   var saveOrUpdate: some View {
     Button {
-      guard delegate.user.isValid(confirm: confirm) else {
-        delegate.error = Exception(code: 1, message: "Invalid Form Data.")
+      guard viewModel.user.isValid(confirm: confirm) else {
+        viewModel.error = Exception(code: 1, message: "Invalid Form Data.")
         return
       }
       
       Task {
-        await delegate.saveOrUpdate(delegate.user)
+        await viewModel.saveOrUpdate(viewModel.user)
         
-        guard delegate.error == nil else { return }
+        guard viewModel.error == nil else { return }
               
         dismiss()
         
         try? await Task.sleep(for: .milliseconds(500))
-        onComplete(delegate.user)
+        onComplete(viewModel.user)
       }
       
     } label: {
@@ -187,15 +182,15 @@ extension UserForm {
     .alert(
       "Error",
       isPresented: Binding(
-        get: { delegate.error != nil },
-        set: { _ in delegate.error = nil }
+        get: { viewModel.error != nil },
+        set: { _ in viewModel.error = nil }
       )
     ) {
         Button("OK", role: .cancel) {
-          delegate.error = nil
+          viewModel.error = nil
         }
     } message: {
-      Text((delegate.error as? Exception)?.message ?? delegate.error?.localizedDescription ?? "An unknown error occurred.")
+      Text((viewModel.error as? Exception)?.message ?? viewModel.error?.localizedDescription ?? "An unknown error occurred.")
     }
   }
 }

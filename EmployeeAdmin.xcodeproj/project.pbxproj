@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A898FCA52DE988F400996F3F /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A898FCA42DE988F400996F3F /* PureMVC */; };
-		A8D448362FE2F28D0021B42C /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8024A1C2DE1A07800D1BF1E /* PureMVC */; };
-		A8D448372FE2F28D0021B42C /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8F237232DE97F3B00E5DD0A /* PureMVC */; };
 		A8D4486B2FE4F0980021B42C /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = A8D4486A2FE4F0980021B42C /* CHANGELOG.md */; };
 		A8F9208F2F8A5E5F003EA9F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A8F9208E2F8A5E5F003EA9F0 /* LICENSE */; };
 		A8F920912F8A5E64003EA9F0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A8F920902F8A5E64003EA9F0 /* README.md */; };
@@ -64,9 +61,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8D448372FE2F28D0021B42C /* PureMVC in Frameworks */,
-				A8D448362FE2F28D0021B42C /* PureMVC in Frameworks */,
-				A898FCA52DE988F400996F3F /* PureMVC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,9 +124,6 @@
 			);
 			name = EmployeeAdmin;
 			packageProductDependencies = (
-				A8024A1C2DE1A07800D1BF1E /* PureMVC */,
-				A8F237232DE97F3B00E5DD0A /* PureMVC */,
-				A898FCA42DE988F400996F3F /* PureMVC */,
 			);
 			productName = EmployeeAdmin;
 			productReference = A80249A12DE0D9E000D1BF1E /* EmployeeAdmin.app */;
@@ -217,7 +208,6 @@
 			mainGroup = A80249982DE0D9E000D1BF1E;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				A898FCA32DE988F400996F3F /* XCRemoteSwiftPackageReference "puremvc-swift-multicore-framework" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A80249A22DE0D9E000D1BF1E /* Products */;
@@ -583,33 +573,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		A898FCA32DE988F400996F3F /* XCRemoteSwiftPackageReference "puremvc-swift-multicore-framework" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PureMVC/puremvc-swift-multicore-framework";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.8.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		A8024A1C2DE1A07800D1BF1E /* PureMVC */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PureMVC;
-		};
-		A898FCA42DE988F400996F3F /* PureMVC */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A898FCA32DE988F400996F3F /* XCRemoteSwiftPackageReference "puremvc-swift-multicore-framework" */;
-			productName = PureMVC;
-		};
-		A8F237232DE97F3B00E5DD0A /* PureMVC */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PureMVC;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A80249992DE0D9E000D1BF1E /* Project object */;
 }

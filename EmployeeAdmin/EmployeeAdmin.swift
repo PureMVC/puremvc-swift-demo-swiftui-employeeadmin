@@ -7,16 +7,11 @@
 //
 
 import SwiftUI
-import PureMVC
 
-let facade = ApplicationFacade.getInstance()
+let container = ApplicationContainer()
 
 @main
 struct EmployeeAdmin: App {
-    
-  init() {
-    facade.startup()
-  }
 
   var body: some Scene {
     WindowGroup {

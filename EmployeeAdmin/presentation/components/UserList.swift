@@ -10,24 +10,20 @@ import SwiftUI
 import Observation
 
 struct UserList: View {
-    
-  @State private var delegate: UserListMediator
+  
+  @State private var viewModel: UserListViewModel
   
   init() {
-    guard let delegate = facade.retrieveMediator(UserListMediator.NAME) as? UserListMediator else  {
-      fatalError("UserListMediator not found.")
-    }
-    
-    self.delegate = delegate
+    _viewModel = State(initialValue: UserListViewModel(repository: container.userRepository, deleteUser: DeleteUserUseCase(repository: container.userRepository)))
   }
   
   var body: some View {
     ZStack {
       users
-        .disabled(delegate.isLoading)
-        .blur(radius: delegate.isLoading ? 2 : 0)
+        .disabled(viewModel.isLoading)
+        .blur(radius: viewModel.isLoading ? 2 : 0)
       
-      if delegate.isLoading {
+      if viewModel.isLoading {
         ProgressView()
           .padding()
           .background(.regularMaterial)
@@ -40,7 +36,7 @@ struct UserList: View {
         NavigationLink {
           UserForm { user in
             withAnimation {
-              delegate.users.append(user)
+              viewModel.users.append(user)
             }
           }
         } label: {
@@ -51,32 +47,32 @@ struct UserList: View {
     }
     .navigationDestination(for: User.self) { user in
       UserForm(id: user.id) { user in
-        if let index = delegate.users.firstIndex(where: { $0.id == user.id }) {
+        if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
           withAnimation {
-            delegate.users[index] = user
+            viewModel.users[index] = user
           }
         }
       }
     }
     .task {
-      if delegate.users.isEmpty {
-        await delegate.findAll()
+      if viewModel.users.isEmpty {
+        await viewModel.findAll()
       }
     }
     .alert(
         "Error",
         isPresented: Binding(
-          get: { delegate.error != nil },
-          set: { _ in delegate.error = nil }
+          get: { viewModel.error != nil },
+          set: { _ in viewModel.error = nil }
         )
     ) {
         Button("OK") {
-          delegate.error = nil
+          viewModel.error = nil
         }
     } message: {
         Text(
-          (delegate.error as? Exception)?.message ??
-          delegate.error?.localizedDescription ??
+          (viewModel.error as? Exception)?.message ??
+          viewModel.error?.localizedDescription ??
           "An unknown error occurred."
         )
     }
@@ -87,21 +83,21 @@ extension UserList {
   
   var users: some View {
       List {
-        ForEach(delegate.users) { user in
+        ForEach(viewModel.users) { user in
           NavigationLink(value: user) {
               Text(user.givenName)
           }
         }
         .onDelete { indexes in
           for index in indexes.sorted(by: >) {
-            let user = delegate.users[index]
+            let user = viewModel.users[index]
             withAnimation {
-              delegate.users.remove(at: index)
+              viewModel.users.remove(at: index)
               return ()
             }
             
             Task {
-              await delegate.deleteById(user.id)
+              await viewModel.deleteById(user.id)
             }
           }
         }
