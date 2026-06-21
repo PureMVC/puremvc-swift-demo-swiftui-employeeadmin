@@ -11,41 +11,28 @@ import Observation
 
 struct UserRole: View {
     
-  private let id: Int
-  private let selection: [Role]
-  private let onComplete: ([Role]) -> Void
+  private let username: String
+  private let onComplete: ([RoleEnum]) -> Void
   
   @State private var delegate: UserRoleMediator
     
   @Environment(\.dismiss) private var dismiss
 
-  init(id: Int, selection: [Role], onComplete: @escaping ([Role]) -> Void) {
-    self.id = id
-    self.selection = selection
+  init(username: String, selection: [RoleEnum], onComplete: @escaping ([RoleEnum]) -> Void) {
+    self.username = username
     self.onComplete = onComplete
-    
+        
     guard let delegate = facade.retrieveMediator(UserRoleMediator.NAME) as? UserRoleMediator else {
       fatalError("UserRoleMediator not found.")
     }
     
     self.delegate = delegate
+    
+    if !selection.isEmpty { delegate.selection = selection }
   }
     
   var body: some View {
-    ZStack {
-      VStack {
-        roles
-      }
-      .disabled(delegate.isLoading)
-      .blur(radius: delegate.isLoading ? 2 : 0)
-      
-      if delegate.isLoading {
-        ProgressView()
-          .padding()
-          .background(.regularMaterial)
-          .clipShape(RoundedRectangle(cornerRadius: 12))
-      }
-    }
+    roles
     .navigationTitle("User Roles")
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
@@ -53,16 +40,13 @@ struct UserRole: View {
         Button("Done") {
           onComplete(delegate.selection)
           dismiss()
+          delegate.selection = []
         }
       }
     }
     .task { // User Data
-      await delegate.findAll()
-      
       if delegate.selection.isEmpty {
-        delegate.selection = selection
-      } else {
-        await delegate.findByUserId(id)
+        delegate.findByUsername(username)
       }
     }
   }
@@ -71,7 +55,7 @@ struct UserRole: View {
 extension UserRole {
     
   var roles: some View {
-    List(delegate.roles) { role in
+    List(RoleEnum.allCases, id: \.self) { role in
       HStack {
         Text(role.name).foregroundColor(.primary)
         Spacer()
@@ -94,5 +78,5 @@ extension UserRole {
 }
 
 #Preview {
-  UserRole(id: 0, selection: []) {_ in }
+  UserRole(username: "", selection: []) {_ in }
 }

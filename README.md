@@ -8,16 +8,6 @@ This demo illustrates techniques for performing routine maintenance operations i
 - [Async](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/async)
 - [Combine](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/combine)
 
-## Installation
-
-Clone and launch a microservice before running the application
-
-```commandLine
-git clone https://github.com/PureMVC/puremvc-js-demo-microservice-employeeadmin.git
-cd puremvc-js-demo-microservice-employeeadmin
-docker compose up
-```
-
 ## Platforms / Technologies
 * [SwiftUI](https://en.wikipedia.org/wiki/SwiftUI)
 * [Swift](http://en.wikipedia.org/wiki/Swift_(programming_language))

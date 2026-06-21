@@ -10,17 +10,18 @@ import SwiftUI
 import Observation
 
 struct UserForm: View {
-  private let id: Int
-  private let onComplete: (User) -> Void
+  private let username: String
+  private let onComplete: (UserVO) -> Void
   
   @Environment(\.dismiss) private var dismiss
 
   @State private var delegate: UserFormMediator
+  @State private var selection: [RoleEnum] = []
   @State private var confirm: String = ""
   @State private var isSheetPresented: Bool = false
 
-  init(id: Int = 0, onComplete: @escaping (User) -> Void) {
-    self.id = id
+  init(username: String = "", onComplete: @escaping (UserVO) -> Void) {
+    self.username = username
     self.onComplete = onComplete
     
     guard let delegate = facade.retrieveMediator(UserFormMediator.NAME) as? UserFormMediator else {
@@ -31,36 +32,25 @@ struct UserForm: View {
   }
   
   var body: some View {
-    ZStack {
-      VStack {
-        HStack {
-          first
-          last
-        }
-        
-        HStack {
-          email
-          username
-        }
-        
-        HStack {
-          password
-          confirmPassword
-        }
-        
-        VStack {
-          department
-          roles
-        }
+    VStack {
+      HStack {
+        first
+        last
       }
-      .disabled(delegate.isLoading)
-      .blur(radius: delegate.isLoading ? 2 : 0)
       
-      if delegate.isLoading {
-        ProgressView()
-          .padding()
-          .background(.regularMaterial)
-          .clipShape(RoundedRectangle(cornerRadius: 12))
+      HStack {
+        email
+        usernameField
+      }
+      
+      HStack {
+        password
+        confirmPassword
+      }
+      
+      VStack {
+        department
+        roles
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -73,12 +63,8 @@ struct UserForm: View {
       }
     }
     .task {
-      if delegate.departments.isEmpty {
-        await delegate.findAllDepartments()
-      }
-      
-      if id != 0 {
-        await delegate.findById(id)
+      if username != "" {
+        delegate.findByUsername(username)
         confirm = delegate.user.password
       } else {
         delegate.user = .empty
@@ -111,7 +97,7 @@ extension UserForm {
       .keyboardType(.emailAddress)
   }
   
-  var username: some View {
+  var usernameField: some View {
     TextField("Username", text: $delegate.user.username)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
@@ -136,8 +122,9 @@ extension UserForm {
   
   var department: some View {
     Picker("Department", selection: $delegate.user.department) {
-      ForEach([.empty] + delegate.departments, id: \.id) { department in
-        Text(department.name).tag(department)
+      ForEach(DeptEnum.allCases, id: \.self) { department in
+        Text(department.name)
+          .tag(department)
       }
     }
     .pickerStyle(.wheel)
@@ -156,8 +143,8 @@ extension UserForm {
     }
     .sheet(isPresented: $isSheetPresented) {
       NavigationStack {
-        UserRole(id: delegate.user.id, selection: delegate.user.roles) { roles in
-          delegate.user.roles = roles
+        UserRole(username: delegate.user.username, selection: self.selection) { roles in
+          self.selection = roles
         }
       }
     }
@@ -166,12 +153,16 @@ extension UserForm {
   var saveOrUpdate: some View {
     Button {
       guard delegate.user.isValid(confirm: confirm) else {
-        delegate.error = Exception(code: 1, message: "Invalid Form Data.")
+        delegate.error = "Invalid Form Data."
         return
       }
       
       Task {
-        await delegate.saveOrUpdate(delegate.user)
+        if self.username.isEmpty {
+          delegate.save(delegate.user, roles: selection)
+        } else {
+          delegate.update(delegate.user, roles: selection)
+        }
         
         guard delegate.error == nil else { return }
               
@@ -182,7 +173,7 @@ extension UserForm {
       }
       
     } label: {
-      Text(id == 0 ? "Save" : "Update")
+      Text(username.isEmpty ? "Save" : "Update")
     }
     .alert(
       "Error",
@@ -195,11 +186,11 @@ extension UserForm {
           delegate.error = nil
         }
     } message: {
-      Text((delegate.error as? Exception)?.message ?? delegate.error?.localizedDescription ?? "An unknown error occurred.")
+      Text(delegate.error ?? "An unknown error occurred.")
     }
   }
 }
 
 #Preview {
-  UserForm(id: 0) { _ in }
+  UserForm(username: "") { _ in }
 }

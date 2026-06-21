@@ -13,9 +13,7 @@ import PureMVC
 class UserListMediator: Mediator {
   override class var NAME: String { "UserListMediator" }
   
-  var users: [User] = []
-  var error: Error?
-  var isLoading = false
+  var users: [UserVO] = []
   
   private var userProxy: IUserProxy?
   
@@ -28,26 +26,10 @@ class UserListMediator: Mediator {
   }
   
   func findAll() async {
-    isLoading = true
-    error = nil
-    defer { isLoading = false }
-    
-    do {
-      users = try await userProxy?.findAll() ?? []
-    } catch {
-      self.error = error
-    }
+    users = userProxy?.findAll() ?? []
   }
   
-  func deleteById(_ id: Int) async {
-    isLoading = true
-    error = nil
-    defer { isLoading = false }
-    
-    do {
-      try await userProxy?.deleteById(id)
-    } catch {
-      self.error = error
-    }
+  func delete(_ user: UserVO) {
+    userProxy?.delete(user)
   }
 }

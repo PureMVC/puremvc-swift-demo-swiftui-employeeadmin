@@ -11,49 +11,45 @@ import Combine
 import PureMVC
 
 protocol IRoleProxy: Proxy {
-  func findAll() async throws -> [Role]
-  func findByUserId(_ id: Int) async throws -> [Role]
+  func findByUsername(_ username: String) -> [RoleEnum]
+  func save(_ role: RoleVO)
+  func update(_ role: RoleVO)
 }
 
 class RoleProxy: Proxy, IRoleProxy {
     
   override class var NAME: String { "RoleProxy" }
   
-  private var session: URLSession
-  private var decoder: JSONDecoder
-  
-  init(session: URLSession, decoder: JSONDecoder) {
-    self.session = session
-    self.decoder = decoder
-    super.init(name: RoleProxy.NAME)
+  init() {
+    super.init(name: RoleProxy.NAME, data: [])
   }
   
-  func findAll() async throws -> [Role] {
-    var request = URLRequest(url: URL(string: "http://localhost/roles")!)
-    request.httpMethod = "GET"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
+  func findByUsername(_ username: String) -> [RoleEnum] {
+    guard let result = roles.first(where: {$0.username == username}) else {
+      fatalError("User not found.")
     }
     
-    return try decoder.decode([Role].self, from: data)
+    return result.roles
   }
   
-  func findByUserId(_ id: Int) async throws -> [Role] {
-    var request = URLRequest(url: URL(string: "http://localhost/users/\(id)/roles")!)
-    request.httpMethod = "GET"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
+  func save(_ role: RoleVO) {
+    var roles = roles;
+    roles.append(role)
+    data = roles
+  }
+  
+  func update(_ role: RoleVO) {
+    var roles = roles
+    guard let index = roles.firstIndex(where: {$0.username == role.username}) else {
+      fatalError("User not found.")
     }
     
-    return try decoder.decode([Role].self, from: data)
+    roles[index].roles = role.roles
+    data = roles
   }
     
+  private var roles: [RoleVO] {
+    get { data as? [RoleVO] ?? [] }
+    set { data = newValue }
+  }
 }

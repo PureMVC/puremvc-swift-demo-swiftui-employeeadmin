@@ -1,5 +1,5 @@
 //
-//  Role.swift
+//  RoleVO.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct Role: Identifiable, Hashable, Codable {
-  let id: Int
-  let name: String
+struct RoleVO {
+  var username: String
+  var roles: [RoleEnum]
   
-  init(id: Int, name: String) {
-    self.id = id
-    self.name = name
+  init(username: String, roles: [RoleEnum]) {
+    self.username = username
+    self.roles = roles
   }
 }

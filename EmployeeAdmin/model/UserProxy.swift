@@ -11,114 +11,64 @@ import Combine
 import PureMVC
 
 protocol IUserProxy: Proxy {
-  func findAll() async throws -> [User]
-  func findById(_ id: Int) async throws -> User
-  func save(_ user: User) async throws -> User
-  func update(_ user: User) async throws -> User
-  func deleteById(_ id: Int) async throws -> Void
-  func findAllDepartments() async throws -> [Department]
+  func findAll() -> [UserVO]
+  func findByUsername(_ username: String) throws -> UserVO
+  @discardableResult func save(_ user: UserVO) throws -> UserVO
+  @discardableResult func update(_ user: UserVO) throws -> UserVO
+  func delete(_ user: UserVO)
 }
 
 class UserProxy: Proxy, IUserProxy {
     
   override class var NAME: String { "UserProxy" }
   
-  private let session: URLSession
-  private let encoder: JSONEncoder
-  private let decoder: JSONDecoder
-  
-  init(session: URLSession, encoder: JSONEncoder, decoder: JSONDecoder) {
-    self.session = session
-    self.encoder = encoder
-    self.decoder = decoder
-    super.init(name: UserProxy.NAME)
+  init() {
+    super.init(name: UserProxy.NAME, data: [])
   }
   
-  func findAll() async throws -> [User] {
-    var request = URLRequest(url: URL(string: "http://localhost/users")!)
-    request.httpMethod = "GET"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
-    }
-    
-    return try decoder.decode([User].self, from: data)
+  func findAll() -> [UserVO] {
+    users
   }
   
-  func findById(_ id: Int) async throws -> User {
-    var request = URLRequest(url: URL(string: "http://localhost/users/\(id)")!)
-    request.httpMethod = "GET"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
+  func findByUsername(_ username: String) throws -> UserVO {
+    guard let user = users.first(where: { $0.username == username } ) else {
+      throw NSError(domain: "UserProxy", code: 1, userInfo: [NSLocalizedDescriptionKey: "User not found."])
     }
     
-    return try decoder.decode(User.self, from: data)
+    return user
   }
   
-  func save(_ user: User) async throws -> User {
-    var request = URLRequest(url: URL(string: "http://localhost/users")!)
-    request.httpMethod = "POST"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    
-    request.httpBody = try? encoder.encode(user)
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 201 else {
-      throw try decoder.decode(Exception.self, from: data)
+  func save(_ user: UserVO) throws -> UserVO {
+    var users = users
+    guard users.contains(where: {$0.username == user.username}) == false else {
+      throw NSError(domain: "UserProxy", code: 1, userInfo: [NSLocalizedDescriptionKey: "User already exists."])
     }
     
-    return try decoder.decode(User.self, from: data)
+    users.append(user)
+    data = users
+    return user
   }
   
-  func update(_ user: User) async throws -> User {
-    var request = URLRequest(url: URL(string: "http://localhost/users")!)
-    request.httpMethod = "PUT"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    
-    request.httpBody = try? encoder.encode(user)
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
+  func update(_ user: UserVO) throws -> UserVO {
+    var users = users
+    guard let index = users.firstIndex(where: {$0.username == user.username}) else {
+      throw NSError(domain: "UserProxy", code: 1, userInfo: [NSLocalizedDescriptionKey: "User not found."])
     }
     
-    return try decoder.decode(User.self, from: data)
+    users[index] = user
+    data = users
+    return user
   }
     
-  func deleteById(_ id: Int) async throws -> Void {
-    var request = URLRequest(url: URL(string: "http://localhost/users/\(id)")!)
-    request.httpMethod = "DELETE"
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 204 else {
-      throw try decoder.decode(Exception.self, from: data)
-    }
+  func delete(_ user: UserVO) -> Void {
+    var users = users
+    users.removeAll { $0.username == user.username }
+    data = users;
   }
-    
-  func findAllDepartments() async throws -> [Department] {
-    var request = URLRequest(url: URL(string: "http://localhost/departments")!)
-    request.httpMethod = "GET"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    
-    let (data, response) = try await session.data(for: request)
-    
-    guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try decoder.decode(Exception.self, from: data)
-    }
-    
-    return try decoder.decode([Department].self, from: data)
+  
+  private var users: [UserVO] {
+    get { data as? [UserVO] ?? [] }
+    set { data = newValue }
   }
     
 }

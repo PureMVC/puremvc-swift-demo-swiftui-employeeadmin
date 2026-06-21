@@ -13,12 +13,11 @@ import PureMVC
 class UserFormMediator: Mediator {
   override class var NAME: String { "UserFormMediator" }
   
-  var departments: [Department] = []
-  var user: User = .empty
-  var isLoading = false
-  var error: Error?
+  var user: UserVO = .empty
+  var error: String?
   
   private var userProxy: IUserProxy?
+  private var roleProxy: IRoleProxy?
   
   init() {
     super.init(name: UserFormMediator.NAME, viewComponent: nil)
@@ -26,41 +25,32 @@ class UserFormMediator: Mediator {
   
   override func onRegister() {
     userProxy = facade?.retrieveProxy(UserProxy.NAME) as? IUserProxy
+    roleProxy = facade?.retrieveProxy(RoleProxy.NAME) as? IRoleProxy
   }
-  
-  func findAllDepartments() async {
-    isLoading = true
-    error = nil
-    defer { isLoading = false }
-    
+   
+  func findByUsername(_ username: String) {
     do {
-      departments = try await userProxy?.findAllDepartments() ?? []
+      user = try userProxy?.findByUsername(username) ?? .empty
     } catch {
-      self.error = error
+      self.error = error.localizedDescription
     }
   }
   
-  func findById(_ id: Int) async {
-    isLoading = true
-    error = nil
-    defer { isLoading = false }
-    
+  func save(_ user: UserVO, roles: [RoleEnum]) {
     do {
-      user = try await userProxy?.findById(id) ?? .empty
+      self.user = try userProxy?.save(user) ?? .empty
+      roleProxy?.save(RoleVO(username: user.username, roles: roles))
     } catch {
-      self.error = error
+      self.error = error.localizedDescription
     }
   }
   
-  func saveOrUpdate(_ user: User) async {
+  func update(_ user: UserVO, roles: [RoleEnum]) {
     do {
-      if (user.id == 0) {
-        self.user = try await userProxy?.save(user) ?? .empty
-      } else {
-        self.user = try await userProxy?.update(user) ?? .empty
-      }
+      self.user = try userProxy?.update(user) ?? .empty
+      roleProxy?.update(RoleVO(username: user.username, roles: roles))
     } catch {
-      self.error = error
+      self.error = error.localizedDescription
     }
   }
 

@@ -13,10 +13,7 @@ import PureMVC
 class UserRoleMediator: Mediator {
   override class var NAME: String { "UserRoleMediator" }
   
-  var roles: [Role] = []
-  var selection: [Role] = []
-  var isLoading = false
-  var error: Error?
+  var selection: [RoleEnum] = []
   
   private var roleProxy: IRoleProxy?
   
@@ -28,27 +25,7 @@ class UserRoleMediator: Mediator {
     roleProxy = facade?.retrieveProxy(RoleProxy.NAME) as? IRoleProxy
   }
   
-  func findAll() async {
-    isLoading = true
-    error = nil
-    defer { isLoading = false }
-    
-    do {
-      roles = try await roleProxy?.findAll() ?? []
-    } catch {
-      self.error = error
-    }
-  }
-  
-  func findByUserId(_ id: Int) async {
-    isLoading = true
-    error = nil
-    defer { isLoading = false }
-    
-    do {
-      selection = try await roleProxy?.findByUserId(id) ?? []
-    } catch {
-      self.error = error
-    }
+  func findByUsername(_ username: String) {
+    selection = roleProxy?.findByUsername(username) ?? []
   }
 }
