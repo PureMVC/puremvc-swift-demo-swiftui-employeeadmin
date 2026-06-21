@@ -13,12 +13,12 @@ struct Department: Identifiable, Hashable, Codable {
   var name: String
   
   init(id: Int, name: String) {
-      self.id = id
-      self.name = name
+    self.id = id
+    self.name = name
   }
   
   func isValid() -> Bool {
-      id != 0 && name.isEmpty == false
+    id != 0 && name.isEmpty == false
   }
 }
 

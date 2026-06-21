@@ -20,9 +20,9 @@ class ApplicationFacade: Facade {
     registerCommand(ApplicationFacade.STARTUP) { StartupCommand() }
   }
   
-  class func getInstance(key: String) -> ApplicationFacade {
-    guard let facade = Facade.getInstance(key, factory: { k in ApplicationFacade(key: k) }) as? ApplicationFacade else {
-      fatalError("Expected ApplicationFacade for key '\(key)'")
+  class func getInstance() -> ApplicationFacade {
+    guard let facade = Facade.getInstance(KEY, factory: { k in ApplicationFacade(key: k) }) as? ApplicationFacade else {
+      fatalError("Expected ApplicationFacade for key '\(KEY)'")
     }
     
     return facade

@@ -9,7 +9,7 @@
 import SwiftUI
 import PureMVC
 
-let facade = ApplicationFacade.getInstance(key: ApplicationFacade.KEY)
+let facade = ApplicationFacade.getInstance()
 
 @main
 struct EmployeeAdmin: App {

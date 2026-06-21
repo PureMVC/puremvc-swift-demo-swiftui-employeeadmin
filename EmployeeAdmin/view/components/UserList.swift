@@ -66,18 +66,18 @@ struct UserList: View {
     .alert(
         "Error",
         isPresented: Binding(
-            get: { delegate.error != nil },
-            set: { _ in delegate.error = nil }
+          get: { delegate.error != nil },
+          set: { _ in delegate.error = nil }
         )
     ) {
         Button("OK") {
-            delegate.error = nil
+          delegate.error = nil
         }
     } message: {
         Text(
-            (delegate.error as? Exception)?.message ??
-            delegate.error?.localizedDescription ??
-            "An unknown error occurred."
+          (delegate.error as? Exception)?.message ??
+          delegate.error?.localizedDescription ??
+          "An unknown error occurred."
         )
     }
   }
