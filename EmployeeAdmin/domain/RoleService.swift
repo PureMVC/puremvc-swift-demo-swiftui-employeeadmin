@@ -9,12 +9,12 @@
 import Foundation
 import Combine
 
-protocol IRoleRepository {
+protocol IRoleService {
   func findAll() async throws -> [Role]
   func findByUserId(_ id: Int) async throws -> [Role]
 }
 
-final class RoleRepository: IRoleRepository {
+final class RoleService: IRoleService {
   
   private let session: URLSession = .shared
   private let encoder: JSONEncoder = JSONEncoder()

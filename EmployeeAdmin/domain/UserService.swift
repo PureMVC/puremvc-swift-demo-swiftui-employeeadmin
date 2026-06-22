@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-protocol IUserRepository {
+protocol IUserService {
   func findAll() async throws -> [User]
   func findById(_ id: Int) async throws -> User
   func save(_ user: User) async throws -> User
@@ -18,7 +18,7 @@ protocol IUserRepository {
   func findAllDepartments() async throws -> [Department]
 }
 
-final class UserRepository: IUserRepository {
+final class UserService: IUserService {
   
   private let session: URLSession = .shared
   private let encoder: JSONEncoder = JSONEncoder()

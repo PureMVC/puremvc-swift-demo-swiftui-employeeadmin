@@ -16,10 +16,10 @@ class UserFormViewModel {
   var isLoading = false
   var error: Error?
   
-  private let repository: IUserRepository
+  private let service: IUserService
   
-  init(repository: IUserRepository) {
-    self.repository = repository
+  init(service: IUserService) {
+    self.service = service
   }
 
   func findAllDepartments() async {
@@ -28,7 +28,7 @@ class UserFormViewModel {
     defer { isLoading = false }
     
     do {
-      departments = try await repository.findAllDepartments()
+      departments = try await service.findAllDepartments()
     } catch {
       self.error = error
     }
@@ -40,7 +40,7 @@ class UserFormViewModel {
     defer { isLoading = false }
     
     do {
-      user = try await repository.findById(id)
+      user = try await service.findById(id)
     } catch {
       self.error = error
     }
@@ -49,9 +49,9 @@ class UserFormViewModel {
   func saveOrUpdate(_ user: User) async {
     do {
       if (user.id == 0) {
-        self.user = try await repository.save(user)
+        self.user = try await service.save(user)
       } else {
-        self.user = try await repository.update(user)
+        self.user = try await service.update(user)
       }
     } catch {
       self.error = error

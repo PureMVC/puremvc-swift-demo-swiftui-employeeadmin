@@ -16,10 +16,10 @@ class UserRoleViewModel {
   var isLoading = false
   var error: Error?
 
-  private let repository: IRoleRepository
+  private let service: IRoleService
   
-  init(repository: IRoleRepository) {
-    self.repository = repository
+  init(service: IRoleService) {
+    self.service = service
   }
   
   func findAll() async {
@@ -28,7 +28,7 @@ class UserRoleViewModel {
     defer { isLoading = false }
     
     do {
-      roles = try await repository.findAll()
+      roles = try await service.findAll()
     } catch {
       self.error = error
     }
@@ -40,7 +40,7 @@ class UserRoleViewModel {
     defer { isLoading = false }
     
     do {
-      selection = try await repository.findByUserId(id)
+      selection = try await service.findByUserId(id)
     } catch {
       self.error = error
     }

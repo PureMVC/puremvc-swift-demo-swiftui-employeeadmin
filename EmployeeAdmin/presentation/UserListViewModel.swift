@@ -15,11 +15,11 @@ final class UserListViewModel {
   var error: Error?
   var isLoading = false
   
-  private let repository: IUserRepository
+  private let service: IUserService
   private let deleteUser: DeleteUserUseCase
   
-  init(repository: IUserRepository, deleteUser: DeleteUserUseCase) {
-    self.repository = repository
+  init(service: IUserService, deleteUser: DeleteUserUseCase) {
+    self.service = service
     self.deleteUser = deleteUser
   }
   
@@ -29,7 +29,7 @@ final class UserListViewModel {
     defer { isLoading = false }
     
     do {
-      users = try await repository.findAll()
+      users = try await service.findAll()
     } catch {
       self.error = error
     }

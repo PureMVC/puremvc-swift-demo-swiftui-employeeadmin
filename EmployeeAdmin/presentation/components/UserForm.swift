@@ -22,7 +22,7 @@ struct UserForm: View {
   init(id: Int = 0, onComplete: @escaping (User) -> Void) {
     self.id = id
     self.onComplete = onComplete
-    _viewModel = State(initialValue: UserFormViewModel(repository: container.userRepository))
+    _viewModel = State(initialValue: UserFormViewModel(service: container.userService))
   }
   
   var body: some View {

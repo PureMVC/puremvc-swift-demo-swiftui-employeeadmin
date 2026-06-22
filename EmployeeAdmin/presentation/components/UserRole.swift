@@ -24,7 +24,7 @@ struct UserRole: View {
     self.selection = selection
     self.onComplete = onComplete
   
-    _viewModel = State(initialValue: UserRoleViewModel(repository: container.roleRepository))
+    _viewModel = State(initialValue: UserRoleViewModel(service: container.roleService))
   }
     
   var body: some View {

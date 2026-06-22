@@ -14,7 +14,7 @@ struct UserList: View {
   @State private var viewModel: UserListViewModel
   
   init() {
-    _viewModel = State(initialValue: UserListViewModel(repository: container.userRepository, deleteUser: DeleteUserUseCase(repository: container.userRepository)))
+    _viewModel = State(initialValue: UserListViewModel(service: container.userService, deleteUser: DeleteUserUseCase(service: container.userService)))
   }
   
   var body: some View {

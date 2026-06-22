@@ -9,9 +9,9 @@
 import Foundation
 
 struct DeleteUserUseCase {
-  let repository: IUserRepository
+  let service: IUserService
 
   func callAsFunction(_ id: Int) async throws {
-    try await repository.deleteById(id)
+    try await service.deleteById(id)
   }
 }

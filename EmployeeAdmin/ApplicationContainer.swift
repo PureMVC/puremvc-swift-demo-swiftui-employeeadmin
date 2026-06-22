@@ -10,7 +10,7 @@ import SwiftUI
 
 final class ApplicationContainer {
     
-  let userRepository: IUserRepository = UserRepository()
-  let roleRepository: IRoleRepository = RoleRepository()
+  let userService: IUserService = UserService()
+  let roleService: IRoleService = RoleService()
   
 }
