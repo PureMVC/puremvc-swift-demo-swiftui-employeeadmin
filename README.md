@@ -10,7 +10,8 @@ This demo illustrates techniques for performing routine maintenance operations i
 - [Main](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/)
 - [Async](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/async)
 - [Combine](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/combine)
-
+- [MVVM](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/mvvm)
+  
 ## Installation
 
 Clone and launch a microservice before running the application
