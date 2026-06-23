@@ -7,12 +7,11 @@
 //
 
 import SwiftUI
-
-let container = ApplicationContainer()
+import ComposableArchitecture
 
 @main
 struct EmployeeAdmin: App {
-
+  
   var body: some Scene {
     WindowGroup {
       NavigationStack {

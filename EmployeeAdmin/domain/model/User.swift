@@ -6,9 +6,7 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import Foundation
-
-struct User: Identifiable, Hashable, Codable {
+struct User: Codable, Identifiable, Hashable, Equatable {
     
   var id: Int
   var username: String

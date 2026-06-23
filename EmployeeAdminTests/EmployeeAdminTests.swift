@@ -1,8 +1,9 @@
 //
 //  EmployeeAdminTests.swift
-//  EmployeeAdminTests
+//  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
-//  Created by Saad Shams on 5/23/25.
+//  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
+//  Your reuse is governed by the BSD 3-Clause License
 //
 
 import Testing
@@ -11,7 +12,7 @@ import Testing
 struct EmployeeAdminTests {
 
     @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+      // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }
 
 }

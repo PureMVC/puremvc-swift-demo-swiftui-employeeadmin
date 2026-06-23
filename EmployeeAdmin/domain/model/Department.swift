@@ -6,8 +6,6 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import Foundation
-
 struct Department: Identifiable, Hashable, Codable {
   var id: Int
   var name: String

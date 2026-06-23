@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import Observation
+import ComposableArchitecture
 
 struct UserRole: View {
     
@@ -15,16 +15,17 @@ struct UserRole: View {
   private let selection: [Role]
   private let onComplete: ([Role]) -> Void
   
-  @State private var viewModel: UserRoleViewModel
-    
+  @Bindable var store: StoreOf<UserRoleStore>
+  
   @Environment(\.dismiss) private var dismiss
 
   init(id: Int, selection: [Role], onComplete: @escaping ([Role]) -> Void) {
     self.id = id
     self.selection = selection
     self.onComplete = onComplete
-  
-    _viewModel = State(initialValue: UserRoleViewModel(service: container.roleService))
+    self.store = Store(initialState: UserRoleStore.State()) {
+      UserRoleStore()
+    }
   }
     
   var body: some View {
@@ -32,10 +33,10 @@ struct UserRole: View {
       VStack {
         roles
       }
-      .disabled(viewModel.isLoading)
-      .blur(radius: viewModel.isLoading ? 2 : 0)
+      .disabled(store.isLoading)
+      .blur(radius: store.isLoading ? 2 : 0)
       
-      if viewModel.isLoading {
+      if store.isLoading {
         ProgressView()
           .padding()
           .background(.regularMaterial)
@@ -47,18 +48,20 @@ struct UserRole: View {
     .toolbar {
       ToolbarItem(placement: .navigationBarTrailing) {
         Button("Done") {
-          onComplete(viewModel.selection)
+          onComplete(store.selection)
           dismiss()
         }
       }
     }
     .task { // User Data
-      await viewModel.findAll()
+      store.send(.findAll)
       
-      if viewModel.selection.isEmpty {
-        viewModel.selection = selection
+      if selection.isEmpty { // iterate and append
+        store.send(.findByUserId(id: id))
       } else {
-        await viewModel.findByUserId(id)
+        selection.forEach {
+          store.send(.append($0))
+        }
       }
     }
   }
@@ -67,21 +70,21 @@ struct UserRole: View {
 extension UserRole {
     
   var roles: some View {
-    List(viewModel.roles) { role in
+    List(store.roles) { role in
       HStack {
         Text(role.name).foregroundColor(.primary)
         Spacer()
-        if viewModel.selection.contains(where: { $0.id == role.id }) {
+        if store.selection.contains(where: { $0.id == role.id }) {
           Image(systemName: "checkmark")
             .foregroundColor(.blue)
         }
       }
       .contentShape(Rectangle())
       .onTapGesture {
-        if let index = viewModel.selection.firstIndex(where: { $0.id == role.id }) {
-          viewModel.selection.remove(at: index)
+        if let index = store.selection.firstIndex(where: { $0.id == role.id }) {
+          store.send(.remove(index))
         } else {
-          viewModel.selection.append(role)
+          store.send(.append(role))
         }
       }
     }

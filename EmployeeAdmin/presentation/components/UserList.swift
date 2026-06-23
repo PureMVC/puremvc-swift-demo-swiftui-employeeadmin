@@ -7,23 +7,25 @@
 //
 
 import SwiftUI
-import Observation
+import ComposableArchitecture
 
 struct UserList: View {
   
-  @State private var viewModel: UserListViewModel
+  @Bindable var store: StoreOf<UserListStore>
   
   init() {
-    _viewModel = State(initialValue: UserListViewModel(service: container.userService, deleteUser: DeleteUserUseCase(service: container.userService)))
+    self.store = Store(initialState: UserListStore.State()) {
+      UserListStore()
+    }
   }
   
   var body: some View {
     ZStack {
       users
-        .disabled(viewModel.isLoading)
-        .blur(radius: viewModel.isLoading ? 2 : 0)
+        .disabled(store.isLoading)
+        .blur(radius: store.isLoading ? 2 : 0)
       
-      if viewModel.isLoading {
+      if store.isLoading {
         ProgressView()
           .padding()
           .background(.regularMaterial)
@@ -34,10 +36,8 @@ struct UserList: View {
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         NavigationLink {
-          UserForm { user in
-            withAnimation {
-              viewModel.users.append(user)
-            }
+          UserForm(id: 0) { user in
+            
           }
         } label: {
             Image(systemName: "plus.circle")
@@ -47,34 +47,19 @@ struct UserList: View {
     }
     .navigationDestination(for: User.self) { user in
       UserForm(id: user.id) { user in
-        if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
-          withAnimation {
-            viewModel.users[index] = user
-          }
-        }
+        store.send(.updateResponse(user))
       }
     }
     .task {
-      if viewModel.users.isEmpty {
-        await viewModel.findAll()
-      }
+      store.send(.findAll)
     }
     .alert(
         "Error",
-        isPresented: Binding(
-          get: { viewModel.error != nil },
-          set: { _ in viewModel.error = nil }
-        )
+        isPresented: .constant(store.error != nil)
     ) {
-        Button("OK") {
-          viewModel.error = nil
-        }
+      Button("OK") {}
     } message: {
-        Text(
-          (viewModel.error as? Exception)?.message ??
-          viewModel.error?.localizedDescription ??
-          "An unknown error occurred."
-        )
+      Text(store.error ?? "An unknown error occurred.")
     }
   }
 }
@@ -83,22 +68,15 @@ extension UserList {
   
   var users: some View {
       List {
-        ForEach(viewModel.users) { user in
+        ForEach(store.users) { user in
           NavigationLink(value: user) {
-              Text(user.givenName)
+            Text(user.givenName)
           }
         }
-        .onDelete { indexes in
-          for index in indexes.sorted(by: >) {
-            let user = viewModel.users[index]
-            withAnimation {
-              viewModel.users.remove(at: index)
-              return ()
-            }
-            
-            Task {
-              await viewModel.deleteById(user.id)
-            }
+        .onDelete { indexSet in
+          for index in indexSet {
+            let user = store.users[index]
+            store.send(.deleteById(id: user.id))
           }
         }
       }

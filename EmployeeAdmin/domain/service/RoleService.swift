@@ -1,5 +1,5 @@
 //
-//  RoleRepository.swift
+//  RoleService.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Combine
 
 protocol IRoleService {
   func findAll() async throws -> [Role]
@@ -17,7 +16,6 @@ protocol IRoleService {
 final class RoleService: IRoleService {
   
   private let session: URLSession = .shared
-  private let encoder: JSONEncoder = JSONEncoder()
   private let decoder: JSONDecoder = JSONDecoder()
   
   func findAll() async throws -> [Role] {
@@ -28,10 +26,10 @@ final class RoleService: IRoleService {
     let (data, response) = try await session.data(for: request)
     
     guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try JSONDecoder().decode(Exception.self, from: data)
+      throw try decoder.decode(Exception.self, from: data)
     }
     
-    return try JSONDecoder().decode([Role].self, from: data)
+    return try decoder.decode([Role].self, from: data)
   }
   
   func findByUserId(_ id: Int) async throws -> [Role] {
@@ -42,10 +40,10 @@ final class RoleService: IRoleService {
     let (data, response) = try await session.data(for: request)
     
     guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-      throw try JSONDecoder().decode(Exception.self, from: data)
+      throw try decoder.decode(Exception.self, from: data)
     }
     
-    return try JSONDecoder().decode([Role].self, from: data)
+    return try decoder.decode([Role].self, from: data)
   }
     
 }

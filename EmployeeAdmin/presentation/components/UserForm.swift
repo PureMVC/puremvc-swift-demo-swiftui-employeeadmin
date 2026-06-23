@@ -7,22 +7,26 @@
 //
 
 import SwiftUI
-import Observation
+import ComposableArchitecture
 
 struct UserForm: View {
   private let id: Int
   private let onComplete: (User) -> Void
   
-  @Environment(\.dismiss) private var dismiss
-
-  @State private var viewModel: UserFormViewModel
+  @Bindable var store: StoreOf<UserFormStore>
+    
   @State private var confirm: String = ""
+  @State private var selection: [Role] = []
   @State private var isSheetPresented: Bool = false
-
+  
+  @Environment(\.dismiss) private var dismiss
+  
   init(id: Int = 0, onComplete: @escaping (User) -> Void) {
     self.id = id
     self.onComplete = onComplete
-    _viewModel = State(initialValue: UserFormViewModel(service: container.userService))
+    self.store = Store(initialState: UserFormStore.State()) {
+      UserFormStore()
+    }
   }
   
   var body: some View {
@@ -48,10 +52,10 @@ struct UserForm: View {
           roles
         }
       }
-      .disabled(viewModel.isLoading)
-      .blur(radius: viewModel.isLoading ? 2 : 0)
+      .disabled(store.isLoading)
+      .blur(radius: store.isLoading ? 2 : 0)
       
-      if viewModel.isLoading {
+      if store.isLoading {
         ProgressView()
           .padding()
           .background(.regularMaterial)
@@ -68,38 +72,42 @@ struct UserForm: View {
       }
     }
     .task {
-      if viewModel.departments.isEmpty {
-        await viewModel.findAllDepartments()
+      store.send(.departments)
+      if (id != 0) {
+        store.send(.findById(id))
       }
-      
-      if id != 0 {
-        await viewModel.findById(id)
-        confirm = viewModel.user.password
-      } else {
-        viewModel.user = .empty
-        confirm = ""
-      }
+    }
+    .onChange(of: store.user.password) { _, password in
+      confirm = password
+    }
+    .alert(
+        "Error",
+        isPresented: .constant(store.error != nil)
+    ) {
+      Button("OK") {}
+    } message: {
+      Text(store.error ?? "An unknown error occurred.")
     }
   }
 }
 
 extension UserForm {
   var first: some View {
-    TextField("First", text: $viewModel.user.first)
+    TextField("First", text: $store.user.first)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
   }
   
   var last: some View {
-    TextField("Last", text: $viewModel.user.last)
+    TextField("Last", text: $store.user.last)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
   }
   
   var email: some View {
-    TextField("Email", text: $viewModel.user.email)
+    TextField("Email", text: $store.user.email)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
@@ -107,14 +115,14 @@ extension UserForm {
   }
   
   var username: some View {
-    TextField("Username", text: $viewModel.user.username)
+    TextField("Username", text: $store.user.username)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
   }
   
   var password: some View {
-    SecureField("Password", text: $viewModel.user.password)
+    SecureField("Password", text: $store.user.password)
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
@@ -130,8 +138,8 @@ extension UserForm {
   }
   
   var department: some View {
-    Picker("Department", selection: $viewModel.user.department) {
-      ForEach([.empty] + viewModel.departments, id: \.id) { department in
+    Picker("Department", selection: $store.user.department) {
+      ForEach([.empty] + store.departments, id: \.id) { department in
         Text(department.name).tag(department)
       }
     }
@@ -151,8 +159,9 @@ extension UserForm {
     }
     .sheet(isPresented: $isSheetPresented) {
       NavigationStack {
-        UserRole(id: viewModel.user.id, selection: viewModel.user.roles) { roles in
-          viewModel.user.roles = roles
+        UserRole(id: store.user.id, selection: selection) { roles in
+          selection = roles
+          print(selection)
         }
       }
     }
@@ -160,37 +169,24 @@ extension UserForm {
     
   var saveOrUpdate: some View {
     Button {
-      guard viewModel.user.isValid(confirm: confirm) else {
-        viewModel.error = Exception(code: 1, message: "Invalid Form Data.")
+      guard store.user.isValid(confirm: confirm) else {
+        store.error = "Invalid Form Data."
         return
       }
       
       Task {
-        await viewModel.saveOrUpdate(viewModel.user)
+        store.send(.saveOrUpdate)
         
-        guard viewModel.error == nil else { return }
+        guard store.error == nil else { return }
               
         dismiss()
         
         try? await Task.sleep(for: .milliseconds(500))
-        onComplete(viewModel.user)
+        onComplete(store.user)
       }
       
     } label: {
       Text(id == 0 ? "Save" : "Update")
-    }
-    .alert(
-      "Error",
-      isPresented: Binding(
-        get: { viewModel.error != nil },
-        set: { _ in viewModel.error = nil }
-      )
-    ) {
-        Button("OK", role: .cancel) {
-          viewModel.error = nil
-        }
-    } message: {
-      Text((viewModel.error as? Exception)?.message ?? viewModel.error?.localizedDescription ?? "An unknown error occurred.")
     }
   }
 }

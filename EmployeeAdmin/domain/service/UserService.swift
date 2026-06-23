@@ -1,5 +1,5 @@
 //
-//  UserRepository.swift
+//  UserService.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2025-2026 Saad Shams <saad.shams@puremvc.org>
@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Combine
 
 protocol IUserService {
   func findAll() async throws -> [User]
