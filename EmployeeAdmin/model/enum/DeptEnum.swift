@@ -6,8 +6,6 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import Foundation
-
 enum DeptEnum: Int, CaseIterable {
 
   case noneSelected = -1

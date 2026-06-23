@@ -71,6 +71,19 @@ struct UserForm: View {
         confirm = ""
       }
     }
+    .alert(
+      "Error",
+      isPresented: Binding(
+        get: { delegate.error != nil },
+        set: { _ in delegate.error = nil }
+      )
+    ) {
+        Button("OK", role: .cancel) {
+          delegate.error = nil
+        }
+    } message: {
+      Text(delegate.error ?? "An unknown error occurred.")
+    }
   }
 }
 
@@ -174,19 +187,6 @@ extension UserForm {
       
     } label: {
       Text(username.isEmpty ? "Save" : "Update")
-    }
-    .alert(
-      "Error",
-      isPresented: Binding(
-        get: { delegate.error != nil },
-        set: { _ in delegate.error = nil }
-      )
-    ) {
-        Button("OK", role: .cancel) {
-          delegate.error = nil
-        }
-    } message: {
-      Text(delegate.error ?? "An unknown error occurred.")
     }
   }
 }
