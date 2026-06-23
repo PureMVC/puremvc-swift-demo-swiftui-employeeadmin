@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Combine
 
 protocol IRoleService {
   func findAll() async throws -> [Role]

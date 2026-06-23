@@ -6,9 +6,6 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-
-import Foundation
-
 struct Exception: Error, Codable {
   let code: Int
   let message: String

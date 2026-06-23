@@ -6,8 +6,6 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import Foundation
-
 struct Role: Identifiable, Hashable, Codable {
   let id: Int
   let name: String
