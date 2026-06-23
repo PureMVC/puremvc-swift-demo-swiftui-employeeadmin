@@ -10,6 +10,7 @@ This demo illustrates techniques for performing routine maintenance operations i
 - [Main](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/)
 - [Async](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/async)
 - [Combine](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/combine)
+- [The Composable Architecture](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/tca)
 - [MVVM](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/tree/mvvm)
   
 ## Installation
