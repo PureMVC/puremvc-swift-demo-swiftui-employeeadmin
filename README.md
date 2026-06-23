@@ -2,6 +2,9 @@
 
 This demo illustrates techniques for performing routine maintenance operations in a PureMVC-based application using [SwiftUI](https://en.wikipedia.org/wiki/SwiftUI) view components.
 
+## Screenshot
+![Demo](https://raw.githubusercontent.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/refs/heads/main/screenshots/image.png)
+
 ## Demo Branches
 
 - [Main](https://github.com/PureMVC/puremvc-swift-demo-swiftui-employeeadmin/)
