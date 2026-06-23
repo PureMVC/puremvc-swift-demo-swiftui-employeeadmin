@@ -22,6 +22,7 @@ struct UserListStore {
     case findAll
     case findAllResponse(Result<[User], Error>)
     
+    case addResponse(User)
     case updateResponse(User)
     
     case deleteById(id: Int)
@@ -29,6 +30,7 @@ struct UserListStore {
   }
   
   @Dependency(\.userClient) var client: UserClient
+  @Dependency(\.deleteUser) var deleteUser: DeleteUserUseCase
   
   var body: some ReducerOf<Self> {
     Reduce { state, action in
@@ -49,6 +51,9 @@ struct UserListStore {
         state.error = error.localizedDescription
         return .none
 
+      case let .addResponse(user):
+        state.users.append(user)
+        return .none
         
       case let .updateResponse(user):
         guard let index = state.users.firstIndex(where: { $0.id == user.id }) else {
@@ -61,7 +66,7 @@ struct UserListStore {
       case let .deleteById(id):
         state.isLoading = true
         return .run { send in
-          await send(.deleteByIdResponse(id: id, Result { try await client.deleteById(id) }))
+          await send(.deleteByIdResponse(id: id, Result { try await deleteUser(id) } ))
         }
         
       case let .deleteByIdResponse(id, .success):

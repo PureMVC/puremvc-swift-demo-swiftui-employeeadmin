@@ -73,9 +73,7 @@ struct UserForm: View {
     }
     .task {
       store.send(.departments)
-      if (id != 0) {
-        store.send(.findById(id))
-      }
+      store.send(.findById(id))
     }
     .onChange(of: store.user.password) { _, password in
       confirm = password

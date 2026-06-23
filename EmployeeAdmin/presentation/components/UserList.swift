@@ -37,7 +37,7 @@ struct UserList: View {
       ToolbarItem(placement: .topBarTrailing) {
         NavigationLink {
           UserForm(id: 0) { user in
-            
+            store.send(.addResponse(user))
           }
         } label: {
             Image(systemName: "plus.circle")
