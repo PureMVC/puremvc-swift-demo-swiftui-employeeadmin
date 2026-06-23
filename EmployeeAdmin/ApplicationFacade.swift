@@ -6,7 +6,6 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import SwiftUI
 import PureMVC
 
 class ApplicationFacade: Facade {
