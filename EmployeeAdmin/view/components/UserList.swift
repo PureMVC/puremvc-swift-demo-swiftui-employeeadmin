@@ -39,18 +39,6 @@ struct UserList: View {
                 }
             }
         }
-        .navigationDestination(for: User.self, destination: { user in // existing user
-            UserForm(id: user.id) { user in
-                guard let user else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if let index = self.delegate?.users.firstIndex(of: user) {
-                        withAnimation {
-                            delegate?.users[index] = user
-                        }
-                    }
-                }
-            }
-        })
         .task {
              delegate?.findAllUsers()
         }
@@ -78,7 +66,20 @@ extension UserList {
                 }
             } 
         }
+        .navigationDestination(for: User.self, destination: { user in // existing user
+            UserForm(id: user.id) { user in
+                guard let user else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if let index = self.delegate?.users.firstIndex(of: user) {
+                        withAnimation {
+                            delegate?.users[index] = user
+                        }
+                    }
+                }
+            }
+        })
     }
+  
 }
 
 #Preview {
