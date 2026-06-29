@@ -45,15 +45,6 @@ struct UserList: View {
         }
       }
     }
-    .navigationDestination(for: User.self) { user in
-      UserForm(id: user.id) { user in
-        if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
-          withAnimation {
-            viewModel.users[index] = user
-          }
-        }
-      }
-    }
     .task {
       if viewModel.users.isEmpty {
         await viewModel.findAll()
@@ -102,7 +93,17 @@ extension UserList {
           }
         }
       }
+      .navigationDestination(for: User.self) { user in
+        UserForm(id: user.id) { user in
+          if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
+            withAnimation {
+              viewModel.users[index] = user
+            }
+          }
+        }
+      }
   }
+  
 }
 
 #Preview {
