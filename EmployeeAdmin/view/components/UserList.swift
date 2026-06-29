@@ -49,6 +49,54 @@ struct UserList: View {
         }
       }
     }
+    .task {
+      if delegate.users.isEmpty {
+        await delegate.findAll()
+      }
+    }
+    .alert(
+      "Error",
+      isPresented: Binding(
+        get: { delegate.error != nil },
+        set: { _ in delegate.error = nil }
+      )
+    ) {
+      Button("OK") {
+        delegate.error = nil
+      }
+    } message: {
+      Text(
+        (delegate.error as? Exception)?.message ??
+        delegate.error?.localizedDescription ??
+        "An unknown error occurred."
+      )
+    }
+  }
+}
+
+extension UserList {
+
+  var users: some View {
+    List {
+      ForEach(delegate.users) { user in
+        NavigationLink(value: user) {
+          Text(user.givenName)
+        }
+      }
+      .onDelete { indexes in // forEach -> .onDelete
+        for index in indexes.sorted(by: >) {
+          let user = delegate.users[index]
+
+          withAnimation {
+            _ = delegate.users.remove(at: index)
+          }
+
+          Task {
+            await delegate.deleteById(user.id)
+          }
+        }
+      }
+    }
     .navigationDestination(for: User.self) { user in
       UserForm(id: user.id) { user in
         if let index = delegate.users.firstIndex(where: { $0.id == user.id }) {
@@ -58,55 +106,8 @@ struct UserList: View {
         }
       }
     }
-    .task {
-      if delegate.users.isEmpty {
-        await delegate.findAll()
-      }
-    }
-    .alert(
-        "Error",
-        isPresented: Binding(
-          get: { delegate.error != nil },
-          set: { _ in delegate.error = nil }
-        )
-    ) {
-        Button("OK") {
-          delegate.error = nil
-        }
-    } message: {
-        Text(
-          (delegate.error as? Exception)?.message ??
-          delegate.error?.localizedDescription ??
-          "An unknown error occurred."
-        )
-    }
   }
-}
-
-extension UserList {
   
-  var users: some View {
-      List {
-        ForEach(delegate.users) { user in
-          NavigationLink(value: user) {
-              Text(user.givenName)
-          }
-        }
-        .onDelete { indexes in
-          for index in indexes.sorted(by: >) {
-            let user = delegate.users[index]
-            withAnimation {
-              delegate.users.remove(at: index)
-              return ()
-            }
-            
-            Task {
-              await delegate.deleteById(user.id)
-            }
-          }
-        }
-      }
-  }
 }
 
 #Preview {
