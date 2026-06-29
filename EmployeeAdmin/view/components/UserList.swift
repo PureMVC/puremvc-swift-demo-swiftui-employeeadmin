@@ -38,15 +38,6 @@ struct UserList: View {
         }
       }
     }
-    .navigationDestination(for: UserVO.self) { user in
-      UserForm(username: user.username) { user in
-        if let index = delegate.users.firstIndex(where: { $0.username == user.username }) {
-          withAnimation {
-            delegate.users[index] = user
-          }
-        }
-      }
-    }
     .task {
       if delegate.users.isEmpty {
         await delegate.findAll()
@@ -74,6 +65,15 @@ extension UserList {
           
           Task {
             delegate.delete(user)
+          }
+        }
+      }
+    }
+    .navigationDestination(for: UserVO.self) { user in
+      UserForm(username: user.username) { user in
+        if let index = delegate.users.firstIndex(where: { $0.username == user.username }) {
+          withAnimation {
+            delegate.users[index] = user
           }
         }
       }
