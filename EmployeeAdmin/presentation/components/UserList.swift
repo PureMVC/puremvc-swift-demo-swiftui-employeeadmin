@@ -45,11 +45,6 @@ struct UserList: View {
         }
       }
     }
-    .navigationDestination(for: User.self) { user in
-      UserForm(id: user.id) { user in
-        store.send(.updateResponse(user))
-      }
-    }
     .task {
       store.send(.findAll)
     }
@@ -80,7 +75,13 @@ extension UserList {
           }
         }
       }
+      .navigationDestination(for: User.self) { user in
+        UserForm(id: user.id) { user in
+          store.send(.updateResponse(user))
+        }
+      }
   }
+  
 }
 
 #Preview {
