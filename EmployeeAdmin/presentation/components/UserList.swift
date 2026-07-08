@@ -80,15 +80,17 @@ extension UserList {
           }
         }
         .onDelete { indexes in
-          for index in indexes.sorted(by: >) {
-            let user = viewModel.users[index]
-            withAnimation {
-              viewModel.users.remove(at: index)
-              return ()
+          let usersToDelete = indexes.map { viewModel.users[$0] }
+          
+          Task {
+            for user in usersToDelete {
+              await viewModel.deleteById(user.id)
             }
             
-            Task {
-              await viewModel.deleteById(user.id)
+            await MainActor.run {
+              withAnimation {
+                viewModel.users.remove(atOffsets: indexes)
+              }
             }
           }
         }

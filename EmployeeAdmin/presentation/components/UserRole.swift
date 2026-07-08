@@ -42,7 +42,7 @@ struct UserRole: View {
           .clipShape(RoundedRectangle(cornerRadius: 12))
       }
     }
-    .navigationTitle("User Roles")
+    .navigationTitle("User Role")
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .navigationBarTrailing) {
