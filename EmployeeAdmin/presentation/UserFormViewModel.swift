@@ -44,7 +44,7 @@ final class UserFormViewModel {
     defer { loading = false }
     
     do {
-      user.roles = roles ?? []
+      user.roles = roles
       user = try userStore.save(user)
     } catch {
       self.error = error

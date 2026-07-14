@@ -65,18 +65,20 @@ final class UserStore: IUserStore {
     }
     object.department = department
     
-    let roleIDs = user.roles.map(\.id)
-    let roles = try roleStore.findAllManagedObjects(byIDs: roleIDs)
-    
-    let foundRoleIDs = roles.map(\.id)
-    let missingIDs = roleIDs.filter { !foundRoleIDs.contains($0) }
-    
-    guard missingIDs.isEmpty else {
-      throw Error.rolesNotFound(missingIDs)
+    if let roles = user.roles {
+      let roleIDs = roles.map(\.id)
+      let roles = try roleStore.findAllManagedObjects(byIDs: roleIDs)
+      
+      let foundRoleIDs = roles.map(\.id)
+      let missingIDs = roleIDs.filter { !foundRoleIDs.contains($0) }
+      
+      guard missingIDs.isEmpty else {
+        throw Error.rolesNotFound(missingIDs)
+      }
+      
+      object.roles = NSSet(array: roles)
     }
-    
-    object.roles = NSSet(array: roles)
-    
+
     return object.toDomain()
   }
   
