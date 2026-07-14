@@ -72,7 +72,7 @@ final class UserStore: IUserStore {
     let roleIDs = user.roles.map(\.id)
     let roles = realm.objects(RoleRealmObject.self).where { $0.id.in(roleIDs) }
     
-    let foundRoleIDs = roles.map(\.id)
+    let foundRoleIDs = Set(roles.map(\.id))
     let missingIDs = roleIDs.filter { !foundRoleIDs.contains($0) }
     
     guard missingIDs.isEmpty else {
