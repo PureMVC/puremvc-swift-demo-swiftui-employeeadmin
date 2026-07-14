@@ -16,7 +16,7 @@ struct User: Identifiable, Hashable {
   var username: String
   var password: String
   var department: Department
-  var roles: Set<Role>
+  var roles: [Role]
   
   static let empty = User(id: 0, first: "", last: "", email: "", username: "", password: "", department: .none, roles: [])
 }

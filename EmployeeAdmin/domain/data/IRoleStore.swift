@@ -8,17 +8,17 @@
 
 protocol IRoleStore {
   
-  func findAll() throws -> Set<Role>
+  func findAll() throws -> [Role]
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Role>
+  func findAll(byIDs ids: [Int64]) throws -> [Role]
   
   func find(byID id: Int64) throws -> Role?
   
-  func find(byUserID id: Int64) throws -> Set<Role>
+  func find(byUserID id: Int64) throws -> [Role]
   
   func save(_ role: Role) throws
   
-  func saveAll(_ roles: Set<Role>) throws
+  func saveAll(_ roles: [Role]) throws
   
   func count() throws -> Int
   

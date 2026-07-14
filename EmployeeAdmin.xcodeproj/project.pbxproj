@@ -11,6 +11,10 @@
 		A880A9163005A48B004CD213 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A880A9153005A48B004CD213 /* LICENSE */; };
 		A880A9183005A4AA004CD213 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A880A9173005A4AA004CD213 /* README.md */; };
 		A880A91A3005A4FE004CD213 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = A880A9193005A4FE004CD213 /* CHANGELOG.md */; };
+		A8C20DDE3005C56C00CAD6C4 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A8C20DDD3005C56C00CAD6C4 /* RealmSwift */; };
+		A8C20DDF3005C56C00CAD6C4 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = A8C20DDD3005C56C00CAD6C4 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A8C20F8F30065AE800CAD6C4 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A8C20F8E30065AE800CAD6C4 /* RealmSwift */; };
+		A8C20F9030065AE800CAD6C4 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = A8C20F8E30065AE800CAD6C4 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +33,31 @@
 			remoteInfo = EmployeeAdmin;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A8C20DE03005C56C00CAD6C4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A8C20DDF3005C56C00CAD6C4 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A8C20F9130065AE800CAD6C4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A8C20F9030065AE800CAD6C4 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A84EEE86300135D400ECD509 /* EmployeeAdmin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmployeeAdmin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8C20DDE3005C56C00CAD6C4 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8C20F8F30065AE800CAD6C4 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +125,7 @@
 				A880A9153005A48B004CD213 /* LICENSE */,
 				A880A9173005A4AA004CD213 /* README.md */,
 				A880A9193005A4FE004CD213 /* CHANGELOG.md */,
+				A8C20DD93005C56C00CAD6C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +139,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A8C20DD93005C56C00CAD6C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -117,6 +156,7 @@
 				A84EEE82300135D400ECD509 /* Sources */,
 				A84EEE83300135D400ECD509 /* Frameworks */,
 				A84EEE84300135D400ECD509 /* Resources */,
+				A8C20DE03005C56C00CAD6C4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -127,6 +167,7 @@
 			);
 			name = EmployeeAdmin;
 			packageProductDependencies = (
+				A8C20DDD3005C56C00CAD6C4 /* RealmSwift */,
 			);
 			productName = EmployeeAdmin;
 			productReference = A84EEE86300135D400ECD509 /* EmployeeAdmin.app */;
@@ -139,6 +180,7 @@
 				A84EEE94300135D500ECD509 /* Sources */,
 				A84EEE95300135D500ECD509 /* Frameworks */,
 				A84EEE96300135D500ECD509 /* Resources */,
+				A8C20F9130065AE800CAD6C4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -150,6 +192,7 @@
 			);
 			name = EmployeeAdminTests;
 			packageProductDependencies = (
+				A8C20F8E30065AE800CAD6C4 /* RealmSwift */,
 			);
 			productName = EmployeeAdminTests;
 			productReference = A84EEE98300135D500ECD509 /* EmployeeAdminTests.xctest */;
@@ -210,6 +253,9 @@
 			);
 			mainGroup = A84EEE7D300135D400ECD509;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A8C20DD83005C50D00CAD6C4 /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A84EEE87300135D400ECD509 /* Products */;
 			projectDirPath = "";
@@ -589,6 +635,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A8C20DD83005C50D00CAD6C4 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = community;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A8C20DDD3005C56C00CAD6C4 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A8C20DD83005C50D00CAD6C4 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		A8C20F8E30065AE800CAD6C4 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A8C20DD83005C50D00CAD6C4 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A84EEE7E300135D400ECD509 /* Project object */;
 }

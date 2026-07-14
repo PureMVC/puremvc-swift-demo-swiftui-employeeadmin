@@ -7,18 +7,18 @@
 //
 
 import Testing
+import RealmSwift
 @testable import EmployeeAdmin
-import CoreData
 
 @MainActor
 struct RoleStoreTest {
   
-  private let context: NSManagedObjectContext
+  private let configuration: Realm.Configuration
   private var sut: RoleStore!
   
-  init() {
-    context = ApplicationPersistence(inMemory: true).container.newBackgroundContext()
-    sut = RoleStore(context: context)
+  init() throws {
+    configuration = try ApplicationPersistence(inMemory: true).configuration
+    sut = RoleStore(configuration: configuration)
   }
   
   @Test func testFindAll() throws {
@@ -87,7 +87,7 @@ struct RoleStoreTest {
       Role(id: 2, name: "Accounts Payable")
     ]
     
-    try sut.saveAll(Set(roles))
+    try sut.saveAll(roles)
     #expect(try sut.count() == 2)
   }
   
@@ -96,27 +96,27 @@ struct RoleStoreTest {
       Role(id: 1, name: "Administrator")
     ])
     
-    let object = try sut.findManagedObject(byID: 1)
+    let object = try sut.findRealmObject(byID: 1)
     
     #expect(object != nil)
     #expect(object?.id == 1)
   }
   
-  @Test func testFindAllManagedObjects() throws {
+  @Test func testFindAllRealmObjects() throws {
     try sut.saveAll([
       Role(id: 1, name: "Administrator"),
       Role(id: 2, name: "Accounts Payable"),
       Role(id: 3, name: "Accounts Receivable")
     ])
     
-    let objects = try sut.findAllManagedObjects(byIDs: [1, 3])
+    let objects = try sut.findAllRealmObjects(byIDs: [1, 3])
     
     #expect(objects.count == 2)
-    #expect(Set(objects.map(\.id)) == [1, 3])
-    #expect(Set(objects.map(\.name)) == ["Administrator", "Accounts Receivable"])
+    #expect(objects.map(\.id) == [1, 3])
+    #expect(objects.map(\.name) == ["Administrator", "Accounts Receivable"])
     
-    #expect((try sut.findAllManagedObjects(byIDs: [])).isEmpty)
-    #expect((try sut.findAllManagedObjects(byIDs: [99, 100])).isEmpty)
+    #expect((try sut.findAllRealmObjects(byIDs: [])).isEmpty)
+    #expect((try sut.findAllRealmObjects(byIDs: [99, 100])).isEmpty)
   }
   
 }

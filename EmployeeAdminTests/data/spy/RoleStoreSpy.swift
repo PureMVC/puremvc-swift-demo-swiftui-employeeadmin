@@ -12,13 +12,13 @@ final class RoleStoreSpy: IRoleStore {
   
   private(set) var saveAllCalls = 0
   
-  private var data: Set<Role> = []
+  private var data: [Role] = []
   
-  func findAll() throws -> Set<Role> {
+  func findAll() throws -> [Role] {
     data
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Role> {
+  func findAll(byIDs ids: [Int64]) throws -> [Role] {
     data.filter { ids.contains($0.id) }
   }
   
@@ -26,15 +26,15 @@ final class RoleStoreSpy: IRoleStore {
     data.first { $0.id == id }
   }
   
-  func find(byUserID id: Int64) throws -> Set<Role> {
+  func find(byUserID id: Int64) throws -> [Role] {
     return []
   }
   
   func save(_ role: Role) throws {
-    data.insert(role)
+    data.append(role)
   }
   
-  func saveAll(_ roles: Set<Role>) throws {
+  func saveAll(_ roles: [Role]) throws {
     saveAllCalls += 1
     data = roles
   }

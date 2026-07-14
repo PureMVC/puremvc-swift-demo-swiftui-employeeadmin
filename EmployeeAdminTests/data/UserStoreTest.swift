@@ -8,21 +8,21 @@
 
 import Testing
 @testable import EmployeeAdmin
-import CoreData
+import RealmSwift
 
 @MainActor
 struct UserStoreTest {
   
-  private let context: NSManagedObjectContext
+  private let configuration: Realm.Configuration
   private let departmentStore: DepartmentStore
   private let roleStore: RoleStore
   private var sut: UserStore!
   
-  init() {
-    context = ApplicationPersistence(inMemory: true).container.newBackgroundContext()
-    departmentStore = DepartmentStore(context: context)
-    roleStore = RoleStore(context: context)
-    sut = UserStore(departmentStore: DepartmentStore(context: context), roleStore: RoleStore(context: context), context: context)
+  init() throws {
+    configuration = try ApplicationPersistence(inMemory: true).configuration
+    departmentStore = DepartmentStore(configuration: configuration)
+    roleStore = RoleStore(configuration: configuration)
+    sut = UserStore(departmentStore: departmentStore, roleStore: roleStore, configuration: configuration)
   }
 
   @Test func testFindAll() throws {
@@ -103,20 +103,20 @@ struct UserStoreTest {
     #expect(users.map(\.first) == ["Larry", "Curly"])
   }
   
-  @Test func testFindManagedObject() throws {
+  @Test func testFindRealmObject() throws {
     let accounting = Department(id: 1, name: "Accounting")
     try departmentStore.save(accounting)
     
     try sut.save(User(id: 0, first: "Larry", last: "Stooge", email: "larry@stooges.com", username: "lstooge", password: "ijk456", department: accounting, roles: []))
     
-    let object = try sut.findManagedObject(byID: 1)
+    let object = try sut.findRealmObject(byID: 1)
     
     #expect(object != nil)
     #expect(object?.id == 1)
     #expect(object?.first == "Larry")
   }
   
-  @Test func testFindAllManagedObjects() throws {
+  @Test func testFindAllRealmObjects() throws {
     let accounting = Department(id: 1, name: "Accounting")
     let sales = Department(id: 2, name: "Sales")
     let plant = Department(id: 3, name: "Plant")
@@ -130,14 +130,14 @@ struct UserStoreTest {
     
     #expect(try sut.count() == 3)
     
-    let objects = try sut.findAllManagedObjects(byIDs: [1, 3])
+    let objects = try sut.findAllRealmObjects(byIDs: [1, 3])
     
     #expect(objects.count == 2)
-    #expect(Set(objects.map(\.id)) == [1, 3])
-    #expect(Set(objects.map(\.first)) == ["Larry", "Moe"])
+    #expect(objects.map(\.id) == [1, 3])
+    #expect(objects.map(\.first) == ["Larry", "Moe"])
     
-    #expect((try sut.findAllManagedObjects(byIDs: [])).isEmpty)
-    #expect((try sut.findAllManagedObjects(byIDs: [99, 100])).isEmpty)
+    #expect((try sut.findAllRealmObjects(byIDs: [])).isEmpty)
+    #expect((try sut.findAllRealmObjects(byIDs: [99, 100])).isEmpty)
   }
   
 }

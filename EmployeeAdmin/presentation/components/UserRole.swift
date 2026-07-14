@@ -14,10 +14,10 @@ struct UserRole: View {
   @State private var viewModel: UserRoleViewModel
   
   private let id: Int64
-  private let selection: Set<Role>?
-  private let onComplete: (Set<Role>) -> Void
+  private let selection: [Role]?
+  private let onComplete: ([Role]) -> Void
   
-  init(id: Int64, _ selection: Set<Role>?, viewModel: UserRoleViewModel, onComplete: @escaping (Set<Role>) -> Void) {
+  init(id: Int64, _ selection: [Role]?, viewModel: UserRoleViewModel, onComplete: @escaping ([Role]) -> Void) {
     self.id = id
     self.selection = selection
     self.onComplete = onComplete
@@ -67,10 +67,10 @@ extension UserRole {
   var content: some View {
     List(viewModel.roles.sorted { $0.id < $1.id }) { role in
       Button {
-        if viewModel.selection.contains(role) {
-          viewModel.selection.remove(role)
+        if let index = viewModel.selection.firstIndex(of: role) {
+          viewModel.selection.remove(at: index)
         } else {
-          viewModel.selection.insert(role)
+          viewModel.selection.append(role)
         }
       } label: {
         HStack {

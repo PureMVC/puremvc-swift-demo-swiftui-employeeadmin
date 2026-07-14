@@ -7,24 +7,24 @@
 //
 
 import Testing
-import CoreData
 @testable import EmployeeAdmin
+import RealmSwift
 
 @MainActor
 struct UserRoleViewModelIntegrationTests {
   
-  private let context: NSManagedObjectContext
+  private let configuration: Realm.Configuration
   private let userStore: IUserStore
   private let departmentStore: IDepartmentStore
   private let roleStore: IRoleStore
   private let sut: UserRoleViewModel
   
-  init() {
-    context = ApplicationPersistence(inMemory: true).container.newBackgroundContext()
+  init() throws {
+    configuration = try ApplicationPersistence(inMemory: true).configuration
     
-    departmentStore = DepartmentStore(context: context)
-    roleStore = RoleStore(context: context)
-    userStore = UserStore(departmentStore: departmentStore as! DepartmentStore, roleStore: roleStore as! RoleStore, context: context)
+    departmentStore = DepartmentStore(configuration: configuration)
+    roleStore = RoleStore(configuration: configuration)
+    userStore = UserStore(departmentStore: departmentStore as! DepartmentStore, roleStore: roleStore as! RoleStore, configuration: configuration)
     
     sut = UserRoleViewModel(roleStore: roleStore)
   }
@@ -56,7 +56,7 @@ struct UserRoleViewModelIntegrationTests {
       Role(id: 5, name: "General Ledger"),
       Role(id: 6, name: "Payroll")
     ]
-    try roleStore.saveAll(Set(roles))
+    try roleStore.saveAll(roles)
     
     let larry = try userStore.save(User(id: 0, first: "Larry", last: "Stooge", email: "larry@stooges.com", username: "lstooge", password: "ijk456", department: .none, roles: [roles[3], roles[5]]))
     
@@ -65,8 +65,8 @@ struct UserRoleViewModelIntegrationTests {
     await sut.find(byUserID: larry.id)
         
     #expect(sut.selection.count == 2)
-    #expect(sut.selection.sorted {$0.id < $1.id}.map(\.id) == [4, 6])
-    #expect(sut.selection.sorted {$0.id < $1.id}.map(\.name) == ["Employee Benefits", "Payroll"])
+    #expect(sut.selection.map(\.id) == [4, 6])
+    #expect(sut.selection.map(\.name) == ["Employee Benefits", "Payroll"])
     #expect(sut.loading == false)
     #expect(sut.error == nil)
   }

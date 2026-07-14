@@ -10,7 +10,7 @@ protocol IUserStore {
   
   func findAll() throws -> [User]
   
-  func findAll(byIDs ids: Set<Int64>) throws -> [User]
+  func findAll(byIDs ids: [Int64]) throws -> [User]
   
   func find(byID id: Int64) throws -> User?
   
@@ -28,7 +28,7 @@ protocol IUserStore {
   
   func deleteAll(_ users: [User]) throws
   
-  func deleteAll(byIDs ids: Set<Int64>) throws
+  func deleteAll(byIDs ids: [Int64]) throws
   
   func count() throws -> Int
   

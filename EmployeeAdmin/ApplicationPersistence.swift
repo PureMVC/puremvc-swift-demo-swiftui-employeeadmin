@@ -6,44 +6,49 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import CoreData
+import RealmSwift
 
 struct ApplicationPersistence {
-  static let shared = ApplicationPersistence()
+  static let shared = {
+    do {
+      return try ApplicationPersistence()
+    } catch {
+      fatalError("Failed to initialize Realm: \(error)")
+    }
+  }()
   
   @MainActor
   static let preview: ApplicationPersistence = {
-    let result = ApplicationPersistence(inMemory: true)
-    let viewContext = result.container.viewContext
-    let container = ApplicationContainer(context: viewContext)
     do {
+      let persistence = try ApplicationPersistence(inMemory: true)
+      let container = ApplicationContainer(configuration: persistence.configuration)
+      
       try StartupUseCase(userStore: container.userStore, departmentStore: container.departmentStore, roleStore: container.roleStore).execute()
+      
+      return persistence
     } catch {
-      // Replace this implementation with code to handle the error appropriately.
-      // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-      let nsError = error as NSError
-      fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+      fatalError("Failed to initialize preview Realm: \(error)")
     }
-    
-    return result
   }()
   
-  let container: NSPersistentContainer
+  let configuration: Realm.Configuration
+  
+  // Keeps the in-memory Realm alive.
+  private let realm: Realm?
 
-  init(inMemory: Bool = false) {
-    container = NSPersistentContainer(name: "EmployeeAdmin")
+  init(inMemory: Bool = false) throws {
+    let types: [Object.Type] = [UserRealmObject.self, DepartmentRealmObject.self, RoleRealmObject.self]
+    
     if inMemory {
-      container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+      configuration = Realm.Configuration(inMemoryIdentifier: "EmployeeAdmin", objectTypes: types)
+      realm = try Realm(configuration: configuration)
+    } else {
+      configuration = Realm.Configuration(schemaVersion: 1, objectTypes: types)
+      realm = nil
     }
-    container.loadPersistentStores { [container] _, error in
-      if let error = error as NSError? {
-        fatalError("Unresolved error \(error), \(error.userInfo)")
-      }
-      
-      if let _ = container.persistentStoreCoordinator.persistentStores.first?.url {
-//        print(url.path)
-      }
-    }
-    container.viewContext.automaticallyMergesChangesFromParent = true
+
+//    if let _ = container.persistentStoreCoordinator.persistentStores.first?.url {
+      //        print(url.path)
+//    }
   }
 }

@@ -15,7 +15,7 @@ final class UserFormViewModel {
   private let departmentStore: IDepartmentStore
 
   var user: User
-  var departments: Set<Department> = []
+  var departments: [Department] = []
   var loading: Bool = false
   var error: Error?
   
@@ -39,7 +39,7 @@ final class UserFormViewModel {
     }
   }
   
-  func save(selection roles: Set<Role>?) async {
+  func save(selection roles: [Role]?) async {
     loading = true
     defer { loading = false }
     

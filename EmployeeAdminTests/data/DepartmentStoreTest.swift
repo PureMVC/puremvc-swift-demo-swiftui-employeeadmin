@@ -8,17 +8,17 @@
 
 import Testing
 @testable import EmployeeAdmin
-import CoreData
+import RealmSwift
 
 @MainActor
 struct DepartmentStoreTest {
   
-  private let context: NSManagedObjectContext
+  private let configuration: Realm.Configuration
   private var sut: DepartmentStore!
   
-  init() {
-    context = ApplicationPersistence(inMemory: true).container.newBackgroundContext()
-    sut = DepartmentStore(context: context)
+  init() throws {
+    configuration = try ApplicationPersistence(inMemory: true).configuration
+    sut = DepartmentStore(configuration: configuration)
   }
 
   @Test func testFindAll() throws {
@@ -77,36 +77,36 @@ struct DepartmentStoreTest {
       Department(id: 2, name: "Sales")
     ]
     
-    try sut.saveAll(Set(departments))
+    try sut.saveAll(departments)
     #expect(try sut.count() == 2)
   }
   
-  @Test func testFindManagedObject() throws {
+  @Test func testFindRealmObject() throws {
     try sut.saveAll([
       Department(id: 1, name: "Accounting")
     ])
     
-    let object = try sut.findManagedObject(byID: 1)
+    let object = try sut.findRealmObject(byID: 1)
     
     #expect(object != nil)
     #expect(object?.id == 1)
   }
   
-  @Test func testFindAllManagedObjects() throws {
+  @Test func testFindAllRealmObjects() throws {
     try sut.saveAll([
       Department(id: 1, name: "Accounting"),
       Department(id: 2, name: "Sales"),
       Department(id: 3, name: "Engineering")
     ])
     
-    let objects = try sut.findAllManagedObjects(byIDs: [1, 3])
+    let objects = try sut.findAllRealmObjects(byIDs: [1, 3])
     
     #expect(objects.count == 2)
-    #expect(Set(objects.map(\.id)) == [1, 3])
-    #expect(Set(objects.map(\.name)) == ["Accounting", "Engineering"])
+    #expect(objects.map(\.id) == [1, 3])
+    #expect(objects.map(\.name) == ["Accounting", "Engineering"])
     
-    #expect((try sut.findAllManagedObjects(byIDs: [])).isEmpty)
-    #expect((try sut.findAllManagedObjects(byIDs: [99, 100])).isEmpty)
+    #expect((try sut.findAllRealmObjects(byIDs: [])).isEmpty)
+    #expect((try sut.findAllRealmObjects(byIDs: [99, 100])).isEmpty)
   }
   
 }

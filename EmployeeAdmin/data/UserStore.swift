@@ -6,46 +6,56 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import CoreData
+import RealmSwift
 
 final class UserStore: IUserStore {
   
-  private let context: NSManagedObjectContext
+  enum Error: Swift.Error {
+    case userNotFound(Int64)
+    case departmentNotFound(Int64)
+    case rolesNotFound([Int64])
+    case saveFailed
+  }
+  
+  private let configuration: Realm.Configuration
   private let departmentStore: DepartmentStore
   private let roleStore: RoleStore
   
-  init(departmentStore: DepartmentStore, roleStore: RoleStore, context: NSManagedObjectContext) {
-    self.context = context
+  init(departmentStore: DepartmentStore, roleStore: RoleStore, configuration: Realm.Configuration) {
+    self.configuration = configuration
     self.departmentStore = departmentStore
     self.roleStore = roleStore
   }
   
   func findAll() throws -> [User] {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+    let realm = try Realm(configuration: configuration)
+    let users = realm.objects(UserRealmObject.self).sorted(byKeyPath: "id", ascending: true)
     
-    return try context.fetch(request).toDomain()
+    return users.toDomain()
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> [User] {
-    try findAllManagedObjects(byIDs: ids).toDomain()
+  func findAll(byIDs ids: [Int64]) throws -> [User] {
+    let realm = try Realm(configuration: configuration)
+    let users = realm.objects(UserRealmObject.self).where { $0.id.in(ids) }
+    
+    return users.toDomain()
   }
   
   func find(byID id: Int64) throws -> User? {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id == %d", id)
+    let realm = try Realm(configuration: configuration)
+    let user = realm.object(ofType: UserRealmObject.self, forPrimaryKey: id)
     
-    return try context.fetch(request).first?.toDomain()
+    return user?.toDomain()
   }
   
-  private func upsert(_ user: User) throws -> User {
-    let object: UserManagedObject
+  private func upsert(_ user: User, in realm: Realm) throws -> User {
+    let object: UserRealmObject
     
     if user.id == 0 {
-      object = user.toManagedObject(in: context)
-      object.id = try nextID()
+      object = user.toRealmObject()
+      object.id = try nextID(in: realm)
     } else {
-      guard let existing = try findManagedObject(byID: user.id) else {
+      guard let existing = realm.object(ofType: UserRealmObject.self, forPrimaryKey: user.id) else {
         throw Error.userNotFound(user.id)
       }
       
@@ -54,30 +64,40 @@ final class UserStore: IUserStore {
     
     user.update(object)
         
-    guard let department = try departmentStore.findManagedObject(byID: user.department.id) else {
+    guard let department = realm.object(ofType: DepartmentRealmObject.self, forPrimaryKey: user.department.id) else {
       throw Error.departmentNotFound(user.department.id)
     }
     object.department = department
     
-    let roleIDs = Set(user.roles.map(\.id))
-    let roles = try roleStore.findAllManagedObjects(byIDs: roleIDs)
+    let roleIDs = user.roles.map(\.id)
+    let roles = realm.objects(RoleRealmObject.self).where { $0.id.in(roleIDs) }
     
-    let missingIDs = roleIDs.subtracting(roles.map(\.id))
+    let foundRoleIDs = roles.map(\.id)
+    let missingIDs = roleIDs.filter { !foundRoleIDs.contains($0) }
+    
     guard missingIDs.isEmpty else {
       throw Error.rolesNotFound(missingIDs)
     }
     
-    object.roles = NSSet(set: roles)
+    object.roles.removeAll()
+    object.roles.append(objectsIn: roles)
+    
+    realm.add(object, update: .modified)
     
     return object.toDomain()
   }
   
   @discardableResult
   func save(_ user: User) throws -> User {
-    let saved = try upsert(user)
+    let realm = try Realm(configuration: configuration)
+    var saved: User?
     
-    if context.hasChanges {
-      try context.save()
+    try realm.write {
+      saved = try upsert(user, in: realm)
+    }
+    
+    guard let saved else {
+      throw Error.saveFailed
     }
     
     return saved
@@ -85,14 +105,11 @@ final class UserStore: IUserStore {
   
   @discardableResult
   func saveAll(_ users: [User]) throws -> [User] {
+    let realm = try Realm(configuration: configuration)
     var saved: [User] = []
     
-    for user in users {
-      saved.append(try upsert(user))
-    }
-    
-    if context.hasChanges {
-      try context.save()
+    try realm.write {
+      saved = try users.map { try upsert($0, in: realm) }
     }
     
     return saved
@@ -103,96 +120,73 @@ final class UserStore: IUserStore {
   }
   
   func delete(byID id: Int64) throws {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id == %d", id)
-    request.fetchLimit = 1
+    let realm = try Realm(configuration: configuration)
     
-    if let object = try context.fetch(request).first {
-      context.delete(object)
+    guard let user = realm.object(ofType: UserRealmObject.self, forPrimaryKey: id) else {
+      return
     }
     
-    if context.hasChanges {
-      try context.save()
+    try realm.write {
+      realm.delete(user)
     }
   }
   
   func deleteAll() throws {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
+    let realm = try Realm(configuration: configuration)
     
-    let deleteRequest = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<any NSFetchRequestResult>)
-    try context.execute(deleteRequest)
-    
-    try context.save()
+    try realm.write {
+      realm.delete(realm.objects(UserRealmObject.self))
+    }
   }
   
   func deleteAll(_ users: [User]) throws {
-    let ids = Set(users.map(\.id))
+    let ids = users.map(\.id)
     try deleteAll(byIDs: ids)
   }
   
-  func deleteAll(byIDs ids: Set<Int64>) throws {
-    guard !ids.isEmpty else {
-      return
-    }
+  func deleteAll(byIDs ids: [Int64]) throws {
+    let realm = try Realm(configuration: configuration)
     
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id IN %@", ids)
+    let objects = realm.objects(UserRealmObject.self).where { $0.id.in(ids) }
     
-    let objects = try context.fetch(request)
-    objects.forEach { context.delete($0) }
-    
-    if context.hasChanges {
-      try context.save()
+    try realm.write {
+      realm.delete(objects)
     }
   }
   
   func count() throws -> Int {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    return try context.count(for: request)
+    let realm = try Realm(configuration: configuration)
+    return realm.objects(UserRealmObject.self).count
   }
   
 }
 
 private extension UserStore {
     
-  private func nextID() throws -> Int64 {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-    request.fetchLimit = 1
+  private func nextID(in realm: Realm) throws -> Int64 {
+    let id = realm.objects(UserRealmObject.self).max(ofProperty: "id") as Int64?
     
-    if let user = try context.fetch(request).first {
-      return user.id + 1
-    }
-    
-    return 1
+    return (id ?? 0) + 1
   }
   
 }
 
 extension UserStore {
   
-  func findManagedObject(byID id: Int64) throws -> UserManagedObject? {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id == %d", id)
-    request.fetchLimit = 1
+  func findRealmObject(byID id: Int64) throws -> UserRealmObject? {
+    let realm = try Realm(configuration: configuration)
     
-    return try context.fetch(request).first
+    return realm.object(ofType: UserRealmObject.self, forPrimaryKey: id)
   }
   
-  func findAllManagedObjects(byIDs ids: Set<Int64>) throws -> [UserManagedObject] {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id IN %@", ids)
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+  func findAllRealmObjects(byIDs ids: [Int64]) throws -> [UserRealmObject] {
+    let realm = try Realm(configuration: configuration)
     
-    return try context.fetch(request)
+    let users = realm.objects(UserRealmObject.self)
+      .where { $0.id.in(ids) }
+      .sorted(byKeyPath: "id", ascending: true)
+    
+    return Array(users)
   }
   
-}
-
-extension UserStore {
-  enum Error: Swift.Error {
-    case userNotFound(Int64)
-    case departmentNotFound(Int64)
-    case rolesNotFound(Set<Int64>)
-  }
 }

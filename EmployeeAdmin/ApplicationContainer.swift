@@ -7,20 +7,22 @@
 //
 
 import SwiftUI
-import CoreData
+import RealmSwift
 
 final class ApplicationContainer {
   
-  let context: NSManagedObjectContext
+  let configuration: Realm.Configuration
+  let realm: Realm
   let userStore: UserStore
   let departmentStore: DepartmentStore
   let roleStore: RoleStore
 
-  init(context: NSManagedObjectContext) {
-    self.context = context
-    departmentStore = DepartmentStore(context: context)
-    roleStore = RoleStore(context: context)
-    userStore = UserStore(departmentStore: departmentStore, roleStore: roleStore, context: context)
+  init(configuration: Realm.Configuration) {
+    self.configuration = configuration
+    self.realm = try! Realm(configuration: configuration)
+    departmentStore = DepartmentStore(configuration: configuration)
+    roleStore = RoleStore(configuration: configuration)
+    userStore = UserStore(departmentStore: departmentStore, roleStore: roleStore, configuration: configuration)
   }
   
   func userListViewModel() -> UserListViewModel {
@@ -44,7 +46,7 @@ extension ApplicationContainer {
     let persistence = ApplicationPersistence.preview
     
     return ApplicationContainer(
-      context: persistence.container.viewContext
+      configuration: persistence.configuration
     )
   }()
 }

@@ -7,24 +7,24 @@
 //
 
 import Testing
-import CoreData
 @testable import EmployeeAdmin
+import RealmSwift
 
 @MainActor
 struct UserListViewModelIntegrationTests {
   
-  private let context: NSManagedObjectContext
+  private let configuration: Realm.Configuration
   private let userStore: IUserStore
   private let departmentStore: IDepartmentStore
   private let roleStore: IRoleStore
   private let sut: UserListViewModel
   
-  init() {
-    context = ApplicationPersistence(inMemory: true).container.newBackgroundContext()
+  init() throws {
+    configuration = try ApplicationPersistence(inMemory: true).configuration
     
-    departmentStore = DepartmentStore(context: context)
-    roleStore = RoleStore(context: context)
-    userStore = UserStore(departmentStore: departmentStore as! DepartmentStore, roleStore: roleStore as! RoleStore, context: context)
+    departmentStore = DepartmentStore(configuration: configuration)
+    roleStore = RoleStore(configuration: configuration)
+    userStore = UserStore(departmentStore: departmentStore as! DepartmentStore, roleStore: roleStore as! RoleStore, configuration: configuration)
     
     sut = UserListViewModel(userStore: userStore)
   }

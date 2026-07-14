@@ -11,14 +11,14 @@ import Observation
 @Observable
 final class UserListViewModel {
   
-  private let userData: IUserStore
+  private let userStore: IUserStore
   
   var users: [User] = []
   var loading: Bool = false
   var error: Error?
   
   init(userStore: IUserStore) {
-    self.userData = userStore
+    self.userStore = userStore
   }
   
   func findAll() async {
@@ -26,7 +26,7 @@ final class UserListViewModel {
     defer { loading = false }
     
     do {
-      users = try userData.findAll()
+      users = try userStore.findAll()
     } catch {
       self.error = error
     }
@@ -37,7 +37,7 @@ final class UserListViewModel {
     defer { loading = false }
     
     do {
-      try userData.delete(byID: id)
+      try userStore.delete(byID: id)
     } catch {
       self.error = error
     }

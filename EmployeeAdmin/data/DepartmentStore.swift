@@ -6,69 +6,76 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import CoreData
+import RealmSwift
 
 final class DepartmentStore: IDepartmentStore {
   
-  private let context: NSManagedObjectContext
+  private let configuration: Realm.Configuration
   
-  init(context: NSManagedObjectContext) {
-    self.context = context
+  init(configuration: Realm.Configuration) {
+    self.configuration = configuration
   }
   
-  func findAll() throws -> Set<Department> {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
+  func findAll() throws -> [Department] {
+    let realm = try Realm(configuration: configuration)
+    let departments = realm.objects(DepartmentRealmObject.self).sorted(byKeyPath: "id", ascending: true)
     
-    return Set(try context.fetch(request).toDomain())
+    return departments.toDomain()
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Department> {
-    Set(try findAllManagedObjects(byIDs: ids).toDomain())
+  func findAll(byIDs ids: [Int64]) throws -> [Department] {
+    let realm = try Realm(configuration: configuration)
+    let departments = realm.objects(DepartmentRealmObject.self).where { $0.id.in(ids) }
+    
+    return departments.toDomain()
   }
 
   func find(byID id: Int64) throws -> Department? {
-    try findManagedObject(byID: id)?.toDomain()
+    let realm = try Realm(configuration: configuration)
+    let department = realm.object(ofType: DepartmentRealmObject.self, forPrimaryKey: id)
+    
+    return department?.toDomain()
   }
   
   func save(_ department: Department) throws {
-    _ = department.toManagedObject(in: context)
+    let realm = try Realm(configuration: configuration)
     
-    if context.hasChanges {
-      try context.save()
+    try realm.write {
+      realm.add(department.toRealmObject(), update: .modified)
     }
   }
   
-  func saveAll(_ departments: Set<Department>) throws {
-    _ = departments.toManagedObjects(in: context)
+  func saveAll(_ departments: [Department]) throws {
+    let realm = try Realm(configuration: configuration)
     
-    if context.hasChanges {
-      try context.save()
+    try realm.write {
+      realm.add(departments.toRealmObjects(), update: .modified)
     }
   }
   
   func count() throws -> Int {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
-    return try context.count(for: request)
+    let realm = try Realm(configuration: configuration)
+    return realm.objects(DepartmentRealmObject.self).count
   }
   
 }
 
 extension DepartmentStore {
   
-  func findManagedObject(byID id: Int64) throws -> DepartmentManagedObject? {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id == %d", id)
-    request.fetchLimit = 1
+  func findRealmObject(byID id: Int64) throws -> DepartmentRealmObject? {
+    let realm = try Realm(configuration: configuration)
     
-    return try context.fetch(request).first
+    return realm.object(ofType: DepartmentRealmObject.self, forPrimaryKey: id)
   }
   
-  func findAllManagedObjects(byIDs ids: Set<Int64>) throws -> Set<DepartmentManagedObject> {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id IN %@", ids)
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+  func findAllRealmObjects(byIDs ids: [Int64]) throws -> [DepartmentRealmObject] {
+    let realm = try Realm(configuration: configuration)
     
-    return Set(try context.fetch(request))
+    let departments = realm.objects(DepartmentRealmObject.self)
+      .where { $0.id.in(ids) }
+      .sorted(byKeyPath: "id", ascending: true)
+    
+    return Array(departments)
   }
   
 }

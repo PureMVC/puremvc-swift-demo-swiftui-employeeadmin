@@ -14,7 +14,7 @@ struct UserForm: View {
   @Environment(\.dismiss) private var dismiss
   
   @State private var viewModel: UserFormViewModel
-  @State private var selection: Set<Role>?
+  @State private var selection: [Role]?
   @State private var confirm: String = ""
   @State private var isSheetPresented = false
   
@@ -149,7 +149,7 @@ private extension UserForm {
   
   var department: some View {
     Picker("Department", selection: $viewModel.user.department) {
-      ForEach(Array(viewModel.departments).sorted { $0.id < $1.id }) { department in
+      ForEach(viewModel.departments.sorted { $0.id < $1.id }) { department in
         Text(department.name)
           .tag(department)
       }
