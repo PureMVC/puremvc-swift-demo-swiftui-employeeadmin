@@ -7,52 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A898FCA52DE988F400996F3F /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A898FCA42DE988F400996F3F /* PureMVC */; };
-		A8D448362FE2F28D0021B42C /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8024A1C2DE1A07800D1BF1E /* PureMVC */; };
-		A8D448372FE2F28D0021B42C /* PureMVC in Frameworks */ = {isa = PBXBuildFile; productRef = A8F237232DE97F3B00E5DD0A /* PureMVC */; };
-		A8D4486B2FE4F0980021B42C /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = A8D4486A2FE4F0980021B42C /* CHANGELOG.md */; };
-		A8F9208F2F8A5E5F003EA9F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A8F9208E2F8A5E5F003EA9F0 /* LICENSE */; };
-		A8F920912F8A5E64003EA9F0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A8F920902F8A5E64003EA9F0 /* README.md */; };
+		A84EEFCE3001C5C800ECD509 /* DEVELOPMENT.md in Resources */ = {isa = PBXBuildFile; fileRef = A84EEFCD3001C5C800ECD509 /* DEVELOPMENT.md */; };
+		A880A9163005A48B004CD213 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A880A9153005A48B004CD213 /* LICENSE */; };
+		A880A9183005A4AA004CD213 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A880A9173005A4AA004CD213 /* README.md */; };
+		A880A91A3005A4FE004CD213 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = A880A9193005A4FE004CD213 /* CHANGELOG.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A80249AF2DE0D9E100D1BF1E /* PBXContainerItemProxy */ = {
+		A84EEE99300135D500ECD509 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A80249992DE0D9E000D1BF1E /* Project object */;
+			containerPortal = A84EEE7E300135D400ECD509 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A80249A02DE0D9E000D1BF1E;
+			remoteGlobalIDString = A84EEE85300135D400ECD509;
 			remoteInfo = EmployeeAdmin;
 		};
-		A80249B92DE0D9E100D1BF1E /* PBXContainerItemProxy */ = {
+		A84EEEA3300135D500ECD509 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A80249992DE0D9E000D1BF1E /* Project object */;
+			containerPortal = A84EEE7E300135D400ECD509 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A80249A02DE0D9E000D1BF1E;
+			remoteGlobalIDString = A84EEE85300135D400ECD509;
 			remoteInfo = EmployeeAdmin;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A80249A12DE0D9E000D1BF1E /* EmployeeAdmin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmployeeAdmin.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A80249AE2DE0D9E100D1BF1E /* EmployeeAdminTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmployeeAdminTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A80249B82DE0D9E100D1BF1E /* EmployeeAdminUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmployeeAdminUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8D4486A2FE4F0980021B42C /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		A8F9208E2F8A5E5F003EA9F0 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		A8F920902F8A5E64003EA9F0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A84EEE86300135D400ECD509 /* EmployeeAdmin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmployeeAdmin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A84EEE98300135D500ECD509 /* EmployeeAdminTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmployeeAdminTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A84EEEA2300135D500ECD509 /* EmployeeAdminUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmployeeAdminUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A84EEFCD3001C5C800ECD509 /* DEVELOPMENT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DEVELOPMENT.md; sourceTree = "<group>"; };
+		A880A9153005A48B004CD213 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		A880A9173005A4AA004CD213 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A880A9193005A4FE004CD213 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A80249A32DE0D9E000D1BF1E /* EmployeeAdmin */ = {
+		A84EEE88300135D400ECD509 /* EmployeeAdmin */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EmployeeAdmin;
 			sourceTree = "<group>";
 		};
-		A80249B12DE0D9E100D1BF1E /* EmployeeAdminTests */ = {
+		A84EEE9B300135D500ECD509 /* EmployeeAdminTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EmployeeAdminTests;
 			sourceTree = "<group>";
 		};
-		A80249BB2DE0D9E100D1BF1E /* EmployeeAdminUITests */ = {
+		A84EEEA5300135D500ECD509 /* EmployeeAdminUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EmployeeAdminUITests;
 			sourceTree = "<group>";
@@ -60,24 +59,21 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A802499E2DE0D9E000D1BF1E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A8D448372FE2F28D0021B42C /* PureMVC in Frameworks */,
-				A8D448362FE2F28D0021B42C /* PureMVC in Frameworks */,
-				A898FCA52DE988F400996F3F /* PureMVC in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A80249AB2DE0D9E100D1BF1E /* Frameworks */ = {
+		A84EEE83300135D400ECD509 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A80249B52DE0D9E100D1BF1E /* Frameworks */ = {
+		A84EEE95300135D500ECD509 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A84EEE9F300135D500ECD509 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -87,25 +83,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A80249982DE0D9E000D1BF1E = {
+		A84EEE7D300135D400ECD509 = {
 			isa = PBXGroup;
 			children = (
-				A80249A32DE0D9E000D1BF1E /* EmployeeAdmin */,
-				A80249B12DE0D9E100D1BF1E /* EmployeeAdminTests */,
-				A80249BB2DE0D9E100D1BF1E /* EmployeeAdminUITests */,
-				A80249A22DE0D9E000D1BF1E /* Products */,
-				A8F9208E2F8A5E5F003EA9F0 /* LICENSE */,
-				A8F920902F8A5E64003EA9F0 /* README.md */,
-				A8D4486A2FE4F0980021B42C /* CHANGELOG.md */,
+				A84EEE88300135D400ECD509 /* EmployeeAdmin */,
+				A84EEE9B300135D500ECD509 /* EmployeeAdminTests */,
+				A84EEEA5300135D500ECD509 /* EmployeeAdminUITests */,
+				A84EEE87300135D400ECD509 /* Products */,
+				A84EEFCD3001C5C800ECD509 /* DEVELOPMENT.md */,
+				A880A9153005A48B004CD213 /* LICENSE */,
+				A880A9173005A4AA004CD213 /* README.md */,
+				A880A9193005A4FE004CD213 /* CHANGELOG.md */,
 			);
 			sourceTree = "<group>";
 		};
-		A80249A22DE0D9E000D1BF1E /* Products */ = {
+		A84EEE87300135D400ECD509 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A80249A12DE0D9E000D1BF1E /* EmployeeAdmin.app */,
-				A80249AE2DE0D9E100D1BF1E /* EmployeeAdminTests.xctest */,
-				A80249B82DE0D9E100D1BF1E /* EmployeeAdminUITests.xctest */,
+				A84EEE86300135D400ECD509 /* EmployeeAdmin.app */,
+				A84EEE98300135D500ECD509 /* EmployeeAdminTests.xctest */,
+				A84EEEA2300135D500ECD509 /* EmployeeAdminUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,143 +110,138 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A80249A02DE0D9E000D1BF1E /* EmployeeAdmin */ = {
+		A84EEE85300135D400ECD509 /* EmployeeAdmin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A80249C22DE0D9E100D1BF1E /* Build configuration list for PBXNativeTarget "EmployeeAdmin" */;
+			buildConfigurationList = A84EEEAC300135D500ECD509 /* Build configuration list for PBXNativeTarget "EmployeeAdmin" */;
 			buildPhases = (
-				A802499D2DE0D9E000D1BF1E /* Sources */,
-				A802499E2DE0D9E000D1BF1E /* Frameworks */,
-				A802499F2DE0D9E000D1BF1E /* Resources */,
+				A84EEE82300135D400ECD509 /* Sources */,
+				A84EEE83300135D400ECD509 /* Frameworks */,
+				A84EEE84300135D400ECD509 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A80249A32DE0D9E000D1BF1E /* EmployeeAdmin */,
+				A84EEE88300135D400ECD509 /* EmployeeAdmin */,
 			);
 			name = EmployeeAdmin;
 			packageProductDependencies = (
-				A8024A1C2DE1A07800D1BF1E /* PureMVC */,
-				A8F237232DE97F3B00E5DD0A /* PureMVC */,
-				A898FCA42DE988F400996F3F /* PureMVC */,
 			);
 			productName = EmployeeAdmin;
-			productReference = A80249A12DE0D9E000D1BF1E /* EmployeeAdmin.app */;
+			productReference = A84EEE86300135D400ECD509 /* EmployeeAdmin.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A80249AD2DE0D9E100D1BF1E /* EmployeeAdminTests */ = {
+		A84EEE97300135D500ECD509 /* EmployeeAdminTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A80249C52DE0D9E100D1BF1E /* Build configuration list for PBXNativeTarget "EmployeeAdminTests" */;
+			buildConfigurationList = A84EEEAF300135D500ECD509 /* Build configuration list for PBXNativeTarget "EmployeeAdminTests" */;
 			buildPhases = (
-				A80249AA2DE0D9E100D1BF1E /* Sources */,
-				A80249AB2DE0D9E100D1BF1E /* Frameworks */,
-				A80249AC2DE0D9E100D1BF1E /* Resources */,
+				A84EEE94300135D500ECD509 /* Sources */,
+				A84EEE95300135D500ECD509 /* Frameworks */,
+				A84EEE96300135D500ECD509 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A80249B02DE0D9E100D1BF1E /* PBXTargetDependency */,
+				A84EEE9A300135D500ECD509 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A80249B12DE0D9E100D1BF1E /* EmployeeAdminTests */,
+				A84EEE9B300135D500ECD509 /* EmployeeAdminTests */,
 			);
 			name = EmployeeAdminTests;
 			packageProductDependencies = (
 			);
 			productName = EmployeeAdminTests;
-			productReference = A80249AE2DE0D9E100D1BF1E /* EmployeeAdminTests.xctest */;
+			productReference = A84EEE98300135D500ECD509 /* EmployeeAdminTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A80249B72DE0D9E100D1BF1E /* EmployeeAdminUITests */ = {
+		A84EEEA1300135D500ECD509 /* EmployeeAdminUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A80249C82DE0D9E100D1BF1E /* Build configuration list for PBXNativeTarget "EmployeeAdminUITests" */;
+			buildConfigurationList = A84EEEB2300135D500ECD509 /* Build configuration list for PBXNativeTarget "EmployeeAdminUITests" */;
 			buildPhases = (
-				A80249B42DE0D9E100D1BF1E /* Sources */,
-				A80249B52DE0D9E100D1BF1E /* Frameworks */,
-				A80249B62DE0D9E100D1BF1E /* Resources */,
+				A84EEE9E300135D500ECD509 /* Sources */,
+				A84EEE9F300135D500ECD509 /* Frameworks */,
+				A84EEEA0300135D500ECD509 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A80249BA2DE0D9E100D1BF1E /* PBXTargetDependency */,
+				A84EEEA4300135D500ECD509 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A80249BB2DE0D9E100D1BF1E /* EmployeeAdminUITests */,
+				A84EEEA5300135D500ECD509 /* EmployeeAdminUITests */,
 			);
 			name = EmployeeAdminUITests;
 			packageProductDependencies = (
 			);
 			productName = EmployeeAdminUITests;
-			productReference = A80249B82DE0D9E100D1BF1E /* EmployeeAdminUITests.xctest */;
+			productReference = A84EEEA2300135D500ECD509 /* EmployeeAdminUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		A80249992DE0D9E000D1BF1E /* Project object */ = {
+		A84EEE7E300135D400ECD509 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
-				LastUpgradeCheck = 2640;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
-					A80249A02DE0D9E000D1BF1E = {
-						CreatedOnToolsVersion = 16.3;
+					A84EEE85300135D400ECD509 = {
+						CreatedOnToolsVersion = 26.6;
 					};
-					A80249AD2DE0D9E100D1BF1E = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = A80249A02DE0D9E000D1BF1E;
+					A84EEE97300135D500ECD509 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = A84EEE85300135D400ECD509;
 					};
-					A80249B72DE0D9E100D1BF1E = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = A80249A02DE0D9E000D1BF1E;
+					A84EEEA1300135D500ECD509 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = A84EEE85300135D400ECD509;
 					};
 				};
 			};
-			buildConfigurationList = A802499C2DE0D9E000D1BF1E /* Build configuration list for PBXProject "EmployeeAdmin" */;
+			buildConfigurationList = A84EEE81300135D400ECD509 /* Build configuration list for PBXProject "EmployeeAdmin" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = A80249982DE0D9E000D1BF1E;
+			mainGroup = A84EEE7D300135D400ECD509;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				A898FCA32DE988F400996F3F /* XCRemoteSwiftPackageReference "puremvc-swift-multicore-framework" */,
-			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = A80249A22DE0D9E000D1BF1E /* Products */;
+			productRefGroup = A84EEE87300135D400ECD509 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A80249A02DE0D9E000D1BF1E /* EmployeeAdmin */,
-				A80249AD2DE0D9E100D1BF1E /* EmployeeAdminTests */,
-				A80249B72DE0D9E100D1BF1E /* EmployeeAdminUITests */,
+				A84EEE85300135D400ECD509 /* EmployeeAdmin */,
+				A84EEE97300135D500ECD509 /* EmployeeAdminTests */,
+				A84EEEA1300135D500ECD509 /* EmployeeAdminUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A802499F2DE0D9E000D1BF1E /* Resources */ = {
+		A84EEE84300135D400ECD509 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8F920912F8A5E64003EA9F0 /* README.md in Resources */,
-				A8D4486B2FE4F0980021B42C /* CHANGELOG.md in Resources */,
-				A8F9208F2F8A5E5F003EA9F0 /* LICENSE in Resources */,
+				A880A9163005A48B004CD213 /* LICENSE in Resources */,
+				A880A91A3005A4FE004CD213 /* CHANGELOG.md in Resources */,
+				A880A9183005A4AA004CD213 /* README.md in Resources */,
+				A84EEFCE3001C5C800ECD509 /* DEVELOPMENT.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A80249AC2DE0D9E100D1BF1E /* Resources */ = {
+		A84EEE96300135D500ECD509 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A80249B62DE0D9E100D1BF1E /* Resources */ = {
+		A84EEEA0300135D500ECD509 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -259,21 +251,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A802499D2DE0D9E000D1BF1E /* Sources */ = {
+		A84EEE82300135D400ECD509 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A80249AA2DE0D9E100D1BF1E /* Sources */ = {
+		A84EEE94300135D500ECD509 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A80249B42DE0D9E100D1BF1E /* Sources */ = {
+		A84EEE9E300135D500ECD509 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -283,20 +275,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A80249B02DE0D9E100D1BF1E /* PBXTargetDependency */ = {
+		A84EEE9A300135D500ECD509 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A80249A02DE0D9E000D1BF1E /* EmployeeAdmin */;
-			targetProxy = A80249AF2DE0D9E100D1BF1E /* PBXContainerItemProxy */;
+			target = A84EEE85300135D400ECD509 /* EmployeeAdmin */;
+			targetProxy = A84EEE99300135D500ECD509 /* PBXContainerItemProxy */;
 		};
-		A80249BA2DE0D9E100D1BF1E /* PBXTargetDependency */ = {
+		A84EEEA4300135D500ECD509 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A80249A02DE0D9E000D1BF1E /* EmployeeAdmin */;
-			targetProxy = A80249B92DE0D9E100D1BF1E /* PBXContainerItemProxy */;
+			target = A84EEE85300135D400ECD509 /* EmployeeAdmin */;
+			targetProxy = A84EEEA3300135D500ECD509 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		A80249C02DE0D9E100D1BF1E /* Debug */ = {
+		A84EEEAA300135D500ECD509 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -348,19 +340,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		A80249C12DE0D9E100D1BF1E /* Release */ = {
+		A84EEEAB300135D500ECD509 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -406,26 +397,23 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		A80249C32DE0D9E100D1BF1E /* Debug */ = {
+		A84EEEAD300135D500ECD509 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = EmployeeAdmin/EmployeeAdmin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -440,21 +428,23 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.puremvc.EmployeeAdmin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		A80249C42DE0D9E100D1BF1E /* Release */ = {
+		A84EEEAE300135D500ECD509 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = EmployeeAdmin/EmployeeAdmin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -469,49 +459,59 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.puremvc.EmployeeAdmin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		A80249C62DE0D9E100D1BF1E /* Debug */ = {
+		A84EEEB0300135D500ECD509 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.puremvc.EmployeeAdminTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EmployeeAdmin.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EmployeeAdmin";
 			};
 			name = Debug;
 		};
-		A80249C72DE0D9E100D1BF1E /* Release */ = {
+		A84EEEB1300135D500ECD509 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.puremvc.EmployeeAdminTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EmployeeAdmin.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EmployeeAdmin";
 			};
 			name = Release;
 		};
-		A80249C92DE0D9E100D1BF1E /* Debug */ = {
+		A84EEEB3300135D500ECD509 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -520,14 +520,17 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.puremvc.EmployeeAdminUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = EmployeeAdmin;
 			};
 			name = Debug;
 		};
-		A80249CA2DE0D9E100D1BF1E /* Release */ = {
+		A84EEEB4300135D500ECD509 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -536,7 +539,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.puremvc.EmployeeAdminUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = EmployeeAdmin;
@@ -546,70 +552,43 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A802499C2DE0D9E000D1BF1E /* Build configuration list for PBXProject "EmployeeAdmin" */ = {
+		A84EEE81300135D400ECD509 /* Build configuration list for PBXProject "EmployeeAdmin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A80249C02DE0D9E100D1BF1E /* Debug */,
-				A80249C12DE0D9E100D1BF1E /* Release */,
+				A84EEEAA300135D500ECD509 /* Debug */,
+				A84EEEAB300135D500ECD509 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A80249C22DE0D9E100D1BF1E /* Build configuration list for PBXNativeTarget "EmployeeAdmin" */ = {
+		A84EEEAC300135D500ECD509 /* Build configuration list for PBXNativeTarget "EmployeeAdmin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A80249C32DE0D9E100D1BF1E /* Debug */,
-				A80249C42DE0D9E100D1BF1E /* Release */,
+				A84EEEAD300135D500ECD509 /* Debug */,
+				A84EEEAE300135D500ECD509 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A80249C52DE0D9E100D1BF1E /* Build configuration list for PBXNativeTarget "EmployeeAdminTests" */ = {
+		A84EEEAF300135D500ECD509 /* Build configuration list for PBXNativeTarget "EmployeeAdminTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A80249C62DE0D9E100D1BF1E /* Debug */,
-				A80249C72DE0D9E100D1BF1E /* Release */,
+				A84EEEB0300135D500ECD509 /* Debug */,
+				A84EEEB1300135D500ECD509 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A80249C82DE0D9E100D1BF1E /* Build configuration list for PBXNativeTarget "EmployeeAdminUITests" */ = {
+		A84EEEB2300135D500ECD509 /* Build configuration list for PBXNativeTarget "EmployeeAdminUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A80249C92DE0D9E100D1BF1E /* Debug */,
-				A80249CA2DE0D9E100D1BF1E /* Release */,
+				A84EEEB3300135D500ECD509 /* Debug */,
+				A84EEEB4300135D500ECD509 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		A898FCA32DE988F400996F3F /* XCRemoteSwiftPackageReference "puremvc-swift-multicore-framework" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PureMVC/puremvc-swift-multicore-framework";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.8.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		A8024A1C2DE1A07800D1BF1E /* PureMVC */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PureMVC;
-		};
-		A898FCA42DE988F400996F3F /* PureMVC */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A898FCA32DE988F400996F3F /* XCRemoteSwiftPackageReference "puremvc-swift-multicore-framework" */;
-			productName = PureMVC;
-		};
-		A8F237232DE97F3B00E5DD0A /* PureMVC */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PureMVC;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = A80249992DE0D9E000D1BF1E /* Project object */;
+	rootObject = A84EEE7E300135D400ECD509 /* Project object */;
 }
