@@ -16,25 +16,26 @@ final class RoleStore: IRoleStore {
     self.context = context
   }
   
-  func findAll() throws -> Set<Role> {
+  func findAll() throws -> [Role] {
     let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
+    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     
-    return Set(try context.fetch(request).toDomain())
+    return try context.fetch(request).toDomain()
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Role> {
-    Set(try findAllManagedObjects(byIDs: ids).toDomain())
+  func findAll(byIDs ids: [Int64]) throws -> [Role] {
+    try findAllManagedObjects(byIDs: ids).toDomain()
   }
   
   func find(byID id: Int64) throws -> Role? {
     try findManagedObject(byID: id)?.toDomain()
   }
  
-  func find(byUserID id: Int64) throws -> Set<Role> {
+  func find(byUserID id: Int64) throws -> [Role] {
     let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
     request.predicate = NSPredicate(format: "ANY users.id = %d", id)
     
-    return Set(try context.fetch(request).toDomain())
+    return try context.fetch(request).toDomain()
   }
   
   func save(_ role: Role) throws {
@@ -45,7 +46,7 @@ final class RoleStore: IRoleStore {
     }
   }
   
-  func saveAll(_ roles: Set<Role>) throws {
+  func saveAll(_ roles: [Role]) throws {
     _ = roles.toManagedObjects(in: context)
     
     if context.hasChanges {
@@ -70,12 +71,12 @@ extension RoleStore {
     return try context.fetch(request).first
   }
   
-  func findAllManagedObjects(byIDs ids: Set<Int64>) throws -> Set<RoleManagedObject> {
+  func findAllManagedObjects(byIDs ids: [Int64]) throws -> [RoleManagedObject] {
     let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
     request.predicate = NSPredicate(format: "id IN %@", ids)
     request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     
-    return Set(try context.fetch(request))
+    return try context.fetch(request)
   }
   
 }

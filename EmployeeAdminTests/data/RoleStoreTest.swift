@@ -87,7 +87,7 @@ struct RoleStoreTest {
       Role(id: 2, name: "Accounts Payable")
     ]
     
-    try sut.saveAll(Set(roles))
+    try sut.saveAll(roles)
     #expect(try sut.count() == 2)
   }
   

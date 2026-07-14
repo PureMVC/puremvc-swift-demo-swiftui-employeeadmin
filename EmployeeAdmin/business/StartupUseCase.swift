@@ -28,7 +28,7 @@ struct StartupUseCase {
       Department(id: 4, name: "Shipping"),
       Department(id: 5, name: "Quality Control")
     ]
-    try departmentStore.saveAll(Set(departments))
+    try departmentStore.saveAll(departments)
     
     let roles = [
       Role(id: 1, name: "Administrator"),
@@ -46,7 +46,7 @@ struct StartupUseCase {
       Role(id: 13, name: "Shipping"),
       Role(id: 14, name: "Returns")
     ]
-    try roleStore.saveAll(Set(roles))
+    try roleStore.saveAll(roles)
     
     try userStore.saveAll([
       User(id: 0, first: "Larry", last: "Stooge", email: "larry@stooges.com", username: "lstooge", password: "ijk456", department: departments[1], roles: [roles[4], roles[6]]),

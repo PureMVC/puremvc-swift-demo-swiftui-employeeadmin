@@ -10,13 +10,13 @@
 
 final class MockDepartmentStore: IDepartmentStore {
   
-  private var data: Set<Department> = []
+  private var data: [Department] = []
   
-  func findAll() throws -> Set<Department> {
+  func findAll() throws -> [Department] {
     data
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Department> {
+  func findAll(byIDs ids: [Int64]) throws -> [Department] {
     data.filter { ids.contains($0.id) }
   }
   
@@ -25,10 +25,10 @@ final class MockDepartmentStore: IDepartmentStore {
   }
   
   func save(_ department: Department) throws {
-    data = Set([department])
+    data = [department]
   }
   
-  func saveAll(_ departments: Set<Department>) throws {
+  func saveAll(_ departments: [Department]) throws {
     data = departments
   }
   

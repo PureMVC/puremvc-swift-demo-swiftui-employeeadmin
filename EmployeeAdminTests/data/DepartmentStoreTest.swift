@@ -77,7 +77,7 @@ struct DepartmentStoreTest {
       Department(id: 2, name: "Sales")
     ]
     
-    try sut.saveAll(Set(departments))
+    try sut.saveAll(departments)
     #expect(try sut.count() == 2)
   }
   

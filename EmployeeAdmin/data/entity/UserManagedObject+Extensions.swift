@@ -13,8 +13,7 @@ extension UserManagedObject {
   
   func toDomain() -> User {
     User(id: id, first: first, last: last, email: email, username: username, password: password,
-      department: department?.toDomain() ?? .none,
-      roles: Set((roles as? Set<RoleManagedObject>)?.map { $0.toDomain() } ?? []))
+         department: department?.toDomain() ?? .none, roles: roles.toDomain())
   }
   
 }

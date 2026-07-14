@@ -8,15 +8,15 @@
 
 protocol IDepartmentStore {
   
-  func findAll() throws -> Set<Department>
+  func findAll() throws -> [Department]
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Department>
+  func findAll(byIDs ids: [Int64]) throws -> [Department]
   
   func find(byID id: Int64) throws -> Department?
   
   func save(_ department: Department) throws
   
-  func saveAll(_ departments: Set<Department>) throws
+  func saveAll(_ departments: [Department]) throws
   
   func count() throws -> Int
   

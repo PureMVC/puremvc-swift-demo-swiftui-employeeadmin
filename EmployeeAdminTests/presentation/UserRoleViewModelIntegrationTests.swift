@@ -56,7 +56,7 @@ struct UserRoleViewModelIntegrationTests {
       Role(id: 5, name: "General Ledger"),
       Role(id: 6, name: "Payroll")
     ]
-    try roleStore.saveAll(Set(roles))
+    try roleStore.saveAll(roles)
     
     let larry = try userStore.save(User(id: 0, first: "Larry", last: "Stooge", email: "larry@stooges.com", username: "lstooge", password: "ijk456", department: .none, roles: [roles[3], roles[5]]))
     

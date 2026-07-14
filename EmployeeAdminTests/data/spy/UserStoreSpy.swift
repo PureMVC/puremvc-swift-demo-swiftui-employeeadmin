@@ -18,7 +18,7 @@ final class UserStoreSpy: IUserStore {
     data
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> [User] {
+  func findAll(byIDs ids: [Int64]) throws -> [User] {
     data.filter { ids.contains($0.id) }
   }
   
@@ -60,7 +60,7 @@ final class UserStoreSpy: IUserStore {
     data.removeAll { ids.contains($0.id) }
   }
   
-  func deleteAll(byIDs ids: Set<Int64>) throws {
+  func deleteAll(byIDs ids: [Int64]) throws {
     data.removeAll { ids.contains($0.id) }
   }
   

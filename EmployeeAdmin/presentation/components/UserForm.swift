@@ -14,7 +14,7 @@ struct UserForm: View {
   @Environment(\.dismiss) private var dismiss
   
   @State private var viewModel: UserFormViewModel
-  @State private var selection: Set<Role>?
+  @State private var selection: [Role]?
   @State private var confirm: String = ""
   @State private var isSheetPresented = false
   

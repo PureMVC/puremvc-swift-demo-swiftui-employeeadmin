@@ -45,6 +45,14 @@ extension Sequence where Element == RoleManagedObject {
   
 }
 
+extension NSSet {
+  
+  func toDomain() -> [Role] {
+    compactMap { ($0 as? RoleManagedObject)?.toDomain() }
+  }
+  
+}
+
 extension Sequence where Element == Role {
   
   func toManagedObjects(in context: NSManagedObjectContext) -> [RoleManagedObject] {

@@ -13,8 +13,8 @@ final class UserRoleViewModel {
   
   private let roleData: IRoleStore
   
-  var roles: Set<Role> = []
-  var selection: Set<Role> = []
+  var roles: [Role] = []
+  var selection: [Role] = []
   var loading: Bool = false
   var error: Error?
   

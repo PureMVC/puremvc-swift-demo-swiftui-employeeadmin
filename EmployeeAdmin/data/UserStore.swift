@@ -10,6 +10,12 @@ import CoreData
 
 final class UserStore: IUserStore {
   
+  enum Error: Swift.Error {
+    case userNotFound(Int64)
+    case departmentNotFound(Int64)
+    case rolesNotFound([Int64])
+  }
+  
   private let context: NSManagedObjectContext
   private let departmentStore: DepartmentStore
   private let roleStore: RoleStore
@@ -27,7 +33,7 @@ final class UserStore: IUserStore {
     return try context.fetch(request).toDomain()
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> [User] {
+  func findAll(byIDs ids: [Int64]) throws -> [User] {
     try findAllManagedObjects(byIDs: ids).toDomain()
   }
   
@@ -59,15 +65,17 @@ final class UserStore: IUserStore {
     }
     object.department = department
     
-    let roleIDs = Set(user.roles.map(\.id))
+    let roleIDs = user.roles.map(\.id)
     let roles = try roleStore.findAllManagedObjects(byIDs: roleIDs)
     
-    let missingIDs = roleIDs.subtracting(roles.map(\.id))
+    let foundRoleIDs = roles.map(\.id)
+    let missingIDs = roleIDs.filter { !foundRoleIDs.contains($0) }
+    
     guard missingIDs.isEmpty else {
       throw Error.rolesNotFound(missingIDs)
     }
     
-    object.roles = NSSet(set: roles)
+    object.roles = NSSet(array: roles)
     
     return object.toDomain()
   }
@@ -126,11 +134,11 @@ final class UserStore: IUserStore {
   }
   
   func deleteAll(_ users: [User]) throws {
-    let ids = Set(users.map(\.id))
+    let ids = users.map(\.id)
     try deleteAll(byIDs: ids)
   }
   
-  func deleteAll(byIDs ids: Set<Int64>) throws {
+  func deleteAll(byIDs ids: [Int64]) throws {
     guard !ids.isEmpty else {
       return
     }
@@ -179,7 +187,7 @@ extension UserStore {
     return try context.fetch(request).first
   }
   
-  func findAllManagedObjects(byIDs ids: Set<Int64>) throws -> [UserManagedObject] {
+  func findAllManagedObjects(byIDs ids: [Int64]) throws -> [UserManagedObject] {
     let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
     request.predicate = NSPredicate(format: "id IN %@", ids)
     request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
@@ -189,10 +197,3 @@ extension UserStore {
   
 }
 
-extension UserStore {
-  enum Error: Swift.Error {
-    case userNotFound(Int64)
-    case departmentNotFound(Int64)
-    case rolesNotFound(Set<Int64>)
-  }
-}

@@ -16,14 +16,15 @@ final class DepartmentStore: IDepartmentStore {
     self.context = context
   }
   
-  func findAll() throws -> Set<Department> {
+  func findAll() throws -> [Department] {
     let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
+    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     
-    return Set(try context.fetch(request).toDomain())
+    return try context.fetch(request).toDomain()
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Department> {
-    Set(try findAllManagedObjects(byIDs: ids).toDomain())
+  func findAll(byIDs ids: [Int64]) throws -> [Department] {
+    try findAllManagedObjects(byIDs: ids).toDomain()
   }
 
   func find(byID id: Int64) throws -> Department? {
@@ -38,7 +39,7 @@ final class DepartmentStore: IDepartmentStore {
     }
   }
   
-  func saveAll(_ departments: Set<Department>) throws {
+  func saveAll(_ departments: [Department]) throws {
     _ = departments.toManagedObjects(in: context)
     
     if context.hasChanges {
@@ -63,12 +64,12 @@ extension DepartmentStore {
     return try context.fetch(request).first
   }
   
-  func findAllManagedObjects(byIDs ids: Set<Int64>) throws -> Set<DepartmentManagedObject> {
+  func findAllManagedObjects(byIDs ids: [Int64]) throws -> [DepartmentManagedObject] {
     let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
     request.predicate = NSPredicate(format: "id IN %@", ids)
     request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     
-    return Set(try context.fetch(request))
+    return try context.fetch(request)
   }
   
 }

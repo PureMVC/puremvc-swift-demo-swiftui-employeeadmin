@@ -10,15 +10,15 @@
 
 final class MockRoleStore: IRoleStore {
   
-  private var data: Set<Role> = []
+  private var data: [Role] = []
   
-  private var userRoleIDs: [Int64: Set<Int64>] = [:]
+  private var userRoleIDs: [Int64: [Int64]] = [:]
   
-  func findAll() throws -> Set<Role> {
+  func findAll() throws -> [Role] {
     data
   }
   
-  func findAll(byIDs ids: Set<Int64>) throws -> Set<Role> {
+  func findAll(byIDs ids: [Int64]) throws -> [Role] {
     data.filter { ids.contains($0.id) }
   }
   
@@ -26,16 +26,16 @@ final class MockRoleStore: IRoleStore {
     data.first { $0.id == id }
   }
   
-  func find(byUserID id: Int64) throws -> Set<Role> {
+  func find(byUserID id: Int64) throws -> [Role] {
     let roleIDs = userRoleIDs[id] ?? []
     return data.filter { roleIDs.contains($0.id) }
   }
   
   func save(_ role: Role) throws {
-    data.insert(role)
+    data.append(role)
   }
   
-  func saveAll(_ roles: Set<Role>) throws {
+  func saveAll(_ roles: [Role]) throws {
     data = roles
   }
   
@@ -43,9 +43,12 @@ final class MockRoleStore: IRoleStore {
     data.count
   }
   
-  func assign(_ roles: Set<Role>, toUserID userID: Int64) {
-    data.formUnion(roles)
-    userRoleIDs[userID] = Set(roles.map(\.id))
+  func assign(_ roles: [Role], toUserID userID: Int64) {
+    for role in roles where !data.contains(role) {
+      data.append(role)
+    }
+    
+    userRoleIDs[userID] = roles.map(\.id)
   }
   
 }
