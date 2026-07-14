@@ -44,7 +44,21 @@ extension UserRealmObject {
 extension User {
   
   func toRealmObject() -> UserRealmObject {
-    UserRealmObject(id: id, first: first, last: last, email: email, username: username, department: department.toRealmObject(), roles: roles.toRealmObjects())
+    let object = UserRealmObject()
+    
+    object.id = id
+    object.first = first
+    object.last = last
+    object.email = email
+    object.username = username
+    object.password = password
+    object.department = department.toRealmObject()
+    if let roles = roles {
+      object.roles.removeAll()
+      object.roles.append(objectsIn: roles.toRealmObjects())
+    }
+    
+    return object
   }
   
   func update(_ object: UserRealmObject) {

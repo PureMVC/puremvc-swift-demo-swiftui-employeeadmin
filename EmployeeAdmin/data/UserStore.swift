@@ -69,18 +69,21 @@ final class UserStore: IUserStore {
     }
     object.department = department
     
-    let roleIDs = user.roles.map(\.id)
-    let roles = realm.objects(RoleRealmObject.self).where { $0.id.in(roleIDs) }
     
-    let foundRoleIDs = Set(roles.map(\.id))
-    let missingIDs = roleIDs.filter { !foundRoleIDs.contains($0) }
-    
-    guard missingIDs.isEmpty else {
-      throw Error.rolesNotFound(missingIDs)
+    if let roles = user.roles {
+      let roleIDs = roles.map(\.id)
+      let roles = realm.objects(RoleRealmObject.self).where { $0.id.in(roleIDs) }
+      
+      let foundRoleIDs = Set(roles.map(\.id))
+      let missingIDs = roleIDs.filter { !foundRoleIDs.contains($0) }
+      
+      guard missingIDs.isEmpty else {
+        throw Error.rolesNotFound(missingIDs)
+      }
+      
+      object.roles.removeAll()
+      object.roles.append(objectsIn: roles)
     }
-    
-    object.roles.removeAll()
-    object.roles.append(objectsIn: roles)
     
     realm.add(object, update: .modified)
     
