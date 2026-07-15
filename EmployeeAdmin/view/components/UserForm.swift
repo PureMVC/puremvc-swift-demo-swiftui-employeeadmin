@@ -10,25 +10,22 @@ import SwiftUI
 import Observation
 
 struct UserForm: View {
-  private let username: String
-  private let onComplete: (UserVO) -> Void
   
   @Environment(\.dismiss) private var dismiss
-
+  
   @State private var delegate: UserFormMediator
   @State private var selection: [RoleEnum] = []
   @State private var confirm: String = ""
   @State private var isSheetPresented: Bool = false
+  
+  private let username: String
+  private let onComplete: (UserVO) -> Void
 
   init(username: String = "", onComplete: @escaping (UserVO) -> Void) {
     self.username = username
     self.onComplete = onComplete
     
-    guard let delegate = facade.retrieveMediator(UserFormMediator.NAME) as? UserFormMediator else {
-      fatalError("UserFormMediator not found.")
-    }
-
-    self.delegate = delegate
+    _delegate = State(initialValue: UserFormMediator())
   }
   
   var body: some View {
@@ -59,7 +56,7 @@ struct UserForm: View {
     .navigationTitle("User Form")
     .toolbar {
       ToolbarItem(placement: .navigationBarTrailing) {
-        saveOrUpdate
+        save
       }
     }
     .task {
@@ -163,7 +160,7 @@ extension UserForm {
     }
   }
     
-  var saveOrUpdate: some View {
+  var save: some View {
     Button {
       guard delegate.user.isValid(confirm: confirm) else {
         delegate.error = "Invalid Form Data."

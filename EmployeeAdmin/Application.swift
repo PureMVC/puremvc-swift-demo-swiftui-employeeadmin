@@ -9,13 +9,11 @@
 import SwiftUI
 import PureMVC
 
-let facade = ApplicationFacade.getInstance()
-
 @main
-struct EmployeeAdmin: App {
+struct Application: App {
     
   init() {
-    facade.startup()
+    ApplicationFacade.getInstance().startup()
   }
 
   var body: some Scene {

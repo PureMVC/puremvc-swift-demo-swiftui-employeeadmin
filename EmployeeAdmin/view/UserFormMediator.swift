@@ -21,6 +21,10 @@ class UserFormMediator: Mediator {
   
   init() {
     super.init(name: UserFormMediator.NAME, viewComponent: nil)
+    
+    self.facade = ApplicationFacade.getInstance()
+    facade?.removeMediator(UserFormMediator.NAME)
+    facade?.registerMediator(self)
   }
   
   override func onRegister() {

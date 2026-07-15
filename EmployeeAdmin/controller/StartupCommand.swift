@@ -30,10 +30,6 @@ class StartupCommand: SimpleCommand {
     roleProxy.save(RoleVO(username: "cstooge", roles: [.accountsPayable, .accountsReceivable, .generalLedger]))
     roleProxy.save(RoleVO(username: "mstooge", roles: [.inventory, .production, .sales, .shipping]))
     facade.registerProxy(roleProxy)
-    
-    facade.registerMediator(UserListMediator())
-    facade.registerMediator(UserFormMediator())
-    facade.registerMediator(UserRoleMediator())
   }
     
 }

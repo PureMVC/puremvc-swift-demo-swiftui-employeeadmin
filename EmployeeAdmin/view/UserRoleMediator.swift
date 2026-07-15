@@ -19,6 +19,10 @@ class UserRoleMediator: Mediator {
   
   init() {
     super.init(name: UserRoleMediator.NAME, viewComponent: nil)
+    
+    self.facade = ApplicationFacade.getInstance()
+    facade?.removeMediator(UserRoleMediator.NAME)
+    facade?.registerMediator(self)
   }
   
   override func onRegister() {

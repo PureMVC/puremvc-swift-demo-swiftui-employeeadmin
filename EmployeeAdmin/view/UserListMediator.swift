@@ -19,6 +19,10 @@ class UserListMediator: Mediator {
   
   init() {
     super.init(name: UserListMediator.NAME, viewComponent: nil)
+    
+    self.facade = ApplicationFacade.getInstance()
+    facade?.removeMediator(UserListMediator.NAME)
+    facade?.registerMediator(self)
   }
   
   override func onRegister() {

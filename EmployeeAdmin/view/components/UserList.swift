@@ -12,13 +12,9 @@ import Observation
 struct UserList: View {
     
   @State private var delegate: UserListMediator
-  
-  init() {
-    guard let delegate = facade.retrieveMediator(UserListMediator.NAME) as? UserListMediator else  {
-      fatalError("UserListMediator not found.")
-    }
     
-    self.delegate = delegate
+  init() {
+    _delegate = State(initialValue: UserListMediator())
   }
   
   var body: some View {

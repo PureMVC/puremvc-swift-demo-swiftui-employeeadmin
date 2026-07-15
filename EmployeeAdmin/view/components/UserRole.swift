@@ -10,25 +10,22 @@ import SwiftUI
 import Observation
 
 struct UserRole: View {
+  
+  @Environment(\.dismiss) private var dismiss
+  @State private var delegate: UserRoleMediator
     
   private let username: String
   private let onComplete: ([RoleEnum]) -> Void
   
-  @State private var delegate: UserRoleMediator
-    
-  @Environment(\.dismiss) private var dismiss
-
   init(username: String, selection: [RoleEnum], onComplete: @escaping ([RoleEnum]) -> Void) {
     self.username = username
     self.onComplete = onComplete
-        
-    guard let delegate = facade.retrieveMediator(UserRoleMediator.NAME) as? UserRoleMediator else {
-      fatalError("UserRoleMediator not found.")
+    
+    _delegate = State(initialValue: UserRoleMediator())
+    
+    if !selection.isEmpty {
+      delegate.selection = selection
     }
-    
-    self.delegate = delegate
-    
-    if !selection.isEmpty { delegate.selection = selection }
   }
     
   var body: some View {
