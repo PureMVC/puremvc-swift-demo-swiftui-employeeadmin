@@ -31,6 +31,7 @@ struct UserForm: View {
       
       if viewModel.loading {
         ProgressView()
+          .accessibilityIdentifier("userForm.loading")
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -44,10 +45,21 @@ struct UserForm: View {
         } label: {
           Image(systemName: "chevron.left")
         }
+        .accessibilityLabel("Back")
+        .accessibilityIdentifier("userForm.back")
       }
       
       ToolbarItem(placement: .topBarTrailing) {
-        save
+        Button(id == 0 ? "Save" : "Update") {
+          Task {
+            await viewModel.save(selection: selection)
+            guard viewModel.error == nil else { return }
+            dismiss()
+          }
+        }
+        .buttonStyle(.glassProminent)
+        .accessibilityIdentifier("userForm.save")
+        .disabled(!viewModel.user.isValid(confirm: confirm))
       }
     }
     .task {
@@ -65,8 +77,10 @@ struct UserForm: View {
       Button("OK", role: .cancel) {
         viewModel.error = nil
       }
+      .accessibilityIdentifier("userrForm.error.ok")
     } message: {
       Text(viewModel.error?.localizedDescription ?? "Unknown error")
+        .accessibilityIdentifier("userForm.error.message")
     }
   }
   
@@ -103,6 +117,7 @@ private extension UserForm {
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.words)
+      .accessibilityIdentifier("userForm.first")
   }
   
   var last: some View {
@@ -110,6 +125,7 @@ private extension UserForm {
       .textFieldStyle(.roundedBorder)
       .font(.system(size: 16))
       .textInputAutocapitalization(.words)
+      .accessibilityIdentifier("userForm.last")
   }
   
   var email: some View {
@@ -119,6 +135,7 @@ private extension UserForm {
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
       .keyboardType(.emailAddress)
+      .accessibilityIdentifier("userForm.email")
   }
   
   var username: some View {
@@ -127,6 +144,7 @@ private extension UserForm {
       .font(.system(size: 16))
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
+      .accessibilityIdentifier("userForm.username")
   }
   
   var password: some View {
@@ -136,6 +154,7 @@ private extension UserForm {
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
       .textContentType(.oneTimeCode)
+      .accessibilityIdentifier("userForm.password")
   }
   
   var confirmPassword: some View {
@@ -145,6 +164,7 @@ private extension UserForm {
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
       .textContentType(.oneTimeCode)
+      .accessibilityIdentifier("userForm.confirm")
   }
   
   var department: some View {
@@ -155,6 +175,7 @@ private extension UserForm {
       }
     }
     .pickerStyle(.wheel)
+    .accessibilityIdentifier("userForm.department")
   }
   
   var roles: some View {
@@ -165,6 +186,7 @@ private extension UserForm {
         .frame(maxWidth: .infinity)
     }
     .buttonStyle(.glassProminent)
+    .accessibilityIdentifier("userForm.roles")
     .sheet(isPresented: $isSheetPresented) {
       if let container {
         NavigationStack {
@@ -174,17 +196,6 @@ private extension UserForm {
         }
       }
     }
-  }
-  
-  var save: some View {
-    Button(id == 0 ? "Save" : "Update") {
-      Task {
-        await viewModel.save(selection: selection)
-        guard viewModel.error == nil else { return }
-        dismiss()
-      }
-    }
-    .buttonStyle(.glassProminent)
   }
   
 }

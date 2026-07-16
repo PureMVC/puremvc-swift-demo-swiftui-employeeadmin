@@ -6,8 +6,6 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import Foundation
-
 struct User: Identifiable, Hashable {
   var id: Int64
   var first: String

@@ -30,6 +30,7 @@ struct UserRole: View {
       
       if (viewModel.loading) {
         ProgressView()
+          .accessibilityIdentifier("userRole.loading")
       }
     }
     .navigationTitle("User Role")
@@ -39,6 +40,7 @@ struct UserRole: View {
         Button("Cancel", systemImage: "xmark") {
           dismiss()
         }
+        .accessibilityIdentifier("userRole.cancel")
       }
 
       ToolbarItem(placement: .navigationBarTrailing) {
@@ -47,6 +49,7 @@ struct UserRole: View {
           dismiss()
         }
         .buttonStyle(.glassProminent)
+        .accessibilityIdentifier("userRole.done")
       }
     }
     .task {
@@ -76,13 +79,21 @@ extension UserRole {
         HStack {
           Text(role.name)
             .foregroundColor(.black)
+            .accessibilityIdentifier("userRole.role.\(role.id).name")
+          
           Spacer()
+          
           if viewModel.selection.contains(role) {
             Image(systemName: "checkmark")
+              .accessibilityLabel("Selected")
+              .accessibilityIdentifier("userRole.role.\(role.id).checkmark")
           }
         }
       }
+      .accessibilityIdentifier("userRole.role.\(role.id)")
+      .accessibilityValue(viewModel.selection.contains(role) ? "Selected" : "Not selected")
     }
+    .accessibilityIdentifier("userRole.list")
   }
   
 }

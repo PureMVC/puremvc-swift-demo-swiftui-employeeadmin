@@ -64,7 +64,7 @@ struct UserFormViewModelTests {
     #expect(user!.email == "larry@stooges.com")
     #expect(user!.password == "ijk456")
     #expect(user!.department == accounting)
-    #expect(user?.roles.contains(administrator) == true)
+    #expect(user?.roles?.contains(administrator) == true)
   }
   
   @Test func testFindAllDepartments() async throws {

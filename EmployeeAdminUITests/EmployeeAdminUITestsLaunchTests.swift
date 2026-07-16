@@ -1,8 +1,9 @@
 //
 //  EmployeeAdminUITestsLaunchTests.swift
-//  EmployeeAdminUITests
+//  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
-//  Created by Saad Shams on 7/10/26.
+//  Copyright(c) 2026 Saad Shams <saad.shams@puremvc.org>
+//  Your reuse is governed by the BSD 3-Clause License
 //
 
 import XCTest

@@ -18,8 +18,10 @@ final class ApplicationContainer {
 
   init(context: NSManagedObjectContext) {
     self.context = context
+    
     departmentStore = DepartmentStore(context: context)
     roleStore = RoleStore(context: context)
+    
     userStore = UserStore(departmentStore: departmentStore, roleStore: roleStore, context: context)
   }
   
@@ -40,12 +42,17 @@ final class ApplicationContainer {
 extension ApplicationContainer {
   
   @MainActor
+  static let production: ApplicationContainer = {
+    let persistence = ApplicationPersistence.shared
+    
+    return ApplicationContainer(context: persistence.container.viewContext)
+  }()
+  
+  @MainActor
   static let preview: ApplicationContainer = {
     let persistence = ApplicationPersistence.preview
     
-    return ApplicationContainer(
-      context: persistence.container.viewContext
-    )
+    return ApplicationContainer(context: persistence.container.viewContext)
   }()
 }
 

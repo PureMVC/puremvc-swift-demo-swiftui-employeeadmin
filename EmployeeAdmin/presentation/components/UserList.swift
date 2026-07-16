@@ -26,16 +26,19 @@ struct UserList: View {
       }
     }
     .navigationTitle("User List")
+    .accessibilityIdentifier("userList.screen")
     .glassEffect(.regular, in: .rect(cornerRadius: 24))
     .toolbar {
       NavigationLink(value: Int64(0)) {
         Label("Create", systemImage: "plus")
       }
+      .accessibilityIdentifier("userList.create")
       .buttonStyle(.glass)
     }
     .overlay {
       if viewModel.loading && !viewModel.users.isEmpty {
         ProgressView()
+          .accessibilityIdentifier("userList.loading")
       }
     }
     .onAppear {
@@ -63,7 +66,9 @@ private extension UserList {
       ForEach(viewModel.users) { user in
         NavigationLink(value: user.id) {
           Text(user.givenName)
+            .accessibilityIdentifier("userList.user.\(user.id).name")
         }
+        .accessibilityIdentifier("userList.user.\(user.id)")
       }
       .onDelete { indexSet in
         Task {
@@ -78,6 +83,7 @@ private extension UserList {
         }
       }
     }
+    .accessibilityIdentifier("userList.list")
     .navigationDestination(for: Int64.self) { id in
       if let container {
         UserForm(id: id, viewModel: container.userFormViewModel())

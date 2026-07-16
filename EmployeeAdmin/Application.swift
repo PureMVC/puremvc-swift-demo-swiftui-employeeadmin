@@ -10,45 +10,18 @@ import SwiftUI
 import CoreData
 
 @main
-struct EmployeeAdmin: App {
+struct Application: App {
   
-  let persistence: ApplicationPersistence
   let container: ApplicationContainer
     
   @State private var initialized = false
   
-//  func init2() {
-//    let arguments = ProcessInfo.processInfo.arguments
-//    
-//    if arguments.contains("-ui-testing") {
-//      let persistence = ApplicationPersistence(inMemory: true)
-//      let container = ApplicationContainer(
-//        context: persistence.container.viewContext
-//      )
-//      
-//      if arguments.contains("-seed-users") {
-//        do {
-//          try StartupUseCase(
-//            userData: container.userData,
-//            departmentData: container.departmentData,
-//            roleData: container.roleData
-//          ).execute()
-//        } catch {
-//          fatalError("Unable to seed UI test data: \(error)")
-//        }
-//      }
-//      
-//      .container = container
-//    } else {
-//      self.container = ApplicationContainer(
-//        context: ApplicationPersistence.shared.container.viewContext
-//      )
-//    }
-//  }
-  
   init() {
-    persistence = .shared
-    container = ApplicationContainer(context: persistence.container.viewContext)
+    if ProcessInfo.processInfo.arguments.contains("--ui-testing") {
+      container = .preview
+    } else {
+      container = .production
+    }
   }
 
   var body: some Scene {
