@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PureMVC/puremvc-swift-multicore-framework",
       "state" : {
-        "revision" : "413d63d9da64fe4d99db1fe58e441ef298b9e0df",
-        "version" : "1.8.0"
+        "revision" : "5ec4cfa5f897ad8876b0384bf7ec8ccaa721928b",
+        "version" : "1.9.0"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-docc-plugin",
       "state" : {
-        "revision" : "85e4bb4e1cd62cec64a4b8e769dcefdf0c5b9d64",
-        "version" : "1.4.3"
+        "revision" : "647c708be89f834fa6a6d4945442793a77ddf5b6",
+        "version" : "1.5.0"
       }
     },
     {
