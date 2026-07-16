@@ -47,7 +47,14 @@ struct UserForm: View {
       }
       
       ToolbarItem(placement: .topBarTrailing) {
-        save
+        Button(id == 0 ? "Save" : "Update") {
+          Task {
+            await viewModel.save(selection: selection)
+            guard viewModel.error == nil else { return }
+            dismiss()
+          }
+        }
+        .buttonStyle(.glassProminent)
       }
     }
     .task {
@@ -174,17 +181,6 @@ private extension UserForm {
         }
       }
     }
-  }
-  
-  var save: some View {
-    Button(id == 0 ? "Save" : "Update") {
-      Task {
-        await viewModel.save(selection: selection)
-        guard viewModel.error == nil else { return }
-        dismiss()
-      }
-    }
-    .buttonStyle(.glassProminent)
   }
   
 }
