@@ -11,7 +11,7 @@ import SwiftUI
 let container = ApplicationContainer()
 
 @main
-struct EmployeeAdmin: App {
+struct Application: App {
 
   var body: some Scene {
     WindowGroup {
