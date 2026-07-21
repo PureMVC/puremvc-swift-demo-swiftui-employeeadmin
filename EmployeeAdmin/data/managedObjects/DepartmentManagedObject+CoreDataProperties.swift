@@ -6,7 +6,9 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import CoreData
+public import Foundation
+public import CoreData
+
 
 public typealias DepartmentManagedObjectCoreDataPropertiesSet = NSSet
 
@@ -17,7 +19,7 @@ extension DepartmentManagedObject {
     }
 
     @NSManaged public var id: Int64
-    @NSManaged public var name: String
+    @NSManaged public var name: String?
     @NSManaged public var users: UserManagedObject?
 
 }

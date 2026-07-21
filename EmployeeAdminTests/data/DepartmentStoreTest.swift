@@ -86,7 +86,7 @@ struct DepartmentStoreTest {
       Department(id: 1, name: "Accounting")
     ])
     
-    let object = try sut.findManagedObject(byID: 1)
+    let object = try DepartmentManagedObject.find(byID: 1, in: context)
     
     #expect(object != nil)
     #expect(object?.id == 1)
@@ -99,14 +99,14 @@ struct DepartmentStoreTest {
       Department(id: 3, name: "Engineering")
     ])
     
-    let objects = try sut.findAllManagedObjects(byIDs: [1, 3])
+    let objects = try DepartmentManagedObject.findAll(matching: NSPredicate(format: "id IN %@", [1, 3]), in: context)
     
     #expect(objects.count == 2)
     #expect(Set(objects.map(\.id)) == [1, 3])
     #expect(Set(objects.map(\.name)) == ["Accounting", "Engineering"])
     
-    #expect((try sut.findAllManagedObjects(byIDs: [])).isEmpty)
-    #expect((try sut.findAllManagedObjects(byIDs: [99, 100])).isEmpty)
+    #expect(try DepartmentManagedObject.findAll(matching: NSPredicate(format: "id IN %@", []), in: context).isEmpty)
+    #expect(try DepartmentManagedObject.findAll(matching: NSPredicate(format: "id IN %@", [99, 100]), in: context).isEmpty)
   }
   
 }

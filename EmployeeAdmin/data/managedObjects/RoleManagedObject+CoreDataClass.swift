@@ -6,7 +6,8 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-import CoreData
+public import Foundation
+public import CoreData
 
 public typealias RoleManagedObjectCoreDataClassSet = NSSet
 

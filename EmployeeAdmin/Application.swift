@@ -41,6 +41,17 @@ struct Application: App {
   }
   
   private func startup() async {
+    // For large data initialization or imports, use a background container
+    // to avoid blocking the UI with the main queue context.
+    //
+    // Example:
+    // let background = ApplicationContainer.background()
+    // StartupUseCase(
+    //     userStore: background.userStore,
+    //     departmentStore: background.departmentStore,
+    //     roleStore: background.roleStore
+    // ).execute()
+    
     do {
       try StartupUseCase(userStore: container.userStore, departmentStore: container.departmentStore, roleStore: container.roleStore).execute()
       initialized = true
@@ -49,4 +60,5 @@ struct Application: App {
       initialized = true
     }
   }
+  
 }

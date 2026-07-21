@@ -17,22 +17,25 @@ final class DepartmentStore: IDepartmentStore {
   }
   
   func findAll() throws -> [Department] {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
-    
-    return try context.fetch(request).toDomain()
+    try DepartmentManagedObject
+      .findAll(in: context)
+      .toDomain()
   }
   
   func findAll(byIDs ids: [Int64]) throws -> [Department] {
-    try findAllManagedObjects(byIDs: ids).toDomain()
+    try DepartmentManagedObject
+      .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
+      .toDomain()
   }
 
   func find(byID id: Int64) throws -> Department? {
-    try findManagedObject(byID: id)?.toDomain()
+    try DepartmentManagedObject
+      .find(byID: id, in: context)?
+      .toDomain()
   }
   
   func save(_ department: Department) throws {
-    _ = department.toManagedObject(in: context)
+    _ = toManagedObject(from: department)
     
     if context.hasChanges {
       try context.save()
@@ -40,7 +43,7 @@ final class DepartmentStore: IDepartmentStore {
   }
   
   func saveAll(_ departments: [Department]) throws {
-    _ = departments.toManagedObjects(in: context)
+    _ = toManagedObjects(from: departments)
     
     if context.hasChanges {
       try context.save()
@@ -48,28 +51,31 @@ final class DepartmentStore: IDepartmentStore {
   }
   
   func count() throws -> Int {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
-    return try context.count(for: request)
+    try DepartmentManagedObject.count(in: context)
   }
   
 }
 
 extension DepartmentStore {
   
-  func findManagedObject(byID id: Int64) throws -> DepartmentManagedObject? {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id == %d", id)
-    request.fetchLimit = 1
+  func toManagedObject(from department: Department) -> DepartmentManagedObject {
+    guard let entity = NSEntityDescription.entity(forEntityName: "DepartmentManagedObject", in: context) else {
+      preconditionFailure("DepartmentManagedObject entity not found")
+    }
     
-    return try context.fetch(request).first
+    let object = DepartmentManagedObject(entity: entity, insertInto: context)
+    update(object, from: department)
+    
+    return object
   }
   
-  func findAllManagedObjects(byIDs ids: [Int64]) throws -> [DepartmentManagedObject] {
-    let request: NSFetchRequest<DepartmentManagedObject> = DepartmentManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id IN %@", ids)
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
-    
-    return try context.fetch(request)
+  func toManagedObjects(from departments: [Department]) -> [DepartmentManagedObject] {
+    departments.map { toManagedObject(from: $0) }
+  }
+  
+  func update(_ object: DepartmentManagedObject, from department: Department) {
+    object.id = department.id
+    object.name = department.name
   }
   
 }

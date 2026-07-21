@@ -17,29 +17,31 @@ final class RoleStore: IRoleStore {
   }
   
   func findAll() throws -> [Role] {
-    let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
-    
-    return try context.fetch(request).toDomain()
+    try RoleManagedObject
+      .findAll(in: context)
+      .toDomain()
   }
   
   func findAll(byIDs ids: [Int64]) throws -> [Role] {
-    try findAllManagedObjects(byIDs: ids).toDomain()
+    try RoleManagedObject
+      .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
+      .toDomain()
   }
   
   func find(byID id: Int64) throws -> Role? {
-    try findManagedObject(byID: id)?.toDomain()
+    try RoleManagedObject
+      .find(byID: id, in: context)?
+      .toDomain()
   }
  
   func find(byUserID id: Int64) throws -> [Role] {
-    let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "ANY users.id = %d", id)
-    
-    return try context.fetch(request).toDomain()
+    try RoleManagedObject
+      .findAll(matching: NSPredicate(format: "ANY users.id = %d", id), in: context)
+      .toDomain()
   }
   
   func save(_ role: Role) throws {
-    _ = role.toManagedObject(in: context)
+    _ = toManagedObject(from: role)
     
     if context.hasChanges {
       try context.save()
@@ -47,7 +49,7 @@ final class RoleStore: IRoleStore {
   }
   
   func saveAll(_ roles: [Role]) throws {
-    _ = roles.toManagedObjects(in: context)
+    _ = toManagedObjects(from: roles)
     
     if context.hasChanges {
       try context.save()
@@ -55,28 +57,31 @@ final class RoleStore: IRoleStore {
   }
   
   func count() throws -> Int {
-    let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
-    return try context.count(for: request)
+    try RoleManagedObject.count(in: context)
   }
   
 }
 
 extension RoleStore {
   
-  func findManagedObject(byID id: Int64) throws -> RoleManagedObject? {
-    let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id == %d", id)
-    request.fetchLimit = 1
+  func toManagedObject(from role: Role) -> RoleManagedObject {
+    guard let entity = NSEntityDescription.entity(forEntityName: "RoleManagedObject", in: context) else {
+      preconditionFailure("RoleManagedObject entity not found")
+    }
     
-    return try context.fetch(request).first
+    let object = RoleManagedObject(entity: entity, insertInto: context)
+    update(object, from: role)
+    
+    return object
   }
   
-  func findAllManagedObjects(byIDs ids: [Int64]) throws -> [RoleManagedObject] {
-    let request: NSFetchRequest<RoleManagedObject> = RoleManagedObject.fetchRequest()
-    request.predicate = NSPredicate(format: "id IN %@", ids)
-    request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
-    
-    return try context.fetch(request)
+  func toManagedObjects(from roles: [Role]) -> [RoleManagedObject] {
+    roles.map { toManagedObject(from: $0) }
   }
   
+  func update(_ object: RoleManagedObject, from role: Role) {
+    object.id = role.id
+    object.name = role.name
+  }
+
 }

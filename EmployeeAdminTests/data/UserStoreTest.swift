@@ -109,7 +109,7 @@ struct UserStoreTest {
     
     try sut.save(User(id: 0, first: "Larry", last: "Stooge", email: "larry@stooges.com", username: "lstooge", password: "ijk456", department: accounting, roles: []))
     
-    let object = try sut.findManagedObject(byID: 1)
+    let object = try UserManagedObject.find(byID: 1, in: context)
     
     #expect(object != nil)
     #expect(object?.id == 1)
@@ -130,14 +130,14 @@ struct UserStoreTest {
     
     #expect(try sut.count() == 3)
     
-    let objects = try sut.findAllManagedObjects(byIDs: [1, 3])
+    let objects = try UserManagedObject.find(byIDs: [1, 3], in: context)
     
     #expect(objects.count == 2)
     #expect(Set(objects.map(\.id)) == [1, 3])
     #expect(Set(objects.map(\.first)) == ["Larry", "Moe"])
     
-    #expect((try sut.findAllManagedObjects(byIDs: [])).isEmpty)
-    #expect((try sut.findAllManagedObjects(byIDs: [99, 100])).isEmpty)
+    #expect((try UserManagedObject.find(byIDs: [], in: context)).isEmpty)
+    #expect((try UserManagedObject.find(byIDs: [99, 100], in: context)).isEmpty)
   }
   
 }

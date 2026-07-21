@@ -47,3 +47,15 @@ struct ApplicationPersistence {
     container.viewContext.automaticallyMergesChangesFromParent = true
   }
 }
+
+extension ApplicationPersistence {
+  
+  func backgroundContext() -> NSManagedObjectContext {
+    let context = container.newBackgroundContext()
+    context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+    context.automaticallyMergesChangesFromParent = true
+    return context
+  }
+  
+}
+

@@ -96,7 +96,7 @@ struct RoleStoreTest {
       Role(id: 1, name: "Administrator")
     ])
     
-    let object = try sut.findManagedObject(byID: 1)
+    let object = try RoleManagedObject.find(byID: 1, in: context)
     
     #expect(object != nil)
     #expect(object?.id == 1)
@@ -109,14 +109,15 @@ struct RoleStoreTest {
       Role(id: 3, name: "Accounts Receivable")
     ])
     
-    let objects = try sut.findAllManagedObjects(byIDs: [1, 3])
+    
+    let objects = try RoleManagedObject.findAll(matching: NSPredicate(format: "id IN %@", [1, 3]), in: context)
     
     #expect(objects.count == 2)
     #expect(Set(objects.map(\.id)) == [1, 3])
     #expect(Set(objects.map(\.name)) == ["Administrator", "Accounts Receivable"])
     
-    #expect((try sut.findAllManagedObjects(byIDs: [])).isEmpty)
-    #expect((try sut.findAllManagedObjects(byIDs: [99, 100])).isEmpty)
+    #expect(try RoleManagedObject.findAll(matching: NSPredicate(format: "id IN %@", []), in: context).isEmpty)
+    #expect(try RoleManagedObject.findAll(matching: NSPredicate(format: "id IN %@", [99, 100]), in: context).isEmpty)
   }
   
 }

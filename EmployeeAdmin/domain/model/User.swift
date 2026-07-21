@@ -7,6 +7,7 @@
 //
 
 struct User: Identifiable, Hashable {
+  
   var id: Int64
   var first: String
   var last: String

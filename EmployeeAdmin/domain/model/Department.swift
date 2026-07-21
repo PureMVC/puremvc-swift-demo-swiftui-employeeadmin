@@ -6,7 +6,8 @@
 //  Your reuse is governed by the BSD 3-Clause License
 //
 
-struct Department: Identifiable, nonisolated Hashable {
+struct Department: Identifiable, Hashable {
+  
   let id: Int64
   let name: String
   

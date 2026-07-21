@@ -9,6 +9,7 @@
 import SwiftUI
 import CoreData
 
+@MainActor
 final class ApplicationContainer {
   
   let context: NSManagedObjectContext
@@ -54,7 +55,14 @@ extension ApplicationContainer {
     
     return ApplicationContainer(context: persistence.container.viewContext)
   }()
+  
+  static func background() -> ApplicationContainer {
+    let persistence = ApplicationPersistence.shared
+    
+    return ApplicationContainer(context: persistence.backgroundContext())
+  }
 }
+
 
 private struct ApplicationContainerKey: EnvironmentKey {
   static let defaultValue: ApplicationContainer? = nil
