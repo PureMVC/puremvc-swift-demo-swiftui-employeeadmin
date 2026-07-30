@@ -17,60 +17,69 @@ final class DepartmentStore: IDepartmentStore {
   }
   
   func findAll() throws -> [Department] {
-    try DepartmentManagedObject
-      .findAll(in: context)
-      .toDomain()
+    try context.performAndWait {
+      try DepartmentManagedObject
+        .findAll(in: context)
+        .toDomain()
+    }
   }
   
   func findAll(byIDs ids: [Int64]) throws -> [Department] {
-    try DepartmentManagedObject
-      .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-      .toDomain()
+    try context.performAndWait {
+      try DepartmentManagedObject
+        .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
+        .toDomain()
+    }
   }
 
   func find(byID id: Int64) throws -> Department? {
-    try DepartmentManagedObject
-      .find(byID: id, in: context)?
-      .toDomain()
+    try context.performAndWait {
+      try DepartmentManagedObject
+        .find(byID: id, in: context)?
+        .toDomain()
+    }
   }
   
   func save(_ department: Department) throws {
-    _ = toManagedObject(from: department)
-    
-    if context.hasChanges {
-      try context.save()
+    try context.performAndWait {
+      let object = toManagedObject()
+      update(object, from: department)
+      
+      if context.hasChanges {
+        try context.save()
+      }
     }
   }
   
   func saveAll(_ departments: [Department]) throws {
-    _ = toManagedObjects(from: departments)
-    
-    if context.hasChanges {
-      try context.save()
+    try context.performAndWait {
+      departments.forEach { deparment in
+        let object = toManagedObject()
+        update(object, from: deparment)
+      }
+      
+      if context.hasChanges {
+        try context.save()
+      }
     }
   }
   
   func count() throws -> Int {
-    try DepartmentManagedObject.count(in: context)
+    try context.performAndWait {
+      try DepartmentManagedObject.count(in: context)
+    }
   }
   
 }
 
 extension DepartmentStore {
   
-  func toManagedObject(from department: Department) -> DepartmentManagedObject {
+  func toManagedObject() -> DepartmentManagedObject {
     guard let entity = NSEntityDescription.entity(forEntityName: "DepartmentManagedObject", in: context) else {
       preconditionFailure("DepartmentManagedObject entity not found")
     }
     
-    let object = DepartmentManagedObject(entity: entity, insertInto: context)
-    update(object, from: department)
-    
-    return object
-  }
-  
-  func toManagedObjects(from departments: [Department]) -> [DepartmentManagedObject] {
-    departments.map { toManagedObject(from: $0) }
+    return DepartmentManagedObject(entity: entity, insertInto: context)
   }
   
   func update(_ object: DepartmentManagedObject, from department: Department) {

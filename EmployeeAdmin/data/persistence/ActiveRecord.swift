@@ -8,10 +8,6 @@
 
 import CoreData
 
-public enum ActiveRecordError: Error {
-  case missingContext
-}
-
 public protocol ActiveRecord where Self: NSManagedObject {
   
 }
@@ -19,26 +15,32 @@ public protocol ActiveRecord where Self: NSManagedObject {
 public extension ActiveRecord {
   
   static func findAll(in context: NSManagedObjectContext) throws -> [Self] {
-    let request = fetchRequest()
+    guard let request = fetchRequest() as? NSFetchRequest<Self> else {
+      preconditionFailure("Invalid fetch request for \(Self.self)")
+    }
     request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
     
-    return try context.fetch(request) as! [Self]
+    return try context.fetch(request)
   }
   
   static func findAll(matching predicate: NSPredicate?, sortedBy sortDescriptors: [NSSortDescriptor]? = nil, in context: NSManagedObjectContext) throws -> [Self] {
-    let request = fetchRequest()
+    guard let request = fetchRequest() as? NSFetchRequest<Self> else {
+      preconditionFailure("Invalid fetch request for \(Self.self)")
+    }
     request.predicate = predicate
     request.sortDescriptors = sortDescriptors
     
-    return try context.fetch(request) as! [Self]
+    return try context.fetch(request)
   }
   
   static func find(byID id: Int64, in context: NSManagedObjectContext) throws -> Self? {
-    let request = fetchRequest()
-    request.predicate = NSPredicate(format: "id == %d", id)
+    guard let request = fetchRequest() as? NSFetchRequest<Self> else {
+      preconditionFailure("Invalid fetch request for \(Self.self)")
+    }
+    request.predicate = NSPredicate(format: "id == %@", NSNumber(value: id))
     request.fetchLimit = 1
     
-    return try context.fetch(request).first as? Self
+    return try context.fetch(request).first
   }
   
   static func find(byIDs ids: [Int64], in context: NSManagedObjectContext) throws -> [Self] {
@@ -46,43 +48,22 @@ public extension ActiveRecord {
       return []
     }
     
-    let request = fetchRequest()
+    guard let request = fetchRequest() as? NSFetchRequest<Self> else {
+      preconditionFailure("Invalid fetch request for \(Self.self)")
+    }
     request.predicate = NSPredicate(format: "id IN %@", ids)
     
-    return try context.fetch(request) as? [Self] ?? []
+    return try context.fetch(request)
   }
   
   static func find(byPredicate predicate: NSPredicate, in context: NSManagedObjectContext) throws -> Self? {
-    let request = fetchRequest()
+    guard let request = fetchRequest() as? NSFetchRequest<Self> else {
+      preconditionFailure("Invalid fetch request for \(Self.self)")
+    }
     request.predicate = predicate
+    request.fetchLimit = 1
     
-    return try context.fetch(request).first as? Self
-  }
-  
-  func save() throws {
-    guard let context = managedObjectContext else {
-      throw ActiveRecordError.missingContext
-    }
-    
-    guard context.hasChanges else {
-      return
-    }
-    
-    try context.save()
-  }
-  
-  func delete() throws {
-    guard let context = managedObjectContext else {
-      throw ActiveRecordError.missingContext
-    }
-    
-    context.delete(self)
-    
-    guard context.hasChanges else {
-      return
-    }
-    
-    try context.save()
+    return try context.fetch(request).first
   }
   
   static func count(in context: NSManagedObjectContext) throws -> Int {

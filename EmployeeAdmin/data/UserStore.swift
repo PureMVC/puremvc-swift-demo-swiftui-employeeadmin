@@ -27,51 +27,63 @@ final class UserStore: IUserStore {
   }
   
   func findAll() throws -> [User] {
-    try UserManagedObject
-      .findAll(in: context)
-      .toDomain()
+    try context.performAndWait {
+      try UserManagedObject
+        .findAll(in: context)
+        .toDomain()
+    }
   }
   
   func findAll(byIDs ids: [Int64]) throws -> [User] {
-    try UserManagedObject
-      .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-      .toDomain()
+    try context.performAndWait {
+      try UserManagedObject
+        .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
+        .toDomain()
+    }
   }
   
   func find(byID id: Int64) throws -> User? {
-    try UserManagedObject
-      .find(byID: id, in: context)?
-      .toDomain()
+    try context.performAndWait {
+      try UserManagedObject
+        .find(byID: id, in: context)?
+        .toDomain()
+    }
   }
   
   @discardableResult
   func save(_ user: User) throws -> User {
-    let saved = try upsert(user)
-    
-    if context.hasChanges {
-      try context.save()
+    try context.performAndWait {
+      do {
+        let saved = try upsert(user)
+        
+        if context.hasChanges {
+          try context.save()
+        }
+        
+        return saved.toDomain()
+      } catch {
+        context.rollback()
+        throw error
+      }
     }
-    
-    return saved.toDomain()
   }
   
   @discardableResult
   func saveAll(_ users: [User]) throws -> [User] {
-    var saved: [UserManagedObject] = []
-    
-    do {
-      saved = try users.map { try upsert($0) }
-      try context.save()
-    } catch {
-      context.rollback()
-      throw error
+    try context.performAndWait {
+      do {
+        let objects = try users.map { try upsert($0) }
+        
+        if context.hasChanges {
+          try context.save()
+        }
+        
+        return objects.toDomain()
+      } catch {
+        context.rollback()
+        throw error
+      }
     }
-    
-    if context.hasChanges {
-      try context.save()
-    }
-    
-    return saved.toDomain()
   }
   
   func delete(_ user: User) throws {
@@ -79,32 +91,36 @@ final class UserStore: IUserStore {
   }
   
   func delete(byID id: Int64) throws {
-    guard let object = try UserManagedObject.find(byID: id, in: context) else {
-      return
-    }
-    
-    context.delete(object)
-    
-    if context.hasChanges {
-      try context.save()
+    try context.performAndWait {
+      guard let object = try UserManagedObject.find(byID: id, in: context) else {
+        return
+      }
+      
+      context.delete(object)
+      
+      if context.hasChanges {
+        try context.save()
+      }
     }
   }
   
   func deleteAll() throws {
-    let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
-    
-    // Deletes directly from persistent store, bypassing the managed object context
-    let deleteRequest = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult>)
-    
-    // Return deleted object IDs so the context can be updated
-    deleteRequest.resultType = .resultTypeObjectIDs
-    
-    let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
-    
-    if let objectIDs = result?.result as? [NSManagedObjectID] {
-      // Notify context about deleted objects to avoid stale in-memory objects
-      let changes = [NSDeletedObjectsKey: objectIDs]
-      NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
+    try context.performAndWait {
+      let request: NSFetchRequest<UserManagedObject> = UserManagedObject.fetchRequest()
+      
+      // Deletes directly from persistent store, bypassing the managed object context
+      let deleteRequest = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult>)
+      
+      // Return deleted object IDs so the context can be updated
+      deleteRequest.resultType = .resultTypeObjectIDs
+      
+      let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
+      
+      if let objectIDs = result?.result as? [NSManagedObjectID] {
+        // Notify context about deleted objects to avoid stale in-memory objects
+        let changes = [NSDeletedObjectsKey: objectIDs]
+        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
+      }
     }
   }
   
@@ -117,36 +133,33 @@ final class UserStore: IUserStore {
       return
     }
     
-    let objects = try UserManagedObject.findAll(matching: NSPredicate(format: "id IN %@", ids), sortedBy: [NSSortDescriptor(key: "id", ascending: true)], in: context)
-        
-    objects.forEach { context.delete($0) }
-    
-    if context.hasChanges {
-      try context.save()
+    try context.performAndWait {
+      let objects = try UserManagedObject.findAll(matching: NSPredicate(format: "id IN %@", ids), sortedBy: [NSSortDescriptor(key: "id", ascending: true)], in: context)
+      
+      objects.forEach { context.delete($0) }
+      
+      if context.hasChanges {
+        try context.save()
+      }
     }
   }
   
   func count() throws -> Int {
-    try UserManagedObject.count(in: context)
+    try context.performAndWait {
+      try UserManagedObject.count(in: context)
+    }
   }
   
 }
 
 private extension UserStore {
   
-  func toManagedObject(from user: User) -> UserManagedObject {
+  func toManagedObject() -> UserManagedObject {
     guard let entity = NSEntityDescription.entity(forEntityName: "UserManagedObject", in: context) else {
       preconditionFailure("UserManagedObject entity not found")
     }
     
-    let object = UserManagedObject(entity: entity, insertInto: context)
-    update(object, from: user)
-    
-    return object
-  }
-  
-  func toManagedObjects(from users: [User]) -> [UserManagedObject] {
-    users.map { toManagedObject(from: $0) }
+    return UserManagedObject(entity: entity, insertInto: context)
   }
   
   func update(_ object: UserManagedObject, from user: User) {
@@ -161,8 +174,7 @@ private extension UserStore {
     let object: UserManagedObject
     
     if user.id == 0 {
-      object = toManagedObject(from: user)
-      
+      object = toManagedObject()
       object.id = try nextID()
     } else {
       guard let existing = try UserManagedObject.find(byID: user.id, in: context) else {
@@ -191,6 +203,8 @@ private extension UserStore {
       }
       
       object.roles = NSSet(array: roles)
+    } else {
+      object.roles = nil
     }
     
     return object
