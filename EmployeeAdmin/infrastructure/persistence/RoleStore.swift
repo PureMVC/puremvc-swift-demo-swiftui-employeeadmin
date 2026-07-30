@@ -20,7 +20,7 @@ final class RoleStore: IRoleStore {
     try context.performAndWait {
       try RoleManagedObject
         .findAll(in: context)
-        .toDomain()
+        .toRole()
     }
   }
   
@@ -28,7 +28,7 @@ final class RoleStore: IRoleStore {
     try context.performAndWait {
       try RoleManagedObject
         .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-        .toDomain()
+        .toRole()
     }
   }
   
@@ -36,7 +36,7 @@ final class RoleStore: IRoleStore {
     try context.performAndWait {
       try RoleManagedObject
         .find(byID: id, in: context)?
-        .toDomain()
+        .toRole()
     }
   }
  
@@ -44,14 +44,14 @@ final class RoleStore: IRoleStore {
     try context.performAndWait {
       try RoleManagedObject
         .findAll(matching: NSPredicate(format: "ANY users.id = %d", id), in: context)
-        .toDomain()
+        .toRole()
     }
   }
   
   func save(_ role: Role) throws {
     try context.performAndWait {
       do {
-        let object = toManagedObject()
+        let object = factory()
         update(object, from: role)
         
         if context.hasChanges {
@@ -67,7 +67,7 @@ final class RoleStore: IRoleStore {
   func saveAll(_ roles: [Role]) throws {
     try context.performAndWait {
       roles.forEach { role in
-        let object = toManagedObject()
+        let object = factory()
         update(object, from: role)
       }
       
@@ -87,7 +87,7 @@ final class RoleStore: IRoleStore {
 
 extension RoleStore {
   
-  func toManagedObject() -> RoleManagedObject {
+  func factory() -> RoleManagedObject {
     guard let entity = NSEntityDescription.entity(forEntityName: "RoleManagedObject", in: context) else {
       preconditionFailure("RoleManagedObject entity not found")
     }

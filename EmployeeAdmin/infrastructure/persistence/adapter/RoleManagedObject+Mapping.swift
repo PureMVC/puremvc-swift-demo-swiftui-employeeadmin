@@ -14,7 +14,7 @@ extension RoleManagedObject: ActiveRecord {
 
 extension RoleManagedObject {
 
-  func toDomain() -> Role {
+  func toRole() -> Role {
     Role(id: id, name: name ?? "")
   }
   
@@ -22,16 +22,16 @@ extension RoleManagedObject {
 
 extension Sequence where Element == RoleManagedObject {
   
-  func toDomain() -> [Role] {
-    map { $0.toDomain() }
+  func toRole() -> [Role] {
+    map { $0.toRole() }
   }
   
 }
 
 extension NSSet {
   
-  func toDomain() -> [Role] {
-    compactMap { ($0 as? RoleManagedObject)?.toDomain() }
+  func toRole() -> [Role] {
+    compactMap { ($0 as? RoleManagedObject)?.toRole() }
   }
   
 }

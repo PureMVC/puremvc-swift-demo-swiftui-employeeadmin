@@ -20,7 +20,7 @@ final class DepartmentStore: IDepartmentStore {
     try context.performAndWait {
       try DepartmentManagedObject
         .findAll(in: context)
-        .toDomain()
+        .toDepartment()
     }
   }
   
@@ -28,7 +28,7 @@ final class DepartmentStore: IDepartmentStore {
     try context.performAndWait {
       try DepartmentManagedObject
         .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-        .toDomain()
+        .toDepartment()
     }
   }
 
@@ -36,13 +36,13 @@ final class DepartmentStore: IDepartmentStore {
     try context.performAndWait {
       try DepartmentManagedObject
         .find(byID: id, in: context)?
-        .toDomain()
+        .toDepartment()
     }
   }
   
   func save(_ department: Department) throws {
     try context.performAndWait {
-      let object = toManagedObject()
+      let object = factory()
       update(object, from: department)
       
       if context.hasChanges {
@@ -54,7 +54,7 @@ final class DepartmentStore: IDepartmentStore {
   func saveAll(_ departments: [Department]) throws {
     try context.performAndWait {
       departments.forEach { deparment in
-        let object = toManagedObject()
+        let object = factory()
         update(object, from: deparment)
       }
       
@@ -74,7 +74,7 @@ final class DepartmentStore: IDepartmentStore {
 
 extension DepartmentStore {
   
-  func toManagedObject() -> DepartmentManagedObject {
+  func factory() -> DepartmentManagedObject {
     guard let entity = NSEntityDescription.entity(forEntityName: "DepartmentManagedObject", in: context) else {
       preconditionFailure("DepartmentManagedObject entity not found")
     }

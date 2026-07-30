@@ -14,7 +14,7 @@ extension DepartmentManagedObject: ActiveRecord {
 
 extension DepartmentManagedObject {
 
-  func toDomain() -> Department {
+  func toDepartment() -> Department {
     Department(id: id, name: name ?? "")
   }
   
@@ -22,8 +22,8 @@ extension DepartmentManagedObject {
 
 extension Sequence where Element == DepartmentManagedObject {
   
-  func toDomain() -> [Department] {
-    map { $0.toDomain() }
+  func toDepartment() -> [Department] {
+    map { $0.toDepartment() }
   }
   
 }

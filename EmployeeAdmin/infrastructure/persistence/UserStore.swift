@@ -30,7 +30,7 @@ final class UserStore: IUserStore {
     try context.performAndWait {
       try UserManagedObject
         .findAll(in: context)
-        .toDomain()
+        .toUser()
     }
   }
   
@@ -38,7 +38,7 @@ final class UserStore: IUserStore {
     try context.performAndWait {
       try UserManagedObject
         .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-        .toDomain()
+        .toUser()
     }
   }
   
@@ -46,7 +46,7 @@ final class UserStore: IUserStore {
     try context.performAndWait {
       try UserManagedObject
         .find(byID: id, in: context)?
-        .toDomain()
+        .toUser()
     }
   }
   
@@ -60,7 +60,7 @@ final class UserStore: IUserStore {
           try context.save()
         }
         
-        return saved.toDomain()
+        return saved.toUser()
       } catch {
         context.rollback()
         throw error
@@ -78,7 +78,7 @@ final class UserStore: IUserStore {
           try context.save()
         }
         
-        return objects.toDomain()
+        return objects.toUser()
       } catch {
         context.rollback()
         throw error
@@ -154,7 +154,7 @@ final class UserStore: IUserStore {
 
 private extension UserStore {
   
-  func toManagedObject() -> UserManagedObject {
+  func factory() -> UserManagedObject {
     guard let entity = NSEntityDescription.entity(forEntityName: "UserManagedObject", in: context) else {
       preconditionFailure("UserManagedObject entity not found")
     }
@@ -174,7 +174,7 @@ private extension UserStore {
     let object: UserManagedObject
     
     if user.id == 0 {
-      object = toManagedObject()
+      object = factory()
       object.id = try nextID()
     } else {
       guard let existing = try UserManagedObject.find(byID: user.id, in: context) else {

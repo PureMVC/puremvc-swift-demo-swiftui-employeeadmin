@@ -14,7 +14,7 @@ extension UserManagedObject: ActiveRecord {
 
 extension UserManagedObject {
   
-  func toDomain() -> User {
+  func toUser() -> User {
     User(
       id: id,
       first: first ?? "",
@@ -22,8 +22,8 @@ extension UserManagedObject {
       email: email ?? "",
       username: username ?? "",
       password: password ?? "",
-      department: department?.toDomain() ?? .none,
-      roles: roles?.toDomain()
+      department: department?.toDepartment() ?? .none,
+      roles: roles?.toRole()
     )
   }
   
@@ -31,8 +31,8 @@ extension UserManagedObject {
 
 extension Sequence where Element == UserManagedObject {
 
-  func toDomain() -> [User] {
-    map { $0.toDomain() }
+  func toUser() -> [User] {
+    map { $0.toUser() }
   }
 
 }
