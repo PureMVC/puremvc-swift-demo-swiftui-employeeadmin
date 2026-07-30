@@ -20,7 +20,7 @@ final class RoleStore: IRoleStore {
     try context.performAndWait {
       try RoleManagedObject
         .findAll(in: context)
-        .toRole()
+        .map { $0.toRole() }
     }
   }
   
@@ -28,7 +28,7 @@ final class RoleStore: IRoleStore {
     try context.performAndWait {
       try RoleManagedObject
         .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-        .toRole()
+        .map { $0.toRole() }
     }
   }
   
@@ -44,7 +44,7 @@ final class RoleStore: IRoleStore {
     try context.performAndWait {
       try RoleManagedObject
         .findAll(matching: NSPredicate(format: "ANY users.id = %d", id), in: context)
-        .toRole()
+        .map { $0.toRole() }
     }
   }
   

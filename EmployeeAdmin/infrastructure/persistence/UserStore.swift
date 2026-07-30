@@ -30,7 +30,7 @@ final class UserStore: IUserStore {
     try context.performAndWait {
       try UserManagedObject
         .findAll(in: context)
-        .toUser()
+        .map { $0.toUser() }
     }
   }
   
@@ -38,7 +38,7 @@ final class UserStore: IUserStore {
     try context.performAndWait {
       try UserManagedObject
         .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-        .toUser()
+        .map { $0.toUser() }
     }
   }
   
@@ -78,7 +78,7 @@ final class UserStore: IUserStore {
           try context.save()
         }
         
-        return objects.toUser()
+        return objects.map { $0.toUser() }
       } catch {
         context.rollback()
         throw error

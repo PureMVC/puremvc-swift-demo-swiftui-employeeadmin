@@ -19,11 +19,3 @@ extension DepartmentManagedObject {
   }
   
 }
-
-extension Sequence where Element == DepartmentManagedObject {
-  
-  func toDepartment() -> [Department] {
-    map { $0.toDepartment() }
-  }
-  
-}

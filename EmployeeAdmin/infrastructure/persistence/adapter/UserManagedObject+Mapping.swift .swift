@@ -23,16 +23,8 @@ extension UserManagedObject {
       username: username ?? "",
       password: password ?? "",
       department: department?.toDepartment() ?? .none,
-      roles: roles?.toRole()
+      roles: roles?.compactMap { ($0 as? RoleManagedObject)?.toRole() }
     )
   }
   
-}
-
-extension Sequence where Element == UserManagedObject {
-
-  func toUser() -> [User] {
-    map { $0.toUser() }
-  }
-
 }

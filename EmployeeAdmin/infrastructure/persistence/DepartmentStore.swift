@@ -20,7 +20,7 @@ final class DepartmentStore: IDepartmentStore {
     try context.performAndWait {
       try DepartmentManagedObject
         .findAll(in: context)
-        .toDepartment()
+        .map { $0.toDepartment() }
     }
   }
   
@@ -28,7 +28,7 @@ final class DepartmentStore: IDepartmentStore {
     try context.performAndWait {
       try DepartmentManagedObject
         .findAll(matching: NSPredicate(format: "id IN %@", ids), in: context)
-        .toDepartment()
+        .map { $0.toDepartment() }
     }
   }
 

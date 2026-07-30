@@ -19,19 +19,3 @@ extension RoleManagedObject {
   }
   
 }
-
-extension Sequence where Element == RoleManagedObject {
-  
-  func toRole() -> [Role] {
-    map { $0.toRole() }
-  }
-  
-}
-
-extension NSSet {
-  
-  func toRole() -> [Role] {
-    compactMap { ($0 as? RoleManagedObject)?.toRole() }
-  }
-  
-}
