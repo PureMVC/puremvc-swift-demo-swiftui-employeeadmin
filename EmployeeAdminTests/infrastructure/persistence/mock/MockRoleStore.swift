@@ -39,10 +39,6 @@ final class MockRoleStore: IRoleStore {
     data = roles
   }
   
-  func count() throws -> Int {
-    data.count
-  }
-  
   func assign(_ roles: [Role], toUserID userID: Int64) {
     for role in roles where !data.contains(role) {
       data.append(role)

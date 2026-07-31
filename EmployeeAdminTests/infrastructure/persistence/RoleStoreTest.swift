@@ -33,14 +33,12 @@ struct RoleStoreTest {
     ])
     
     let roles = try sut.findAll()
-    #expect(try sut.count() == 3)
     #expect(roles == [administrator, accountsPayable, accountsReceivable])
   }
 
   @Test func testFindAllEmpty() throws {
     let roles = try sut.findAll()
     #expect(roles.isEmpty)
-    #expect(try sut.count() == 0)
   }
   
   @Test func testFindByID() throws {
@@ -71,13 +69,11 @@ struct RoleStoreTest {
     let administrator = Role(id: 1, name: "Administrator")
     try sut.save(administrator)
     
-    #expect(try sut.count() == 1)
     #expect((try sut.find(byID: 1)) == administrator)
     
     let accountsPayable = Role(id: 2, name: "Accounts Payable")
     try sut.save(accountsPayable)
     
-    #expect(try sut.count() == 2)
     #expect((try sut.find(byID: 2)) == accountsPayable)
   }
   
@@ -88,7 +84,7 @@ struct RoleStoreTest {
     ]
     
     try sut.saveAll(roles)
-    #expect(try sut.count() == 2)
+    #expect(try sut.findAll().count == 2)
   }
   
   @Test func testFindManagedObject() throws {

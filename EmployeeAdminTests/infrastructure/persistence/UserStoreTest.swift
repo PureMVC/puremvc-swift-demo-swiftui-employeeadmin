@@ -38,14 +38,12 @@ struct UserStoreTest {
     ])
     
     let users = try sut.findAll()
-    #expect(try sut.count() == 3)
     #expect(users.map(\.id) == [1, 2, 3])
   }
   
   @Test func testFindAllEmpty() throws {
     let users = try sut.findAll()
     #expect(users.isEmpty)
-    #expect(try sut.count() == 0)
   }
   
   @Test func testFindByID() throws {
@@ -54,7 +52,6 @@ struct UserStoreTest {
     
     try sut.save(User(id: 0, first: "Larry", last: "Stooge", email: "larry@stooges.com", username: "lstooge", password: "ijk456", department: accounting, roles: []))
     
-    #expect(try sut.count() == 1)
     #expect(try sut.find(byID: 1) != nil)
     #expect(try sut.find(byID: 999) == nil)
   }
@@ -70,9 +67,7 @@ struct UserStoreTest {
       User(id: 0, first: "Curly", last: "Stooge", email: "curly@stooges.com", username: "cstooge", password: "xyz987", department: sales, roles: []),
       User(id: 0, first: "Moe", last: "Stooge", email: "moe@stooges.com", username: "mstooge", password: "abc123", department: plant, roles: [])
     ])
-    
-    #expect(try sut.count() == 3)
-    
+       
     var users = try sut.findAll(byIDs: [1, 3])
     #expect(users.count == 2)
     #expect(users.map(\.id) == [1, 3])
@@ -94,9 +89,7 @@ struct UserStoreTest {
       User(id: 0, first: "Larry", last: "Stooge", email: "larry@stooges.com", username: "lstooge", password: "ijk456", department: accounting, roles: []),
       User(id: 0, first: "Curly", last: "Stooge", email: "curly@stooges.com", username: "cstooge", password: "xyz987", department: sales, roles: [])
     ])
-    
-    #expect(try sut.count() == 2)
-    
+      
     let users = try sut.findAll()
     #expect(users.count == 2)
     #expect(users.map(\.id) == [1, 2])
@@ -127,9 +120,7 @@ struct UserStoreTest {
       User(id: 0, first: "Curly", last: "Stooge", email: "curly@stooges.com", username: "cstooge", password: "xyz987", department: sales, roles: []),
       User(id: 0, first: "Moe", last: "Stooge", email: "moe@stooges.com", username: "mstooge", password: "abc123", department: plant, roles: [])
     ])
-    
-    #expect(try sut.count() == 3)
-    
+        
     let objects = try UserManagedObject.find(byIDs: [1, 3], in: context)
     
     #expect(objects.count == 2)

@@ -28,14 +28,12 @@ struct DepartmentStoreTest {
     try sut.saveAll([accounting, sales, plant])
     
     let departments = try sut.findAll()
-    #expect(try sut.count() == 3)
     #expect(departments == [accounting, sales, plant])
   }
   
   @Test func testFindAllEmpty() throws {
     let departments = try sut.findAll()
     #expect(departments.isEmpty)
-    #expect(try sut.count() == 0)
   }
   
   @Test func testFindByID() throws {
@@ -61,13 +59,11 @@ struct DepartmentStoreTest {
     let accounting = Department(id: 1, name: "Accounting")
     try sut.save(accounting)
         
-    #expect(try sut.count() == 1)
     #expect((try sut.find(byID: 1)) == accounting)
     
     let sales = Department(id: 2, name: "Sales")
     try sut.save(sales)
     
-    #expect(try sut.count() == 2)
     #expect((try sut.find(byID: 2)) == sales)
   }
   
@@ -78,7 +74,7 @@ struct DepartmentStoreTest {
     ]
     
     try sut.saveAll(departments)
-    #expect(try sut.count() == 2)
+    #expect(try sut.findAll().count == 2)
   }
   
   @Test func testFindManagedObject() throws {

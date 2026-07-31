@@ -8,6 +8,7 @@
 
 import Testing
 @testable import EmployeeAdmin
+import Foundation
 
 @MainActor
 struct StartupUseCaseTest {
@@ -16,7 +17,9 @@ struct StartupUseCaseTest {
     let departmentStore = MockDepartmentStore()
     let roleStore = MockRoleStore()
     let userStore = MockUserStore()
-    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore)
+    let defaults = UserDefaults(suiteName: #function)!
+    defaults.removePersistentDomain(forName: #function)
+    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore, defaults: defaults)
     
     try sut.execute()
     
@@ -29,7 +32,10 @@ struct StartupUseCaseTest {
     let departmentStore = MockDepartmentStore()
     let roleStore = MockRoleStore()
     let userStore = MockUserStore()
-    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore)
+    let defaults = UserDefaults(suiteName: #function)!
+    defaults.removePersistentDomain(forName: #function)
+    defaults.set(true, forKey: StartupUseCase.FIRST_LAUNCH)
+    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore, defaults: defaults)
         
     try departmentStore.save(.none)
     
@@ -43,11 +49,13 @@ struct StartupUseCaseTest {
     let departmentStore = DepartmentStoreSpy()
     let roleStore = RoleStoreSpy()
     let userStore = UserStoreSpy()
-    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore)
+    let defaults = UserDefaults(suiteName: #function)!
+    defaults.removePersistentDomain(forName: #function)
+    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore, defaults: defaults)
     
     try sut.execute()
     
-    #expect(departmentStore.countCalls == 1)
+    #expect(departmentStore.countCalls == 0)
     #expect(departmentStore.saveAllCalls == 1)
     #expect(roleStore.saveAllCalls == 1)
     #expect(userStore.saveAllCalls == 1)
@@ -57,13 +65,17 @@ struct StartupUseCaseTest {
     let departmentStore = DepartmentStoreSpy()
     let roleStore = RoleStoreSpy()
     let userStore = UserStoreSpy()
-    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore)
+    let defaults = UserDefaults(suiteName: #function)!
+    defaults.removePersistentDomain(forName: #function)
+    defaults.set(true, forKey: StartupUseCase.FIRST_LAUNCH)
+
+    let sut = StartupUseCase(userStore: userStore, departmentStore: departmentStore, roleStore: roleStore, defaults: defaults)
     
     try departmentStore.save(.none)
     
     try sut.execute()
     
-    #expect(departmentStore.countCalls == 1)
+    #expect(departmentStore.countCalls == 0)
     #expect(departmentStore.saveAllCalls == 0)
     #expect(roleStore.saveAllCalls == 0)
     #expect(userStore.saveAllCalls == 0)

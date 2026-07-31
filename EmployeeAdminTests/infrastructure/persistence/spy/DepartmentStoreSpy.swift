@@ -36,9 +36,5 @@ final class DepartmentStoreSpy: IDepartmentStore {
     saveAllCalls += 1
     data = departments
   }
-  
-  func count() throws -> Int {
-    countCalls += 1
-    return data.count
-  }
+
 }

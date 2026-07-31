@@ -1,5 +1,5 @@
 //
-//  UserDataSpy.swift
+//  MockUserData.swift
 //  PureMVC SWIFT UI Demo - EmployeeAdmin
 //
 //  Copyright(c) 2026 Saad Shams <saad.shams@puremvc.org>
@@ -8,9 +8,7 @@
 
 @testable import EmployeeAdmin
 
-final class UserStoreSpy: IUserStore {
-  
-  private(set) var saveAllCalls = 0
+final class MockUserStore: IUserStore {
   
   private var data: [User] = []
   
@@ -38,7 +36,6 @@ final class UserStoreSpy: IUserStore {
   
   @discardableResult
   func saveAll(_ users: [User]) throws -> [User] {
-    saveAllCalls += 1
     data = users
     return users
   }
@@ -56,7 +53,7 @@ final class UserStoreSpy: IUserStore {
   }
   
   func deleteAll(_ users: [User]) throws {
-    let ids = Set(users.map(\.id))
+    let ids = users.map(\.id)
     data.removeAll { ids.contains($0.id) }
   }
   
@@ -64,7 +61,4 @@ final class UserStoreSpy: IUserStore {
     data.removeAll { ids.contains($0.id) }
   }
   
-  func count() throws -> Int {
-    data.count
-  }
 }

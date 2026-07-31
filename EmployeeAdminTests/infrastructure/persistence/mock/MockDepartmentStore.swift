@@ -32,7 +32,4 @@ final class MockDepartmentStore: IDepartmentStore {
     data = departments
   }
   
-  func count() throws -> Int {
-    data.count
-  }
 }

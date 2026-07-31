@@ -39,7 +39,4 @@ final class RoleStoreSpy: IRoleStore {
     data = roles
   }
   
-  func count() throws -> Int {
-    data.count
-  }
 }
