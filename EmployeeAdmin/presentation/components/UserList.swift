@@ -86,7 +86,7 @@ private extension UserList {
     .accessibilityIdentifier("userList.list")
     .navigationDestination(for: Int64.self) { id in
       if let container {
-        UserForm(id: id, viewModel: container.userFormViewModel())
+        container.userForm(id: id)
       }
     }
   }
@@ -97,7 +97,7 @@ private extension UserList {
   let container = ApplicationContainer.preview
   
   NavigationStack {
-    UserList(viewModel: container.userListViewModel())
+    container.userList()
   }
   .environment(\.container, container)
 }

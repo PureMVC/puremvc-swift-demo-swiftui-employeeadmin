@@ -77,12 +77,6 @@ final class RoleStore: IRoleStore {
     }
   }
   
-  func count() throws -> Int {
-    try context.performAndWait {
-      try RoleManagedObject.count(in: context)
-    }
-  }
-  
 }
 
 extension RoleStore {

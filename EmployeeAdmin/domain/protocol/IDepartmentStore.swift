@@ -18,6 +18,4 @@ protocol IDepartmentStore {
   
   func saveAll(_ departments: [Department]) throws
   
-  func count() throws -> Int
-  
 }

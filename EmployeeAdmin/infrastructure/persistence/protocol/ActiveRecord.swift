@@ -66,8 +66,4 @@ public extension ActiveRecord {
     return try context.fetch(request).first
   }
   
-  static func count(in context: NSManagedObjectContext) throws -> Int {
-    try context.count(for: fetchRequest())
-  }
-  
 }

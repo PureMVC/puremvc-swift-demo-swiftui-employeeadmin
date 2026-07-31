@@ -28,7 +28,7 @@ struct Application: App {
     WindowGroup {
       if initialized {
         NavigationStack {
-          UserList(viewModel: container.userListViewModel())
+          container.userList()
         }
         .environment(\.container, container)
       } else {

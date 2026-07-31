@@ -26,15 +26,27 @@ final class ApplicationContainer {
     userStore = UserStore(departmentStore: departmentStore, roleStore: roleStore, context: context)
   }
   
-  func userListViewModel() -> UserListViewModel {
+  func userList() -> UserList {
+    UserList(viewModel: userListViewModel())
+  }
+  
+  private func userListViewModel() -> UserListViewModel {
     UserListViewModel(userStore: userStore)
   }
   
-  func userFormViewModel() -> UserFormViewModel {
+  func userForm(id: Int64) -> UserForm {
+    UserForm(id: id, viewModel: userFormViewModel())
+  }
+  
+  private func userFormViewModel() -> UserFormViewModel {
     UserFormViewModel(userStore: userStore, departmentStore: departmentStore)
   }
   
-  func userRoleViewModel() -> UserRoleViewModel {
+  func userRole(id: Int64, _ selection: [Role]?, _ onComplete: @escaping ([Role]) -> Void) -> UserRole {
+    UserRole(id: id, selection, viewModel: userRoleViewModel(), onComplete: onComplete)
+  }
+  
+  private func userRoleViewModel() -> UserRoleViewModel {
     UserRoleViewModel(roleStore: roleStore)
   }
   

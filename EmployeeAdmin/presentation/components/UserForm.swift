@@ -190,7 +190,7 @@ private extension UserForm {
     .sheet(isPresented: $isSheetPresented) {
       if let container {
         NavigationStack {
-          UserRole(id: id, selection, viewModel: container.userRoleViewModel()) { roles in
+          container.userRole(id: id, selection) { roles in
             selection = roles
           }
         }
@@ -204,7 +204,7 @@ private extension UserForm {
   let container = ApplicationContainer.preview
 
   NavigationStack {
-    UserForm(id: 1, viewModel: container.userFormViewModel())
+    container.userForm(id: 1)
   }
   .environment(\.container, container)
 }

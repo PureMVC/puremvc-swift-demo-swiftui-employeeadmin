@@ -20,6 +20,4 @@ protocol IRoleStore {
   
   func saveAll(_ roles: [Role]) throws
   
-  func count() throws -> Int
-  
 }

@@ -64,12 +64,6 @@ final class DepartmentStore: IDepartmentStore {
     }
   }
   
-  func count() throws -> Int {
-    try context.performAndWait {
-      try DepartmentManagedObject.count(in: context)
-    }
-  }
-  
 }
 
 extension DepartmentStore {

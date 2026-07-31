@@ -30,6 +30,4 @@ protocol IUserStore {
   
   func deleteAll(byIDs ids: [Int64]) throws
   
-  func count() throws -> Int
-  
 }

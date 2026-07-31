@@ -144,12 +144,6 @@ final class UserStore: IUserStore {
     }
   }
   
-  func count() throws -> Int {
-    try context.performAndWait {
-      try UserManagedObject.count(in: context)
-    }
-  }
-  
 }
 
 private extension UserStore {

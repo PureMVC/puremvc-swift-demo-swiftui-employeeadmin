@@ -102,7 +102,7 @@ extension UserRole {
   let container = ApplicationContainer.preview
 
   NavigationStack {
-    UserRole(id: 1, [], viewModel: container.userRoleViewModel()) { _ in }
+    container.userRole(id: 1, []) { _ in }
   }
   .environment(\.container, container)
 }

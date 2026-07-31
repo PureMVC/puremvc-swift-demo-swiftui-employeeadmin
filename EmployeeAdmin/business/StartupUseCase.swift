@@ -14,8 +14,10 @@ struct StartupUseCase {
   let departmentStore: IDepartmentStore
   let roleStore: IRoleStore
   
+  private static let FIRST_LAUNCH = "firstLaunch"
+  
   func execute() throws {
-    guard try departmentStore.count() == 0 else {
+    guard !UserDefaults.standard.bool(forKey: StartupUseCase.FIRST_LAUNCH) else {
       return
     }
     
@@ -52,6 +54,8 @@ struct StartupUseCase {
       User(id: 0, first: "Curly", last: "Stooge", email: "curly@stooges.com", username: "cstooge", password: "xyz987", department: departments[2], roles: [roles[3], roles[5]]),
       User(id: 0, first: "Moe", last: "Stooge", email: "moe@stooges.com", username: "mstooge", password: "abc123", department: departments[3], roles: [roles[8], roles[10], roles[13]])
     ])
+    
+    UserDefaults.standard.set(true, forKey: StartupUseCase.FIRST_LAUNCH)
 
   }
   
