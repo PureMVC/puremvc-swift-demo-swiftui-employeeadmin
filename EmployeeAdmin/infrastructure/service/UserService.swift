@@ -8,15 +8,6 @@
 
 import Foundation
 
-protocol IUserService {
-  func findAll() async throws -> [User]
-  func findById(_ id: Int) async throws -> User
-  func save(_ user: User) async throws -> User
-  func update(_ user: User) async throws -> User
-  func deleteById(_ id: Int) async throws -> Void
-  func findAllDepartments() async throws -> [Department]
-}
-
 final class UserService: IUserService {
   
   private let session: URLSession = .shared

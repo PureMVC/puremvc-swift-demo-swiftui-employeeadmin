@@ -8,11 +8,6 @@
 
 import Foundation
 
-protocol IRoleService {
-  func findAll() async throws -> [Role]
-  func findByUserId(_ id: Int) async throws -> [Role]
-}
-
 final class RoleService: IRoleService {
   
   private let session: URLSession = .shared
