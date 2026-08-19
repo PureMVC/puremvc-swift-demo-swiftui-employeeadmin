@@ -1,0 +1,27 @@
+{
+  "schemaNamespace": "EmployeeAdminAPI",
+  "input": {
+    "operationSearchPaths": [
+      "./EmployeeAdmin/Infrastructure/Service/Schema/*.graphql"
+    ],
+    "schemaSearchPaths": [
+        "./EmployeeAdmin/Infrastructure/Service/Schema/*.graphql"
+    ]
+  },
+  "output": {
+    "schemaTypes": {
+      "path": "./EmployeeAdmin/Infrastructure/Service/Schema/Generated",
+      "moduleType": {
+          "embeddedInTarget": {
+              "name": "EmployeeAdmin"
+          }
+      }
+    },
+    "operations": {
+      "inSchemaModule": {}
+    },
+    "testMocks": {
+      "none": {}
+    }
+  }
+}
